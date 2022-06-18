@@ -53,6 +53,7 @@ class _SignInState extends State<SignIn> {
               padding: EdgeInsets.only(top: 50),
               child: TextField(
                 cursorColor: Colors.black,
+                keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                     hintText: 'Email',
                     border: InputBorder.none,

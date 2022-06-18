@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -14,17 +15,50 @@ class _HomeState extends State<Home> {
         {
           'title': '2-Sitter chairs',
           'description': 'Select the best furniture for your apartment',
-          'picture':
-              'https://cdn.vox-cdn.com/thumbor/teCEQIxlj9RbCj6P_vlwMopAptQ=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/11545893/House_Calls_Brooklyn_Zames_Williams_living_room_2_Matthew_Williams.jpg'
+          'picture': './lib/assets/imgs/remove.png'
         },
         {
           'title': 'Single Sitter chair',
           'description': 'Select the best furniture for your apartment',
-          'picture':
-              'https://ksassets.timeincuk.net/wp/uploads/sites/56/2021/07/Dining-room.jpg'
+          'picture': './lib/assets/imgs/remove2.png'
         },
       ]
-    }
+    },
+    {
+      'package_name': 'Beta Combo',
+      'items': [
+        {
+          'title': '2-Sitter chairs',
+          'description': 'Select the best furniture for your apartment',
+          'picture': './lib/assets/imgs/remove.png'
+        },
+      ]
+    },
+    {
+      'package_name': 'Beta Pro',
+      'items': [
+        {
+          'title': 'Single Sitter chair',
+          'description': 'Select the best furniture for your apartment',
+          'picture': './lib/assets/imgs/remove.png'
+        },
+      ]
+    },
+    {
+      'package_name': 'Beta Pro-Max',
+      'items': [
+        {
+          'title': '2-Sitter chairs',
+          'description': 'Select the best furniture for your apartment',
+          'picture': './lib/assets/imgs/remove.png'
+        },
+        {
+          'title': 'Single Sitter chair',
+          'description': 'Select the best furniture for your apartment',
+          'picture': './lib/assets/imgs/remove.png'
+        },
+      ]
+    },
   ];
 
   void _onTabSelected(index) {
@@ -36,70 +70,232 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        // automaticallyImplyLeading: true,
-        toolbarHeight: 120,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-        ),
-      ),
-      body: ListView(
+      body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  border:
-                      Border.all(color: const Color(0xffD9D9D9), width: 1.5),
-                  borderRadius: const BorderRadius.all(Radius.circular(5))),
-              child: Row(
-                children: [
-                  Expanded(
-                      flex: 1,
-                      child: TextButton(
-                        onPressed: () => _onTabSelected(0),
-                        style: TextButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            backgroundColor: _tabIndex == 0
-                                ? const Color(0xffFFF6D6)
-                                : const Color(0xffFAFAFA)),
-                        child: const Text(
-                          'BetaHome Furniture',
-                          textAlign: TextAlign.center,
-                          style:
-                              TextStyle(color: Color(0xff2F2E41), fontSize: 12),
-                        ),
-                      )),
-                  Expanded(
-                      flex: 1,
-                      child: TextButton(
-                        onPressed: () => _onTabSelected(1),
-                        style: TextButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            backgroundColor: _tabIndex == 1
-                                ? const Color(0xffFFF6D6)
-                                : const Color(0xffFAFAFA)),
-                        child: const Text(
-                          'BetaOffice Furniture',
-                          textAlign: TextAlign.center,
-                          style:
-                              TextStyle(color: Color(0xff2F2E41), fontSize: 12),
-                        ),
-                      )),
-                ],
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                margin: const EdgeInsets.only(top: 10, bottom: 10),
+                decoration: const BoxDecoration(
+                    color: Color(0xffFFF6D6),
+                    borderRadius: BorderRadius.all(Radius.circular(8))),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                            child: Row(children: const [
+                          CircleAvatar(),
+                          SizedBox(width: 15),
+                          Text(
+                            'Welcome, Jeffrey',
+                            style: TextStyle(color: Color(0xff000000)),
+                          )
+                        ])),
+                        Stack(
+                          children: [
+                            const Icon(
+                              Icons.notifications,
+                              color: Color(0xff000000),
+                            ),
+                            Container(
+                              width: 6,
+                              height: 6,
+                              margin: const EdgeInsets.only(left: 15, top: 2),
+                              decoration: const BoxDecoration(
+                                  color: Color(0xffFF0000),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(3))),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 15),
+                    TextField(
+                      cursorColor: Colors.black,
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                          isDense: true,
+                          hintText: 'Search what you need',
+                          hintStyle: const TextStyle(color: Color(0xffAEAEAE)),
+                          // border: InputBorder.none,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: BorderSide.none),
+                          filled: true,
+                          fillColor: const Color(0xffffffff),
+                          prefixIcon: const Icon(
+                            Icons.search,
+                            size: 16,
+                            color: Color(0xffAEAEAE),
+                          )),
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Color(0xff000000),
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-            _tabIndex == 0 ? BetaHome() : BetaOffice(),
-          ]),
+              Container(
+                decoration: BoxDecoration(
+                    border:
+                        Border.all(color: const Color(0xffD9D9D9), width: 1.5),
+                    borderRadius: const BorderRadius.all(Radius.circular(5))),
+                child: Row(
+                  children: [
+                    Expanded(
+                        flex: 1,
+                        child: TextButton(
+                          onPressed: () => _onTabSelected(0),
+                          style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 20),
+                              backgroundColor: _tabIndex == 0
+                                  ? const Color(0xffFFF6D6)
+                                  : const Color(0xffFAFAFA)),
+                          child: const Text(
+                            'BetaHome Furniture',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Color(0xff2F2E41), fontSize: 12),
+                          ),
+                        )),
+                    Expanded(
+                        flex: 1,
+                        child: TextButton(
+                          onPressed: () => _onTabSelected(1),
+                          style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 20),
+                              backgroundColor: _tabIndex == 1
+                                  ? const Color(0xffFFF6D6)
+                                  : const Color(0xffFAFAFA)),
+                          child: const Text(
+                            'BetaOffice Furniture',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Color(0xff2F2E41), fontSize: 12),
+                          ),
+                        )),
+                  ],
+                ),
+              ),
+              Expanded(
+                  child:
+                      _tabIndex == 0 ? _BetaHome(items: _data) : BetaOffice())
+            ],
+          )),
     );
   }
 }
 
-class BetaHome extends StatelessWidget {
+class _BetaHome extends StatelessWidget {
+  List items = [];
+
+  _BetaHome({required this.items});
+
+  Row itemRow(index, item) {
+    // List packageItems = [2, 2];
+    return Row(
+      children: [
+        index % 2 == 0
+            ? Expanded(
+                flex: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(color: Color(0xffD4FFDB)),
+                      child: Text(
+                        item['package_name'],
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                    )
+                  ],
+                ))
+            : const SizedBox(
+                width: 0,
+              ),
+        ...item['items'].map((item) => Expanded(
+              flex: 1,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: index % 2 == 0 ? 5 : 0,
+                  ),
+                  Image(
+                    image: AssetImage(item['picture']),
+                    // width: double.infinity,
+                  ),
+                  SizedBox(
+                    width: index % 2 != 0 ? 5 : 0,
+                  ),
+                ],
+              ),
+            )),
+        // const SizedBox(
+        //   width: 10,
+        // ),
+        // const Expanded(
+        //   flex: 1,
+        //   child: Image(
+        //     image: AssetImage('./lib/assets/imgs/remove.png'),
+        //     // height: 8,
+        //     // width: 60,
+        //   ),
+        // ),
+        // const SizedBox(
+        //   width: 10,
+        // ),
+        // const Expanded(
+        //   flex: 1,
+        //   child: Image(
+        //     image: AssetImage('./lib/assets/imgs/remove2.png'),
+        //     // height: 8,
+        //     // width: 60,
+        //   ),
+        // ),
+        index % 2 != 0
+            ? Expanded(
+                flex: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(color: Color(0xffD4FFDB)),
+                      child: Text(
+                        item['package_name'],
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                    )
+                  ],
+                ))
+            : const SizedBox(
+                width: 0,
+              ),
+        // ...packageItems.map((item) => const Expanded(
+        //       flex: 1,
+        //       child: Text(
+        //         'Item',
+        //         style: TextStyle(color: Colors.black),
+        //       ),
+        //     ))
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Text('Beta Home');
+    return ListView(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      children: items
+          .mapIndexed((index, item) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: itemRow(index, item),
+              ))
+          .toList(),
+    );
   }
 }
 
