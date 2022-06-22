@@ -33,10 +33,12 @@ class _GetStartedState extends State<GetStarted> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // appBar: AppBar(
-      //   title: const Text('Get Started'),
-      // ),
-      body: Column(
+      body: //CustomScrollView(scrollDirection: Axis.vertical, slivers: [
+          // SliverFillRemaining(
+          //   SingleChildScrollView(
+          // // hasScrollBody: true,
+          // child:
+          Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
@@ -120,6 +122,9 @@ class _GetStartedState extends State<GetStarted> {
           )
         ],
       ),
+      // )
+      // ])
+      // ),
     );
   }
 
