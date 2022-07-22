@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:beta_home/screens/get_started.dart';
 
 void main() {
-  runApp(App());
+  runApp(const App());
 }
 
 class App extends StatelessWidget {
-  // const App({Key? key}) : super(key: key);
+  const App({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,7 +17,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: GetStarted(),
+      home: const GetStarted(),
     );
   }
 }

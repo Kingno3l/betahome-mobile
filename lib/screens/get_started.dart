@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_svg/svg.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:beta_home/screens/sign.dart';
+import 'package:beta_home/screens/home.dart';
 
 // const String assetName = './lib/assets/svgs/onboard-1.svg';
 
 class GetStarted extends StatefulWidget {
+  const GetStarted({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _GetStartedState();
 }
@@ -85,7 +87,7 @@ class _GetStartedState extends State<GetStarted> {
                     onPressed: () {
                       // if (currentIndex == slides.length - 1) {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Sign()));
+                          MaterialPageRoute(builder: (context) => Home()));
                       // }
                       // _controller?.nextPage(
                       //     duration: const Duration(milliseconds: 100),
