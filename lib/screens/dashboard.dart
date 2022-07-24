@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:beta_home/screens/home.dart';
 
 class Dashboard extends StatefulWidget {
+  const Dashboard({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _DashboardState();
 }
@@ -14,8 +16,8 @@ class _DashboardState extends State<Dashboard> {
   int _currentTabIndex = 0;
 
   static final List<Widget> _contentOptions = <Widget>[
-    Home(),
-    Market(),
+    const Home(),
+    const Market(),
     Services(),
     Account()
   ];
@@ -39,7 +41,7 @@ class _DashboardState extends State<Dashboard> {
           BottomNavigationBarItem(
               icon: Icon(Icons.account_circle_sharp), label: 'Account'),
         ],
-        type: BottomNavigationBarType.shifting,
+        type: BottomNavigationBarType.fixed,
         currentIndex: _currentTabIndex,
         selectedItemColor: Colors.black,
         unselectedItemColor: const Color(0xffAEAEAE),

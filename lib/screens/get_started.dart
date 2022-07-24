@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_svg/svg.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:beta_home/screens/home.dart';
+import 'package:beta_home/screens/dashboard.dart';
 
 // const String assetName = './lib/assets/svgs/onboard-1.svg';
 
@@ -86,8 +86,10 @@ class _GetStartedState extends State<GetStarted> {
                 child: TextButton(
                     onPressed: () {
                       // if (currentIndex == slides.length - 1) {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Home()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Dashboard()));
                       // }
                       // _controller?.nextPage(
                       //     duration: const Duration(milliseconds: 100),
