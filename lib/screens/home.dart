@@ -1,6 +1,7 @@
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/package.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:beta_home/widgets/beta_home.dart';
@@ -21,8 +22,9 @@ Future getPackages() async {
     // print(resp.statusCode);
     // print(resp.body);
 
-    final response = await Dio().get('localhost:3000');
-    print(response.data);
+    final response = await Dio().get('http://192.168.43.49:3000/test');
+
+    print('Debug here: ${response.data}');
   } catch (e) {
     print(e);
   }
@@ -154,7 +156,7 @@ class _HomeState extends State<Home> {
                       CircleAvatar(
                         radius: 24,
                         child: Image(
-                          image: AssetImage('./lib/assets/imgs/dp.png'),
+                          image: NetworkImage('./lib/assets/imgs/dp.png'),
                           height: 60,
                           // width: 220,
                           fit: BoxFit.contain,

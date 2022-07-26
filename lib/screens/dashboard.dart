@@ -1,6 +1,7 @@
-import 'package:beta_home/screens/account.dart';
+import 'package:beta_home/screens/settings.dart';
 import 'package:beta_home/screens/market.dart';
 import 'package:beta_home/screens/services.dart';
+import 'package:beta_home/screens/wallet.dart';
 import 'package:flutter/material.dart';
 
 import 'package:beta_home/screens/home.dart';
@@ -18,8 +19,9 @@ class _DashboardState extends State<Dashboard> {
   static final List<Widget> _contentOptions = <Widget>[
     const Home(),
     const Market(),
-    Services(),
-    Account()
+    const Services(),
+    const Wallet(),
+    const Settings()
   ];
 
   void _onTabSelected(int index) {
@@ -32,14 +34,16 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _contentOptions[_currentTabIndex],
+      backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.sell), label: 'Market'),
           BottomNavigationBarItem(
               icon: Icon(Icons.miscellaneous_services), label: 'Services'),
+          BottomNavigationBarItem(icon: Icon(Icons.wallet), label: 'Wallet'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_sharp), label: 'Account'),
+              icon: Icon(Icons.settings_suggest_outlined), label: 'Settings'),
         ],
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentTabIndex,

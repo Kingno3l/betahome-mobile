@@ -1,6 +1,7 @@
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/market_item.dart';
 import 'package:beta_home/models/package.dart';
+import 'package:beta_home/screens/my_cart.dart';
 import 'package:beta_home/widgets/dot.dart';
 import 'package:beta_home/widgets/market_card.dart';
 import 'package:dio/dio.dart';
@@ -43,14 +44,14 @@ class _MarketState extends State<Market> {
         'Dropdown fancy light',
         './lib/assets/imgs/remove7.png',
         'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Nulla porttitor accumsan tincidunt. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Donec sollicitudin molestie malesuada. Donec sollicitudin molestie malesuada. Quisque velit nis.',
-        5000,
+        5300,
         0),
     MarketItem(
         111,
         'Dropdown fancy light',
         './lib/assets/imgs/remove2.png',
         'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Nulla porttitor accumsan tincidunt. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Donec sollicitudin molestie malesuada. Donec sollicitudin molestie malesuada. Quisque velit nis.',
-        5000,
+        4500,
         1),
     MarketItem(
         111,
@@ -135,10 +136,17 @@ class _MarketState extends State<Market> {
               ),
               Stack(
                 children: [
-                  const Icon(
-                    Icons.shopping_cart,
-                    color: Color(0xff000000),
-                  ),
+                  IconButton(
+                      onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const MyCart(),
+                            ),
+                          ),
+                      icon: const Icon(
+                        Icons.shopping_cart,
+                        color: Color(0xff000000),
+                      )),
                   Dot(),
                 ],
               ),

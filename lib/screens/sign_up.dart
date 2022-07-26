@@ -68,10 +68,11 @@ class _SignUpState extends State<SignUp> {
               child: TextField(
                 cursorColor: Colors.black,
                 decoration: InputDecoration(
-                    hintText: 'Email',
-                    border: InputBorder.none,
-                    filled: true,
-                    fillColor: Color(0xffFFF6D6)),
+                  hintText: 'Email',
+                  border: InputBorder.none,
+                  filled: true,
+                  fillColor: Color(0xffFFF6D6),
+                ),
                 style: TextStyle(
                   fontSize: 13,
                   color: Color(0xff000000),

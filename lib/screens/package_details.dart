@@ -34,19 +34,24 @@ class _PackageDetails extends State<PackageDetails> {
                 const SizedBox(
                   height: 5,
                 ),
-                Text.rich(TextSpan(
+                Text.rich(
+                  TextSpan(
                     style: const TextStyle(
                         fontWeight: FontWeight.normal,
                         fontSize: 12,
                         height: 1.3),
                     children: [
                       TextSpan(
-                          text: package.toString(),
-                          style: const TextStyle(color: Color(0xff333333))),
+                        text: package.toString(),
+                        style: const TextStyle(color: Color(0xff333333)),
+                      ),
                       TextSpan(
-                          text: ': ${package.details()}',
-                          style: const TextStyle(color: Color(0xffB18B04))),
-                    ]))
+                        text: ': ${package.details()}',
+                        style: const TextStyle(color: Color(0xffB18B04)),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
@@ -89,27 +94,28 @@ class _PackageDetails extends State<PackageDetails> {
                               width: 10,
                             ),
                             Expanded(
-                                flex: 1,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      item['title'],
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    const SizedBox(
-                                      height: 6,
-                                    ),
-                                    Text(
-                                      item['description'],
-                                      maxLines: 4,
-                                      overflow: TextOverflow.fade,
-                                      style: const TextStyle(fontSize: 12),
-                                    )
-                                  ],
-                                )),
+                              flex: 1,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    item['title'],
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  const SizedBox(
+                                    height: 6,
+                                  ),
+                                  Text(
+                                    item['description'],
+                                    maxLines: 4,
+                                    overflow: TextOverflow.fade,
+                                    style: const TextStyle(fontSize: 12),
+                                  )
+                                ],
+                              ),
+                            ),
                             Column(
                               children: [
                                 Container(

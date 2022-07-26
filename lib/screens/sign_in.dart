@@ -73,15 +73,16 @@ class _SignInState extends State<SignIn> {
                   enableSuggestions: false,
                   autocorrect: false,
                   decoration: InputDecoration(
-                      hintText: 'Password',
-                      border: InputBorder.none,
-                      filled: true,
-                      fillColor: Color(0xffFFF6D6),
-                      suffixIcon: Icon(
-                        Icons.visibility_off_outlined,
-                        size: 14,
-                        color: Colors.black,
-                      )),
+                    hintText: 'Password',
+                    border: InputBorder.none,
+                    filled: true,
+                    fillColor: Color(0xffFFF6D6),
+                    suffixIcon: Icon(
+                      Icons.visibility_off_outlined,
+                      size: 14,
+                      color: Colors.black,
+                    ),
+                  ),
                   style: TextStyle(
                     fontSize: 13,
                     color: Color(0xff000000),
@@ -90,23 +91,27 @@ class _SignInState extends State<SignIn> {
             Padding(
               padding: const EdgeInsets.only(bottom: 40),
               child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                      text: 'Forgotten your password?',
-                      style: const TextStyle(
-                          color: Color(0xff000000), fontSize: 12),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () => {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ForgotPassword()))
-                            })),
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  text: 'Forgotten your password?',
+                  style:
+                      const TextStyle(color: Color(0xff000000), fontSize: 12),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ForgotPassword(),
+                            ),
+                          ),
+                        },
+                ),
+              ),
             ),
             TextButton(
               onPressed: () {
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Dashboard()));
+                    MaterialPageRoute(builder: (context) => const Dashboard()));
               },
               style: TextButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 24.0),

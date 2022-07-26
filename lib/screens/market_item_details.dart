@@ -29,10 +29,6 @@ class _MarketItemDetails extends State<MarketItemDetails> {
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        // title: Text(
-        //   title,
-        //   style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-        // ),
         actions: [
           Row(
             children: [
@@ -42,7 +38,7 @@ class _MarketItemDetails extends State<MarketItemDetails> {
                       onPressed: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MyCart(),
+                              builder: (context) => const MyCart(),
                             ),
                           ),
                       icon: const Icon(
@@ -57,8 +53,6 @@ class _MarketItemDetails extends State<MarketItemDetails> {
         ],
         elevation: 0,
         backgroundColor: Colors.transparent,
-        // centerTitle: false,
-        // titleTextStyle: const TextStyle(color: Color(0xff000000)),
       ),
       body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -81,7 +75,6 @@ class _MarketItemDetails extends State<MarketItemDetails> {
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                       color: Color(item.isRated() ? 0xffFFDA58 : 0xffD9D9D9),
-                      // color: Theme.of(context).primaryColor,
                       borderRadius: BorderRadius.circular(100),
                     ),
                     child: const Icon(
@@ -92,19 +85,11 @@ class _MarketItemDetails extends State<MarketItemDetails> {
                   ),
                 ),
               ),
-              // Image(
-              //   image: NetworkImage(item.getImgUrl()),
-              //   alignment: Alignment.center,
-              //   height: 220,
-              //   width: double.infinity,
-              //   fit: BoxFit.fill,
-              // ),
               const SizedBox(
                 height: 15,
               ),
               Text(
                 item.getName(),
-                // '${item.getTitle()} (${item.getQuantity()})',
                 style:
                     const TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
               ),
@@ -171,23 +156,20 @@ class _MarketItemDetails extends State<MarketItemDetails> {
               const SizedBox(
                 height: 10,
               ),
-              // Text(
-              //   item.toString(),
-              //   style: const TextStyle(height: 1.3, fontSize: 12),
-              // ),
               Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.symmetric(vertical: 20),
-                  child: TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 24),
-                        backgroundColor: const Color(0xFFFFDA58)),
-                    child: const Text(
-                      'Add to Cart',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  )),
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(vertical: 20),
+                child: TextButton(
+                  onPressed: () {},
+                  style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 24),
+                      backgroundColor: const Color(0xFFFFDA58)),
+                  child: const Text(
+                    'Add to Cart',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
             ],
           )),
     );
