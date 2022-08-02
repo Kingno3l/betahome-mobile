@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:beta_home/models/cart_item.dart';
 import 'package:beta_home/models/history_item.dart';
 import 'package:beta_home/models/package.dart';
