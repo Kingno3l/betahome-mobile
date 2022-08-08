@@ -32,7 +32,11 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return
+        // SafeArea(
+        //   top: true,
+        //   child:
+        Scaffold(
       body: _contentOptions[_currentTabIndex],
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavigationBar(
@@ -55,6 +59,9 @@ class _DashboardState extends State<Dashboard> {
         onTap: _onTabSelected,
         elevation: 0,
       ),
-    );
+    )
+        //   ,
+        // )
+        ;
   }
 }

@@ -16,7 +16,7 @@ class App extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         // primarySwatch: Colors.green,
-        fontFamily: 'Georgia',
+        // fontFamily: 'Verdana',
         backgroundColor: Colors.white,
       ),
       home: const GetStarted(),

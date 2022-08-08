@@ -141,41 +141,42 @@ class _PackageDetails extends State<PackageDetails> {
                 .toList(),
           )),
           PhysicalModel(
-              // color: Colors.white,
-              color: const Color(0xffFFDA58),
-              // shadowColor: const Color(0xffFFDA58),
-              elevation: 8,
-              child: InkWell(
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PaymentOption(package: package))),
-                child: Container(
-                  // color: const Color(0xffFFDA58),
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      const Text(
-                        'Complete your furniture selection?',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      const SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        'N${package.getPrice()}',
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 20),
-                      ),
-                      const Text(
-                        'Order now',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    ],
-                  ),
+            // color: Colors.white,
+            color: const Color(0xffFFDA58),
+            // shadowColor: const Color(0xffFFDA58),
+            elevation: 8,
+            child: InkWell(
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PaymentOption(package: package))),
+              child: Container(
+                // color: const Color(0xffFFDA58),
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    const Text(
+                      'Complete your furniture selection?',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    Text(
+                      'N${package.getPrice()}',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w600, fontSize: 20),
+                    ),
+                    const Text(
+                      'Order now',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  ],
                 ),
-              ))
+              ),
+            ),
+          )
         ],
       ),
     );

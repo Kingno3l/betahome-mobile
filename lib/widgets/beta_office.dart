@@ -3,20 +3,18 @@ import 'package:beta_home/screens/package_details.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 
-class BetaHome extends StatelessWidget {
+class BetaOffice extends StatelessWidget {
   final List items;
 
-  const BetaHome({Key? key, required this.items}) : super(key: key);
+  const BetaOffice({Key? key, required this.items}) : super(key: key);
 
   void onPackageClick(context, item) {
     Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PackageDetails(
-          package: Package.fromJson(item),
-        ),
-      ),
-    );
+        context,
+        MaterialPageRoute(
+            builder: (context) => PackageDetails(
+                  package: Package.fromJson(item),
+                )));
   }
 
   Widget packageTitle(title, color, isShow, onPress) {
@@ -25,7 +23,7 @@ class BetaHome extends StatelessWidget {
     return Flexible(
       flex: 1,
       child: Container(
-        color: Color(int.parse(color)),
+        color: Color(color),
         height: double.infinity,
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -42,14 +40,14 @@ class BetaHome extends StatelessWidget {
     );
   }
 
-  IntrinsicHeight itemRow(context, index, package) {
+  IntrinsicHeight itemRow(context, index, Package package) {
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          packageTitle(package['name'], package['color'], index % 2 == 0,
+          packageTitle(package.getName(), package.getColor(), index % 2 == 0,
               () => onPackageClick(context, package)),
-          ...package['items'].map((item) => Expanded(
+          ...package.getItems().map((item) => Expanded(
                 flex: 1,
                 child: Row(
                   children: [
@@ -76,7 +74,7 @@ class BetaHome extends StatelessWidget {
                   ],
                 ),
               )),
-          packageTitle(package['name'], package['color'], index % 2 != 0,
+          packageTitle(package.getName(), package.getColor(), index % 2 != 0,
               () => onPackageClick(context, package))
         ],
       ),
@@ -90,7 +88,7 @@ class BetaHome extends StatelessWidget {
       children: items
           .mapIndexed((index, item) => Padding(
                 padding: const EdgeInsets.only(bottom: 8),
-                child: itemRow(context, index, item),
+                child: itemRow(context, index, Package.fromJson(item)),
               ))
           .toList(),
     );

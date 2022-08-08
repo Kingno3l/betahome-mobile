@@ -1,5 +1,7 @@
 import 'package:beta_home/helper/url_helper.dart';
+import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/models/package.dart';
+import 'package:beta_home/widgets/beta_office.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,119 +15,37 @@ class Home extends StatefulWidget {
   State<StatefulWidget> createState() => _HomeState();
 }
 
-// Future <List<Package>> getPackages() async {
-Future getPackages() async {
-  try {
-    // final resp =
-    //     await http.get(Uri.parse('www.googleapis.com/books/v1/volumes'));
-    // final resp = await http.get(Uri.parse(UrlHelper.packages));
-    // print(resp.statusCode);
-    // print(resp.body);
-
-    final response = await Dio().get('http://192.168.43.49:3000/test');
-
-    print('Debug here: ${response.data}');
-  } catch (e) {
-    print(e);
-  }
-}
-
 class _HomeState extends State<Home> {
   int _tabIndex = 0;
-  // Future <List<Package>> packages;
-  static final List _data = [
-    {
-      'uid': 'pk001',
-      'package_name': 'Beta Basic',
-      'description': 'Beta Pro offers you a Pro package of',
-      'color': 0xffD4FFDB,
-      'price': 150000.0,
-      'items': [
-        {
-          'uid': 'item001',
-          'title': '2-Sitter chairs',
-          'description': 'Select the best furniture for your apartment',
-          'quantity': 1,
-          'picture': './lib/assets/imgs/remove.png'
-        },
-        {
-          'uid': 'item002',
-          'title': 'Single Sitter chair',
-          'description': 'Select the best furniture for your apartment',
-          'quantity': 2,
-          'picture': './lib/assets/imgs/remove2.png'
-        },
-      ]
-    },
-    {
-      'uid': 'pk002',
-      'package_name': 'Beta Combo',
-      'description': 'Beta Pro offers you a Pro package of',
-      'color': 0xffFFF6D6,
-      'price': 110000.0,
-      'items': [
-        {
-          'uid': 'item003',
-          'title': '2-Sitter chairs',
-          'description': 'Select the best furniture for your apartment',
-          'quantity': 2,
-          'picture': './lib/assets/imgs/remove3.png'
-        },
-      ]
-    },
-    {
-      'uid': 'pk003',
-      'package_name': 'Beta Pro',
-      'description': 'Beta Pro offers you a Pro package of',
-      'color': 0xffE2E0FF,
-      'price': 130000.0,
-      'items': [
-        {
-          'uid': 'item004',
-          'title': 'Single Sitter chair',
-          'description': 'Select the best furniture for your apartment',
-          'quantity': 10,
-          'picture': './lib/assets/imgs/remove4.png'
-        },
-        {
-          'uid': 'item007',
-          'title': 'Multiple set of furnitures',
-          'description':
-              'Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Nulla porttitor accumsan tincidunt. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Donec sollicitudin molestie malesuada. Donec sollicitudin molestie malesuada. Quisque velit nis.',
-          'quantity': 1,
-          'picture': './lib/assets/imgs/remove7.png'
-        },
-      ]
-    },
-    {
-      'uid': 'pk004',
-      'package_name': 'Beta Pro-Max',
-      'description': 'Beta Pro offers you a Pro package of',
-      'color': 0xffF5F2F2,
-      'price': 250000.0,
-      'items': [
-        {
-          'uid': 'item005',
-          'title': '2-Sitter chairs',
-          'description': 'Select the best furniture for your apartment',
-          'quantity': 2,
-          'picture': './lib/assets/imgs/remove5.png'
-        },
-        {
-          'uid': 'item006',
-          'title': 'Single Sitter chair',
-          'description': 'Select the best furniture for your apartment',
-          'quantity': 3,
-          'picture': './lib/assets/imgs/remove6.png'
-        },
-      ]
-    },
-  ];
+  List _data = [];
+
+  Future getPackages() async {
+    try {
+      final resp = await Dio().get(UrlHelper.packages);
+
+      if (resp.statusCode == 200) {
+        HttpResp json = HttpResp.fromJson(resp.data);
+
+        if (json.status() == "success") {
+          // AlertDialog(content: Text(json.msg()));
+          print('Sucess: ${json.msg()}');
+          // print('Data: ${json.data()}');
+          setState(() {
+            _data = json.data();
+          });
+        } else {
+          // AlertDialog(content: Text(json.msg()));
+          print('Error: ${json.msg()}');
+        }
+      }
+    } catch (e) {
+      // AlertDialog(content: Text(e.toString()));
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    // packages =
     getPackages();
   }
 
@@ -256,20 +176,12 @@ class _HomeState extends State<Home> {
             ),
           ),
           Expanded(
-              child:
-                  _tabIndex == 0 ? BetaHome(items: _data) : const BetaOffice())
+              child: _tabIndex == 0
+                  ? BetaHome(items: _data)
+                  : BetaOffice(items: _data))
         ],
       ),
     );
     ;
-  }
-}
-
-class BetaOffice extends StatelessWidget {
-  const BetaOffice({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Text('Beta Office');
   }
 }
