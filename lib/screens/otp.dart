@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:beta_home/widgets/screen_head.dart';
 
 class OTP extends StatefulWidget {
+  const OTP({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _OTPState();
 }

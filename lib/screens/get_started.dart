@@ -1,10 +1,8 @@
+import 'package:beta_home/helper/keys.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_svg/svg.dart';
-// import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:beta_home/screens/dashboard.dart';
-
-// const String assetName = './lib/assets/svgs/onboard-1.svg';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GetStarted extends StatefulWidget {
   const GetStarted({Key? key}) : super(key: key);
@@ -14,6 +12,7 @@ class GetStarted extends StatefulWidget {
 }
 
 class _GetStartedState extends State<GetStarted> {
+  final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
   List<SliderModel> slides = [];
   int currentIndex = 0;
   PageController? _controller;
@@ -86,10 +85,16 @@ class _GetStartedState extends State<GetStarted> {
                 child: TextButton(
                     onPressed: () {
                       // if (currentIndex == slides.length - 1) {
-                      Navigator.push(
+                      _pref.then((SharedPreferences pref) {
+                        pref.setBool(Keys.IS_GET_STARTED, true);
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Dashboard()));
+                            builder: (context) => const Dashboard(),
+                          ),
+                        );
+                      });
+
                       // }
                       // _controller?.nextPage(
                       //     duration: const Duration(milliseconds: 100),

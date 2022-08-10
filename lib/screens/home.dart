@@ -1,12 +1,16 @@
+import 'package:beta_home/helper/keys.dart';
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/models/package.dart';
+import 'package:beta_home/screens/profile.dart';
+import 'package:beta_home/screens/sign_in.dart';
 import 'package:beta_home/widgets/beta_office.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:beta_home/widgets/beta_home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -16,6 +20,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
   int _tabIndex = 0;
   List _data = [];
 
@@ -62,7 +67,8 @@ class _HomeState extends State<Home> {
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.all(20),
+            padding:
+                const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 10),
             margin: const EdgeInsets.only(top: 10, bottom: 10),
             decoration: const BoxDecoration(
                 color: Color(0xffFFF6D6),
@@ -72,18 +78,39 @@ class _HomeState extends State<Home> {
                 Row(
                   children: [
                     Expanded(
-                        child: Row(children: const [
+                        child: Row(children: [
                       CircleAvatar(
-                        radius: 24,
-                        child: Image(
-                          image: NetworkImage('./lib/assets/imgs/dp.png'),
-                          height: 60,
-                          // width: 220,
-                          fit: BoxFit.contain,
+                        backgroundColor: Colors.transparent,
+                        backgroundImage: const NetworkImage(
+                            'https://img.icons8.com/ios-glyphs/60/95A5A6/test-account.png'),
+                        radius: 20,
+                        child: Material(
+                          shape: const CircleBorder(),
+                          clipBehavior: Clip.hardEdge,
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () => {
+                              _pref.then((SharedPreferences pref) {
+                                !(pref.getBool(Keys.IS_LOGGED_IN) ?? false)
+                                    ? Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => SignIn(),
+                                        ),
+                                      )
+                                    : Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const Profile(),
+                                        ),
+                                      );
+                              })
+                            },
+                          ),
                         ),
                       ),
-                      SizedBox(width: 15),
-                      Text(
+                      const SizedBox(width: 10),
+                      const Text(
                         'Welcome, Jeffrey',
                         style: TextStyle(color: Color(0xff000000)),
                       )
@@ -123,11 +150,11 @@ class _HomeState extends State<Home> {
                       fillColor: const Color(0xffffffff),
                       prefixIcon: const Icon(
                         Icons.search,
-                        size: 16,
+                        size: 18,
                         color: Color(0xffAEAEAE),
                       )),
                   style: const TextStyle(
-                    fontSize: 13,
+                    fontSize: 15,
                     color: Color(0xff000000),
                   ),
                 )
@@ -135,33 +162,37 @@ class _HomeState extends State<Home> {
             ),
           ),
           Container(
+            height: 38,
             decoration: BoxDecoration(
-                border: Border.all(color: const Color(0xffD9D9D9), width: 1.5),
-                borderRadius: const BorderRadius.all(Radius.circular(5))),
+              border: Border.all(color: const Color(0xffD9D9D9), width: 1.5),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(5),
+              ),
+            ),
             child: Row(
               children: [
                 Expanded(
-                    flex: 1,
-                    child: TextButton(
-                      onPressed: () => _onTabSelected(0),
-                      style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          backgroundColor: _tabIndex == 0
-                              ? const Color(0xffFFF6D6)
-                              : const Color(0xffFAFAFA)),
-                      child: const Text(
-                        'BetaHome Furniture',
-                        textAlign: TextAlign.center,
-                        style:
-                            TextStyle(color: Color(0xff2F2E41), fontSize: 12),
-                      ),
-                    )),
+                  flex: 1,
+                  child: TextButton(
+                    onPressed: () => _onTabSelected(0),
+                    style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 0),
+                        backgroundColor: _tabIndex == 0
+                            ? const Color(0xffFFF6D6)
+                            : const Color(0xffFAFAFA)),
+                    child: const Text(
+                      'BetaHome Furniture',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Color(0xff2F2E41), fontSize: 12),
+                    ),
+                  ),
+                ),
                 Expanded(
                     flex: 1,
                     child: TextButton(
                       onPressed: () => _onTabSelected(1),
                       style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          padding: const EdgeInsets.symmetric(vertical: 0),
                           backgroundColor: _tabIndex == 1
                               ? const Color(0xffFFF6D6)
                               : const Color(0xffFAFAFA)),

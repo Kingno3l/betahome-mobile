@@ -1,6 +1,8 @@
 // const baseUrl = "api.rowareng.com/beta-home"; //test
-const baseUrl = "http://ec2-54-91-144-27.compute-1.amazonaws.com:3000"; //test
+const baseUrl = "http://44.205.154.51:3000"; //test
 
 class UrlHelper {
+  static const register = "$baseUrl/register";
+  static const login = "$baseUrl/login";
   static const packages = "$baseUrl/packages";
 }

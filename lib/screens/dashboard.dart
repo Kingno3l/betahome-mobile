@@ -33,9 +33,9 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return
-        // SafeArea(
-        //   top: true,
-        //   child:
+        SafeArea(
+          top: true,
+          child:
         Scaffold(
       body: _contentOptions[_currentTabIndex],
       backgroundColor: Colors.white,
@@ -50,7 +50,7 @@ class _DashboardState extends State<Dashboard> {
               icon: Icon(Icons.settings_suggest_outlined), label: 'Settings'),
         ],
         type: BottomNavigationBarType.fixed,
-        currentIndex: _currentTabIndex,
+        currentIndex: _currentTabIndex, 
         selectedItemColor: Colors.black,
         unselectedItemColor: const Color(0xffAEAEAE),
         iconSize: 26,
@@ -60,8 +60,8 @@ class _DashboardState extends State<Dashboard> {
         elevation: 0,
       ),
     )
-        //   ,
-        // )
+          ,
+        )
         ;
   }
 }

@@ -1,6 +1,5 @@
+import 'package:beta_home/screens/splash.dart';
 import 'package:flutter/material.dart';
-
-import 'package:beta_home/screens/get_started.dart';
 
 void main() {
   runApp(const App());
@@ -13,13 +12,13 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Beta Home',
       theme: ThemeData(
         // primarySwatch: Colors.green,
         // fontFamily: 'Verdana',
         backgroundColor: Colors.white,
       ),
-      home: const GetStarted(),
+      home: const Splash(),
     );
   }
 }

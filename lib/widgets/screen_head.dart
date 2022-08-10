@@ -8,12 +8,15 @@ Column screenHead(title, subTitle) {
         title,
         style: const TextStyle(
             color: Color(0xff000000),
-            fontSize: 20,
+            fontSize: 18,
             fontWeight: FontWeight.w600),
+      ),
+      const SizedBox(
+        height: 8,
       ),
       Text(
         subTitle,
-        style: const TextStyle(color: Color(0xff8E8E8E), fontSize: 12),
+        style: const TextStyle(color: Color(0xff8E8E8E), fontSize: 13),
       ),
     ],
   );
