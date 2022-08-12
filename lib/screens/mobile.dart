@@ -1,14 +1,11 @@
-import 'package:beta_home/helper/keys.dart';
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/screens/otp.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'package:beta_home/widgets/screen_head.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Mobile extends StatefulWidget {
   const Mobile({Key? key}) : super(key: key);
@@ -18,7 +15,7 @@ class Mobile extends StatefulWidget {
 }
 
 class _MobileState extends State<Mobile> {
-  final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
+  // final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
   String _country_code = '234', _phone = '';
 
   Future _onProceed() async {
@@ -36,7 +33,9 @@ class _MobileState extends State<Mobile> {
               msg: 'Please login or create account',
               toastLength: Toast.LENGTH_LONG);
         } else if (resp['status'] == 200) {
-          final HttpResp json = resp['json'];
+          final HttpResp json = HttpResp.fromJson(resp['data']);
+          Fluttertoast.showToast(
+              msg: json.msg(), toastLength: Toast.LENGTH_LONG);
           if (json.status() == 'success') {
             (() {
               Navigator.push(
@@ -46,9 +45,6 @@ class _MobileState extends State<Mobile> {
                 ),
               );
             })();
-          } else {
-           Fluttertoast.showToast(
-              msg: json.msg(), toastLength: Toast.LENGTH_LONG); 
           }
         } else {
           Fluttertoast.showToast(
@@ -79,7 +75,7 @@ class _MobileState extends State<Mobile> {
           children: [
             screenHead('Mobile', 'An OTP will be sent to this number.'),
             Container(
-              margin: const EdgeInsets.only(top: 30, bottom: 50),
+              margin: const EdgeInsets.only(top: 30, bottom: 20),
               child: Row(
                 children: [
                   Expanded(
@@ -127,6 +123,25 @@ class _MobileState extends State<Mobile> {
                   backgroundColor: const Color(0xFFFFDA58)),
               child: const Text('Proceed',
                   style: TextStyle(color: Color(0xFF000000))),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextButton(
+              onPressed: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const OTP())),
+              style: TextButton.styleFrom(
+                splashFactory: NoSplash.splashFactory,
+                padding: const EdgeInsets.symmetric(vertical: 15.0),
+                // backgroundColor: Color(_isTandC ? 0xFFFFDA58 : 0xffC4C4C4),
+              ),
+              child: const Text(
+                'I have an OTP',
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontSize: 11,
+                ),
+              ),
             ),
           ],
         ),

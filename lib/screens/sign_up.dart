@@ -1,4 +1,5 @@
 import 'package:beta_home/helper/keys.dart';
+import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/screens/mobile.dart';
@@ -50,30 +51,28 @@ class _SignUpState extends State<SignUp> {
 
   Future reg() async {
     try {
-      final resp = await Dio().post(UrlHelper.register, data: {
+      final resp = await ServerHelper.post(UrlHelper.register, {
         'first_name': _fName,
         'last_name': _lName,
         'email': _email,
         'password': _pwd
       });
-      if (resp.statusCode == 200) {
-        HttpResp json = HttpResp.fromJson(resp.data);
-        if (json.status() == "success") {
+      if (resp['status'] == 200) {
+        final HttpResp json = HttpResp.fromJson(resp['data']);
+        Fluttertoast.showToast(msg: json.msg(), toastLength: Toast.LENGTH_LONG);
+        if (json.status() == 'success') {
           _pref.then((SharedPreferences pref) {
             pref.setString(Keys.TOKEN, json.token());
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Mobile()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const Mobile()));
           });
-        } else {
-          Fluttertoast.showToast(
-              msg: json.msg(), toastLength: Toast.LENGTH_LONG);
         }
       } else {
         Fluttertoast.showToast(
-            msg: 'Connection error!', toastLength: Toast.LENGTH_LONG);
+            msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
       }
     } catch (e) {
-      print(e);
+      Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG);
     }
   }
 
@@ -235,7 +234,8 @@ class _SignUpState extends State<SignUp> {
                         color: Color(_isTandC ? 0xFF000000 : 0xffffffff))),
               ),
               TextButton(
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Mobile())),
+                onPressed: () => Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Mobile())),
                 style: TextButton.styleFrom(
                   splashFactory: NoSplash.splashFactory,
                   padding: const EdgeInsets.symmetric(vertical: 15.0),

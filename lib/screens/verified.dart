@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:beta_home/widgets/screen_head.dart';
 
 class Verified extends StatelessWidget {
+  const Verified({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

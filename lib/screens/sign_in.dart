@@ -1,3 +1,4 @@
+import 'package:beta_home/helper/keys.dart';
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/http_resp.dart';
@@ -9,13 +10,17 @@ import 'package:beta_home/widgets/screen_head.dart';
 import 'package:beta_home/screens/sign_up.dart';
 import 'package:beta_home/screens/forgot-password.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignIn extends StatefulWidget {
+  const SignIn({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _SignInState();
 }
 
 class _SignInState extends State<SignIn> {
+  final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
   bool showPwd = false;
   String _email = '', _pwd = '';
 
@@ -30,19 +35,17 @@ class _SignInState extends State<SignIn> {
           'password': _pwd,
         });
         if (resp['status'] == 200) {
-          final HttpResp json = resp['json'];
+          final HttpResp json = HttpResp.fromJson(resp['data']);
+          print(resp['data']);
           Fluttertoast.showToast(
               msg: json.msg(), toastLength: Toast.LENGTH_LONG);
-          if (json.status() == 'success') {
-            (() {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const Dashboard(),
-                ),
-              );
-            })();
-          }
+          _pref.then((SharedPreferences pref) {
+            pref.setString(Keys.TOKEN, json.token());
+            if (json.status() == 'success') {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const Dashboard()));
+            }
+          });
         } else {
           Fluttertoast.showToast(
               msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
@@ -82,7 +85,7 @@ class _SignInState extends State<SignIn> {
           )
         ],
       ),
-      body: Container(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 30.0),
         child: Flex(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -153,7 +156,7 @@ class _SignInState extends State<SignIn> {
             TextButton(
               onPressed: _onProceed,
               style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 24.0),
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
                   backgroundColor: const Color(0xFFFFDA58)),
               child: const Text('Proceed',
                   style: TextStyle(color: Color(0xFF000000))),

@@ -4,5 +4,6 @@ const baseUrl = "http://44.205.154.51:3000"; //test
 class UrlHelper {
   static const register = "$baseUrl/register";
   static const login = "$baseUrl/login";
+  static const profile = "$baseUrl/profile";
   static const packages = "$baseUrl/packages";
 }
