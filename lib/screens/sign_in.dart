@@ -1,3 +1,6 @@
+import 'package:beta_home/helper/server_helper.dart';
+import 'package:beta_home/helper/url_helper.dart';
+import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/screens/dashboard.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:beta_home/widgets/screen_head.dart';
 import 'package:beta_home/screens/sign_up.dart';
 import 'package:beta_home/screens/forgot-password.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -13,6 +17,42 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   bool showPwd = false;
+  String _email = '', _pwd = '';
+
+  Future _onProceed() async {
+    if (_email == '' || _pwd == '') {
+      Fluttertoast.showToast(
+          msg: 'All fields are required', toastLength: Toast.LENGTH_LONG);
+    } else {
+      try {
+        final resp = await ServerHelper.post(UrlHelper.login, {
+          'email': _email,
+          'password': _pwd,
+        });
+        if (resp['status'] == 200) {
+          final HttpResp json = resp['json'];
+          Fluttertoast.showToast(
+              msg: json.msg(), toastLength: Toast.LENGTH_LONG);
+          if (json.status() == 'success') {
+            (() {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Dashboard(),
+                ),
+              );
+            })();
+          }
+        } else {
+          Fluttertoast.showToast(
+              msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
+        }
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: e.toString(), toastLength: Toast.LENGTH_LONG);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,30 +89,32 @@ class _SignInState extends State<SignIn> {
           direction: Axis.vertical,
           children: [
             screenHead('Sign In', 'Welcome to Beta Homes, sign in and enjoy.'),
-            const Padding(
-              padding: EdgeInsets.only(top: 50),
+            Padding(
+              padding: const EdgeInsets.only(top: 50),
               child: TextField(
                 cursorColor: Colors.black,
                 keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
+                onChanged: (val) => _email = val,
+                decoration: const InputDecoration(
                     hintText: 'Email',
                     border: InputBorder.none,
                     filled: true,
                     fillColor: Color(0xffFFF6D6)),
-                style: TextStyle(
-                  fontSize: 13,
+                style: const TextStyle(
+                  fontSize: 15,
                   color: Color(0xff000000),
                 ),
               ),
             ),
-            const Padding(
-                padding: EdgeInsets.only(top: 10, bottom: 20),
+            Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 20),
                 child: TextField(
                   cursorColor: Colors.black,
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
-                  decoration: InputDecoration(
+                  onChanged: (val) => _pwd = val,
+                  decoration: const InputDecoration(
                     hintText: 'Password',
                     border: InputBorder.none,
                     filled: true,
@@ -83,8 +125,8 @@ class _SignInState extends State<SignIn> {
                       color: Colors.black,
                     ),
                   ),
-                  style: TextStyle(
-                    fontSize: 13,
+                  style: const TextStyle(
+                    fontSize: 15,
                     color: Color(0xff000000),
                   ),
                 )),
@@ -109,10 +151,7 @@ class _SignInState extends State<SignIn> {
               ),
             ),
             TextButton(
-              onPressed: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const Dashboard()));
-              },
+              onPressed: _onProceed,
               style: TextButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 24.0),
                   backgroundColor: const Color(0xFFFFDA58)),
