@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:beta_home/helper/keys.dart';
+import 'package:beta_home/models/data.dart';
 import 'package:beta_home/screens/dashboard.dart';
 import 'package:beta_home/screens/get_started.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Splash extends StatefulWidget {
@@ -20,12 +24,15 @@ class _SplashState extends State<Splash> {
     super.initState();
     Future.delayed(const Duration(milliseconds: 5000), () {
       _pref.then((SharedPreferences pref) {
-        bool isLoggedIn = pref.getBool(Keys.IS_GET_STARTED) ?? false;
+        bool isStarted = pref.getBool(Keys.IS_GET_STARTED) ?? false;
+        // print('STARTED::::::::::::::::::::::::::::::::$isStarted');
+        Provider.of<DataModel>(context, listen: false).profile =
+            pref.getString(Keys.PROFILE);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) =>
-                isLoggedIn ? const Dashboard() : const GetStarted(),
+                isStarted ? const Dashboard() : const GetStarted(),
           ),
         );
       });

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:beta_home/helper/keys.dart';
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/http_resp.dart';
@@ -67,13 +69,10 @@ class ServerHelper {
       final resp = await ServerHelper.get(UrlHelper.profile);
       if (resp['status'] == 200 || resp['status'] == 401) {
         final HttpResp json = HttpResp.fromJson(resp['data']);
-        print(resp['data']);
         if (json.status() == 'success') {
           _pref.then((SharedPreferences pref) {
-            pref.setString(Keys.PROFILE, json.data());
-            if (route != null) {
-              Navigator.push(context, route);
-            }
+            pref.setString(Keys.PROFILE, jsonEncode(json.data()));
+            Navigator.pushAndRemoveUntil(context, route!, ((route) => false));
           });
         } else {
           Fluttertoast.showToast(

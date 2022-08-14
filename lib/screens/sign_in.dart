@@ -42,8 +42,11 @@ class _SignInState extends State<SignIn> {
           _pref.then((SharedPreferences pref) {
             pref.setString(Keys.TOKEN, json.token());
             if (json.status() == 'success') {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Dashboard()));
+              ServerHelper.getProfile(context,
+                  route: MaterialPageRoute(
+                      builder: (context) => const Dashboard()));
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => const Dashboard()));
             }
           });
         } else {
