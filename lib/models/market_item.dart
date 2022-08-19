@@ -1,41 +1,25 @@
 class MarketItem {
-  int uid;
-  String name;
-  String imgUrl;
-  String description;
-  double price;
-  int rated;
+  String _id;
+  String _name;
+  String _desc;
+  String _price;
+  String _picture;
+  dynamic _categories;
+  final bool _is_rated = false;
 
-  MarketItem(this.uid, this.name, this.imgUrl, this.description, this.price,
-      this.rated);
+  MarketItem(this._id, this._name, this._desc, this._price, this._picture,
+      this._categories);
 
-  // factory MarketItem.fromJson(dynamic json) {
-  //   return MarketItem(json['package_name'], json['description'], json['color'],
-  //       json['price'], json['items']);
-  // }
-
-  int getUID() {
-    return uid;
+  factory MarketItem.fromJson(dynamic json) {
+    return MarketItem(json['_id'], json['name'], json['description'],
+        json['price'], json['picture'], json['category_ids']);
   }
 
-  String getName() {
-    return name;
-  }
-
-  String getImgUrl() {
-    return imgUrl;
-  }
-
-  double getPrice() {
-    return price;
-  }
-
-  bool isRated() {
-    return rated == 1;
-  }
-
-  @override
-  String toString() {
-    return description;
-  }
+  get id => _id;
+  get name => _name;
+  get desc => _desc;
+  get price => _price;
+  get picture => _picture;
+  get categories => _categories;
+  get isRated => _is_rated;
 }

@@ -14,29 +14,26 @@ Stack dp() {
       ),
       Container(
         color: Colors.white,
-        width: 60,
-        height: 90,
+        width: 50,
+        height: 80,
       ),
-      Consumer<DataModel>(builder: (context, data, child) {
-        return CircleAvatar(
-          radius: 55,
-          // foregroundColor: Colors.transparent,
-          backgroundColor: Colors.transparent,
-          child: data.profile!.profile_pic == null
-              ? const Image(
-                  image: AssetImage('./lib/assets/imgs/dp.jpg'),
-                  height: 86,
-                  width: 86,
-                  fit: BoxFit.cover,
+      Positioned(
+        top: 12,
+        left: 12,
+        right: 12,
+        bottom: 12,
+        child: Consumer<DataModel>(builder: (context, data, child) {
+          return data.profile != null && data.profile!.profile_pic != null
+              ? CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  backgroundImage:
+                      NetworkImage(data.profile?.profile_pic ?? 'http://'),
                 )
-              : const Image(
-                  image: NetworkImage('./lib/assets/imgs/dp.png'),
-                  height: 86,
-                  width: 86,
-                  fit: BoxFit.cover,
-                ),
-        );
-      }),
+              : const CircleAvatar(
+                  backgroundImage: AssetImage('./lib/assets/imgs/dp.jpg'),
+                );
+        }),
+      ),
     ],
   );
 }

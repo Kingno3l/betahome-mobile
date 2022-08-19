@@ -1,11 +1,12 @@
+import 'package:beta_home/helper/server_helper.dart';
+import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/data.dart';
-import 'package:beta_home/screens/wallet.dart';
+import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/widgets/DP.dart';
 import 'package:beta_home/widgets/screen_bar.dart';
 import 'package:flutter/material.dart';
 
-import 'package:beta_home/widgets/screen_head.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class Profile extends StatefulWidget {
@@ -17,6 +18,52 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   bool _isEdit = false;
+  final TextEditingController _nameCont = TextEditingController();
+  final TextEditingController _emailCont = TextEditingController();
+  final TextEditingController _countryCont = TextEditingController();
+  final TextEditingController _phoneCont = TextEditingController();
+  final TextEditingController _addrCont = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    ProfileModel? profile =
+        Provider.of<DataModel>(context, listen: false).profile;
+    _nameCont.text = '${profile?.first_name} ${profile?.last_name}';
+    _emailCont.text = '${profile?.email}';
+    _phoneCont.text = profile?.phone ?? '';
+    _countryCont.text = profile?.country_code ?? '';
+    _addrCont.text = profile?.address ?? '';
+  }
+
+  Future _onSubmit() async {
+    final name = _nameCont.text.split(' ');
+    try {
+      final resp = await ServerHelper.put(UrlHelper.profile, {
+        'first_name': name[0],
+        'last_name': name[1],
+        'country_code': _countryCont.text,
+        'phone': _phoneCont.text,
+        'address': _addrCont.text,
+      });
+      if (resp['status'] == 200) {
+        final HttpResp json = HttpResp.fromJson(resp['data']);
+        Fluttertoast.showToast(msg: json.msg, toastLength: Toast.LENGTH_LONG);
+        if (json.status == 'success') {
+          setState(() {
+            _isEdit = false;
+          });
+          if (!mounted) return;
+          ServerHelper.getProfile(context);
+        }
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,11 +136,31 @@ class _ProfileState extends State<Profile> {
               TextField(
                 cursorColor: Colors.black,
                 readOnly: !_isEdit,
-                decoration: InputDecoration(
-                  hintText: data.profile!.first_name ?? 'Name',
+                textCapitalization: TextCapitalization.words,
+                controller: _nameCont,
+                decoration: const InputDecoration(
+                  hintText: 'Name',
                   border: InputBorder.none,
                   filled: true,
-                  fillColor: const Color(0xffECECEC),
+                  fillColor: Color(0xffECECEC),
+                ),
+                style: const TextStyle(
+                  fontSize: 15,
+                  color: Color(0xff000000),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextField(
+                cursorColor: Colors.black,
+                readOnly: true,
+                controller: _emailCont,
+                decoration: const InputDecoration(
+                  hintText: 'Email',
+                  border: InputBorder.none,
+                  filled: true,
+                  fillColor: Color(0xffECECEC),
                 ),
                 style: const TextStyle(
                   fontSize: 15,
@@ -106,11 +173,13 @@ class _ProfileState extends State<Profile> {
               TextField(
                 cursorColor: Colors.black,
                 readOnly: !_isEdit,
-                decoration: InputDecoration(
-                  hintText: data.profile!.email ?? 'Email',
+                keyboardType: TextInputType.phone,
+                controller: _phoneCont,
+                decoration: const InputDecoration(
+                  hintText: 'Phone No.',
                   border: InputBorder.none,
                   filled: true,
-                  fillColor: const Color(0xffECECEC),
+                  fillColor: Color(0xffECECEC),
                 ),
                 style: const TextStyle(
                   fontSize: 15,
@@ -122,29 +191,16 @@ class _ProfileState extends State<Profile> {
               ),
               TextField(
                 cursorColor: Colors.black,
+                maxLines: null,
+                minLines: 2,
                 readOnly: !_isEdit,
-                decoration: InputDecoration(
-                  hintText: data.profile!.phone ?? 'Phone No.',
+                textCapitalization: TextCapitalization.words,
+                controller: _addrCont,
+                decoration: const InputDecoration(
+                  hintText: 'Address',
                   border: InputBorder.none,
                   filled: true,
-                  fillColor: const Color(0xffECECEC),
-                ),
-                style: const TextStyle(
-                  fontSize: 15,
-                  color: Color(0xff000000),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                cursorColor: Colors.black,
-                readOnly: !_isEdit,
-                decoration: InputDecoration(
-                  hintText: data.profile!.address ?? 'Address',
-                  border: InputBorder.none,
-                  filled: true,
-                  fillColor: const Color(0xffECECEC),
+                  fillColor: Color(0xffECECEC),
                 ),
                 style: const TextStyle(
                   fontSize: 15,
@@ -155,7 +211,7 @@ class _ProfileState extends State<Profile> {
                 height: 30,
               ),
               TextButton(
-                onPressed: null,
+                onPressed: _onSubmit,
                 style: TextButton.styleFrom(
                   backgroundColor: const Color(0xffFFDA58),
                   padding: const EdgeInsets.all(15),

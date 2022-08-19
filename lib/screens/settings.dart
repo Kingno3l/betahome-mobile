@@ -24,12 +24,12 @@ class _SettingsState extends State<Settings> {
 
   void _onLogout() async {
     SharedPreferences pref = await _pref;
-    // bool isDone = await pref.remove(Keys.PROFILE);
-    // if (!mounted) return;
-    // if (isDone) {
-    //   Provider.of<DataModel>(context, listen: false).profile =
-    //       pref.getString(Keys.PROFILE);
-    // }
+    bool isDone = await pref.remove(Keys.PROFILE);
+    if (!mounted) return;
+    if (isDone) {
+      Provider.of<DataModel>(context, listen: false).profile =
+          pref.getString(Keys.PROFILE);
+    }
   }
 
   @override
@@ -86,11 +86,11 @@ class _SettingsState extends State<Settings> {
             Row(
               children: [
                 Text(
-                  '${data.profile!.first_name ?? 'Guest'} ',
+                  '${data.profile != null ? data.profile!.first_name : 'Guest'} ',
                   style: const TextStyle(fontSize: 25, color: Colors.black),
                 ),
                 Text(
-                  data.profile!.last_name ?? 'User',
+                  ' ${data.profile != null ? data.profile!.last_name : 'User'}',
                   style: const TextStyle(
                     fontSize: 25,
                     color: Color(0xFF8E8E8E),

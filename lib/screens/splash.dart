@@ -25,9 +25,10 @@ class _SplashState extends State<Splash> {
     Future.delayed(const Duration(milliseconds: 5000), () {
       _pref.then((SharedPreferences pref) {
         bool isStarted = pref.getBool(Keys.IS_GET_STARTED) ?? false;
-        // print('STARTED::::::::::::::::::::::::::::::::$isStarted');
+        final profile = pref.getString(Keys.PROFILE);
         Provider.of<DataModel>(context, listen: false).profile =
-            pref.getString(Keys.PROFILE);
+            profile != null ? jsonDecode(profile) : null;
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

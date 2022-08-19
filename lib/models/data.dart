@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+// ignore_for_file: non_constant_identifier_names
 import 'package:flutter/foundation.dart';
 
 class DataModel extends ChangeNotifier {
@@ -8,12 +7,8 @@ class DataModel extends ChangeNotifier {
 
   List<int> get items => _cart;
 
-  set profile(dynamic profile) {
-    // if (profile != null) {
-    _profile = ProfileModel.fromJson(jsonDecode(profile));
-    // } else {
-    //   _profile = null;
-    // }
+  set profile(dynamic json) {
+    _profile = json != null ? ProfileModel.fromJson(json) : json;
     notifyListeners();
   }
 

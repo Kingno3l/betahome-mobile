@@ -22,7 +22,7 @@ Widget galleryCard(context, int index, MarketItem item) => Card(
               child: Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage(item.getImgUrl()),
+                    image: AssetImage(item.picture),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -32,7 +32,7 @@ Widget galleryCard(context, int index, MarketItem item) => Card(
                     margin: const EdgeInsets.all(5),
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                      color: Color(item.isRated() ? 0xffFFDA58 : 0xffD9D9D9),
+                      color: Color(item.isRated ? 0xffFFDA58 : 0xffD9D9D9),
                       // color: Theme.of(context).primaryColor,
                       borderRadius: BorderRadius.circular(100),
                     ),
@@ -47,12 +47,12 @@ Widget galleryCard(context, int index, MarketItem item) => Card(
             ),
             Container(
               padding: const EdgeInsets.all(8.0),
-              child: Text(item.getName()),
+              child: Text(item.name),
             ),
             Container(
               padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
               child: Text(
-                'N${item.getPrice()}',
+                'N${item.price}',
                 style: const TextStyle(color: Color(0xffF55859)),
               ),
             ),

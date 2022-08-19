@@ -1,40 +1,28 @@
 class TransactionItem {
-  final int _uid;
+  final String _id;
   final double _amount;
   final String _type;
   final String _subType;
   final String _date;
   final String _time;
 
-  TransactionItem(this._uid, this._amount, this._type, this._subType,
-      this._date, this._time);
+  TransactionItem(this._id, this._amount, this._type, this._subType, this._date,
+      this._time);
 
-  // factory MarketItem.fromJson(dynamic json) {
-  //   return MarketItem(json['package_name'], json['description'], json['color'],
-  //       json['price'], json['items']);
-  // }
-
-  int uid() {
-    return _uid;
+  factory TransactionItem.fromJson(dynamic json) {
+    return TransactionItem(json['_id'], double.parse(json['amount'].toString()),
+        json['type'], json['sub_type'], json['date'], json['time']);
   }
 
-  double amount() {
-    return _amount;
-  }
+  get id => _id;
 
-  String type() {
-    return _type;
-  }
+  get amount => _amount;
 
-  String subType() {
-    return _subType;
-  }
+  get type => _type;
 
-  String date() {
-    return _date;
-  }
+  get subType => _subType;
 
-  String time() {
-    return _time;
-  }
+  get date => _date;
+
+  get time => _time;
 }

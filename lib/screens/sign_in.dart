@@ -36,12 +36,10 @@ class _SignInState extends State<SignIn> {
         });
         if (resp['status'] == 200) {
           final HttpResp json = HttpResp.fromJson(resp['data']);
-          print(resp['data']);
-          Fluttertoast.showToast(
-              msg: json.msg(), toastLength: Toast.LENGTH_LONG);
+          Fluttertoast.showToast(msg: json.msg, toastLength: Toast.LENGTH_LONG);
           _pref.then((SharedPreferences pref) {
-            pref.setString(Keys.TOKEN, json.token());
-            if (json.status() == 'success') {
+            pref.setString(Keys.TOKEN, json.token);
+            if (json.status == 'success') {
               ServerHelper.getProfile(context,
                   route: MaterialPageRoute(
                       builder: (context) => const Dashboard()));

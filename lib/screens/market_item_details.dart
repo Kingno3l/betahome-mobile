@@ -64,7 +64,7 @@ class _MarketItemDetails extends State<MarketItemDetails> {
                 height: 220,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage(item.getImgUrl()),
+                    image: AssetImage(item.picture),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -74,7 +74,7 @@ class _MarketItemDetails extends State<MarketItemDetails> {
                     margin: const EdgeInsets.all(5),
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                      color: Color(item.isRated() ? 0xffFFDA58 : 0xffD9D9D9),
+                      color: Color(item.isRated ? 0xffFFDA58 : 0xffD9D9D9),
                       borderRadius: BorderRadius.circular(100),
                     ),
                     child: const Icon(
@@ -89,7 +89,7 @@ class _MarketItemDetails extends State<MarketItemDetails> {
                 height: 15,
               ),
               Text(
-                item.getName(),
+                item.name,
                 style:
                     const TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
               ),
@@ -132,7 +132,7 @@ class _MarketItemDetails extends State<MarketItemDetails> {
                 height: 12,
               ),
               Text(
-                'N${item.getPrice()}',
+                'N${item.price}',
                 style: const TextStyle(
                     color: Color(0xffF55859),
                     fontSize: 18,
@@ -151,7 +151,7 @@ class _MarketItemDetails extends State<MarketItemDetails> {
                 height: 8,
               ),
               Text(
-                item.description,
+                item.desc,
               ),
               const SizedBox(
                 height: 10,

@@ -1,18 +1,14 @@
-import 'package:beta_home/helper/keys.dart';
+import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/data.dart';
 import 'package:beta_home/models/http_resp.dart';
-import 'package:beta_home/models/package.dart';
 import 'package:beta_home/screens/profile.dart';
 import 'package:beta_home/screens/sign_in.dart';
 import 'package:beta_home/widgets/beta_office.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:beta_home/widgets/beta_home.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -22,31 +18,28 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
   int _tabIndex = 0;
-  List _data = [];
+  List _items = [];
 
   Future getPackages() async {
     try {
-      final resp = await Dio().get(UrlHelper.packages);
-
-      if (resp.statusCode == 200) {
-        HttpResp json = HttpResp.fromJson(resp.data);
-
-        if (json.status() == "success") {
-          // AlertDialog(content: Text(json.msg()));
-          print('Sucess: ${json.msg()}');
-          // print('Data: ${json.data()}');
+      final resp = await ServerHelper.get(UrlHelper.packages);
+      if (resp['status'] == 200) {
+        final HttpResp json = HttpResp.fromJson(resp['data']);
+        if (json.status == 'success') {
           setState(() {
-            _data = json.data();
+            _items = json.data;
           });
         } else {
-          // AlertDialog(content: Text(json.msg()));
-          print('Error: ${json.msg()}');
+          Fluttertoast.showToast(msg: json.msg, toastLength: Toast.LENGTH_LONG);
         }
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
       }
     } catch (e) {
-      // AlertDialog(content: Text(e.toString()));
+      Fluttertoast.showToast(
+          msg: 'An error occured.', toastLength: Toast.LENGTH_LONG);
     }
   }
 
@@ -81,19 +74,19 @@ class _HomeState extends State<Home> {
                   Row(
                     children: [
                       Expanded(
-                          child: Row(children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          backgroundImage: const NetworkImage(
-                              'https://img.icons8.com/ios-glyphs/60/95A5A6/test-account.png'),
-                          radius: 20,
-                          child: Material(
-                            shape: const CircleBorder(),
-                            clipBehavior: Clip.hardEdge,
-                            color: Colors.transparent,
-                            child: InkWell(
-                                onTap: () =>
-                                    // {
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              backgroundImage: const NetworkImage(
+                                  'https://img.icons8.com/ios-glyphs/60/95A5A6/test-account.png'),
+                              radius: 20,
+                              child: Material(
+                                shape: const CircleBorder(),
+                                clipBehavior: Clip.hardEdge,
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () => {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -103,47 +96,20 @@ class _HomeState extends State<Home> {
                                                 : const Profile(),
                                       ),
                                     )
-
-                                // data.profile == null
-                                //     ? Navigator.push(
-                                //         context,
-                                //         MaterialPageRoute(
-                                //           builder: (context) => const SignIn(),
-                                //         ),
-                                //       )
-                                //     : Navigator.push(
-                                //         context,
-                                //         MaterialPageRoute(
-                                //           builder: (context) => const Profile(),
-                                //         ),
-                                //       )
-
-                                // _pref.then((SharedPreferences pref) {
-                                //   !(pref.getBool(Keys.IS_LOGGED_IN) ?? false)
-                                //       ? Navigator.push(
-                                //           context,
-                                //           MaterialPageRoute(
-                                //             builder: (context) => SignIn(),
-                                //           ),
-                                //         )
-                                //       : Navigator.push(
-                                //           context,
-                                //           MaterialPageRoute(
-                                //             builder: (context) =>
-                                //                 const Profile(),
-                                //           ),
-                                //         );
-                                // })
-                                // },
+                                  },
                                 ),
-                          ),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              'Welcome${data.profile != null ? ', ${data.profile?.first_name}' : ''}',
+                              style: const TextStyle(
+                                color: Color(0xff000000),
+                              ),
+                            )
+                          ],
                         ),
-                        const SizedBox(width: 10),
-                        Text(
-                          'Welcome, ${data.profile?.first_name}',
-                          style: const TextStyle(color: Color(0xff000000)),
-                        )
-                      ])),
+                      ),
                       Stack(
                         children: [
                           const Icon(
@@ -238,8 +204,8 @@ class _HomeState extends State<Home> {
             ),
             Expanded(
                 child: _tabIndex == 0
-                    ? BetaHome(items: _data)
-                    : BetaOffice(items: _data))
+                    ? BetaHome(items: _items)
+                    : BetaOffice(items: _items))
           ],
         ),
       );

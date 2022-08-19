@@ -1,15 +1,13 @@
-import 'package:beta_home/models/cart_item.dart';
-import 'package:beta_home/models/package.dart';
-import 'package:beta_home/models/package_item.dart';
+import 'package:beta_home/helper/server_helper.dart';
+import 'package:beta_home/helper/url_helper.dart';
+import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/models/transaction_item.dart';
-import 'package:beta_home/screens/check_out.dart';
-import 'package:beta_home/screens/package_item_details.dart';
-import 'package:beta_home/screens/payment_option.dart';
-import 'package:beta_home/widgets/dot.dart';
 import 'package:beta_home/widgets/screen_bar.dart';
+import 'package:beta_home/widgets/transaction_row.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:collection/collection.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Transactions extends StatefulWidget {
   const Transactions({Key? key}) : super(key: key);
@@ -19,28 +17,35 @@ class Transactions extends StatefulWidget {
 }
 
 class _TransactionsState extends State<Transactions> {
-  final List<TransactionItem> _transactions = [
-    TransactionItem(100, 2400, 'credit', 'other', '23 May, 2022', '4:30pm'),
-    TransactionItem(101, 250, 'credit', 'wallet', '22 May, 2022', '4:01pm'),
-    TransactionItem(100, 2000, 'debit', 'wallet', '23 May, 2022', '4:30pm'),
-    TransactionItem(101, 500, 'debit', 'other', '22 May, 2022', '4:01pm'),
-    TransactionItem(100, 2400, 'credit', 'wallet', '23 May, 2022', '4:30pm'),
-    TransactionItem(101, 250, 'credit', 'other', '22 May, 2022', '4:01pm'),
-    TransactionItem(100, 10, 'debit', 'wallet', '23 May, 2022', '4:30pm'),
-    TransactionItem(101, 250, 'credit', 'wallet', '22 May, 2022', '4:01pm'),
-    TransactionItem(100, 2400, 'credit', 'other', '23 May, 2022', '4:30pm'),
-    TransactionItem(101, 250, 'credit', 'wallet', '22 May, 2022', '4:01pm'),
-    TransactionItem(100, 2400, 'credit', 'other', '23 May, 2022', '4:30pm'),
-    TransactionItem(101, 250, 'credit', 'wallet', '22 May, 2022', '4:01pm'),
-    TransactionItem(100, 2000, 'debit', 'wallet', '23 May, 2022', '4:30pm'),
-    TransactionItem(101, 500, 'debit', 'other', '22 May, 2022', '4:01pm'),
-    TransactionItem(100, 2400, 'credit', 'wallet', '23 May, 2022', '4:30pm'),
-    TransactionItem(101, 250, 'credit', 'other', '22 May, 2022', '4:01pm'),
-    TransactionItem(100, 10, 'debit', 'wallet', '23 May, 2022', '4:30pm'),
-    TransactionItem(101, 250, 'credit', 'wallet', '22 May, 2022', '4:01pm'),
-    TransactionItem(100, 2400, 'credit', 'other', '23 May, 2022', '4:30pm'),
-    TransactionItem(101, 250, 'credit', 'wallet', '22 May, 2022', '4:01pm'),
-  ];
+  List _items = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getTransactions();
+  }
+
+  Future getTransactions() async {
+    try {
+      final resp = await ServerHelper.get(UrlHelper.transactions);
+      if (resp['status'] == 200) {
+        final HttpResp json = HttpResp.fromJson(resp['data']);
+        if (json.status == 'success') {
+          setState(() {
+            _items = json.data;
+          });
+        } else {
+          Fluttertoast.showToast(msg: json.msg, toastLength: Toast.LENGTH_LONG);
+        }
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'Error.', toastLength: Toast.LENGTH_LONG);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +67,7 @@ class _TransactionsState extends State<Transactions> {
                   child: TextButton.icon(
                     onPressed: null,
                     style: TextButton.styleFrom(
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(12),
                         // shape: RoundedRectangleBorder(borderRadius: ),
                         alignment: Alignment.centerLeft,
                         backgroundColor: const Color(0xffF4F4F4)),
@@ -87,7 +92,7 @@ class _TransactionsState extends State<Transactions> {
                   child: TextButton.icon(
                     onPressed: null,
                     style: TextButton.styleFrom(
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(12),
                         // shape: RoundedRectangleBorder(borderRadius: ),
                         alignment: Alignment.centerLeft,
                         backgroundColor: const Color(0xffF4F4F4)),
@@ -111,68 +116,10 @@ class _TransactionsState extends State<Transactions> {
                   color: Color(0xff696969),
                 ),
               ),
-              ..._transactions
+              ..._items
                   .mapIndexed(
-                    (index, item) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 45,
-                            height: 45,
-                            padding: const EdgeInsets.all(8),
-                            margin: const EdgeInsets.only(right: 10),
-                            decoration: BoxDecoration(
-                                color: item.type() == 'debit'
-                                    ? const Color.fromARGB(50, 235, 87, 87)
-                                    : const Color.fromARGB(50, 20, 176, 139),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(10.0))),
-                            child: SvgPicture.asset(
-                              item.subType() == 'wallet'
-                                  ? './lib/assets/icons/svgs/wallet_top_up.svg'
-                                  : './lib/assets/icons/svgs/cd.svg',
-                              color: item.type() == 'debit'
-                                  ? const Color.fromRGBO(235, 87, 87, 1)
-                                  : const Color.fromRGBO(20, 176, 139, 1),
-                            ),
-                          ),
-                          Expanded(
-                              child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'N${item.amount()}',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                '${item.subType()} ${item.type()}',
-                                style:
-                                    const TextStyle(color: Color(0xff696969)),
-                              ),
-                            ],
-                          )),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(item.date()),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                item.time(),
-                                style:
-                                    const TextStyle(color: Color(0xff696969)),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
+                    (index, item) =>
+                        transactionRow(TransactionItem.fromJson(item)),
                   )
                   .toList()
             ],

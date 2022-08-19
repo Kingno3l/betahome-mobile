@@ -1,16 +1,13 @@
-import 'package:beta_home/models/cart_item.dart';
+import 'package:beta_home/helper/server_helper.dart';
+import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/history_item.dart';
-import 'package:beta_home/models/package.dart';
-import 'package:beta_home/models/package_item.dart';
-import 'package:beta_home/models/transaction_item.dart';
-import 'package:beta_home/screens/check_out.dart';
-import 'package:beta_home/screens/package_item_details.dart';
-import 'package:beta_home/screens/payment_option.dart';
-import 'package:beta_home/widgets/dot.dart';
+import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/widgets/screen_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:collection/collection.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class OrderHistory extends StatefulWidget {
   const OrderHistory({Key? key}) : super(key: key);
@@ -50,6 +47,40 @@ class _OrderHistoryState extends State<OrderHistory> {
     HistoryItem(101, 'Beta Basic', 250, './lib/assets/imgs/remove8.png', -1,
         '22 May, 2022 4:01pm'),
   ];
+  List _items = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getOrders();
+  }
+
+  Future getOrders() async {
+    try {
+      final resp = await ServerHelper.get(UrlHelper.orders);
+      if (resp['status'] == 200) {
+        final HttpResp json = HttpResp.fromJson(resp['data']);
+        print(resp['data']);
+        var now = DateTime.now();
+        var format = DateFormat().format(now);
+        print(format);
+
+        if (json.status == 'success') {
+          setState(() {
+            _items = json.data;
+          });
+        } else {
+          Fluttertoast.showToast(msg: json.msg, toastLength: Toast.LENGTH_LONG);
+        }
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'Error.', toastLength: Toast.LENGTH_LONG);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +102,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                   child: TextButton.icon(
                     onPressed: null,
                     style: TextButton.styleFrom(
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(12),
                         // shape: RoundedRectangleBorder(borderRadius: ),
                         alignment: Alignment.centerLeft,
                         backgroundColor: const Color(0xffF4F4F4)),
@@ -96,7 +127,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                   child: TextButton.icon(
                     onPressed: null,
                     style: TextButton.styleFrom(
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(12),
                         // shape: RoundedRectangleBorder(borderRadius: ),
                         alignment: Alignment.centerLeft,
                         backgroundColor: const Color(0xffF4F4F4)),
@@ -122,7 +153,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                       child: Row(
                         children: [
                           Image(
-                            image: NetworkImage(item.picture()),
+                            image: AssetImage(item.picture()),
                             // alignment: Alignment.center,
                             height: 70,
                             width: 70,
