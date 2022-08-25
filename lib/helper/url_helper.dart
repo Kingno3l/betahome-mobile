@@ -5,6 +5,7 @@ class UrlHelper {
   static const register = "$baseUrl/register";
   static const login = "$baseUrl/login";
   static const profile = "$baseUrl/profile";
+  static const password = "$baseUrl/password";
   static const packages = "$baseUrl/packages";
   static const market = "$baseUrl/market";
   static const services = "$baseUrl/services";

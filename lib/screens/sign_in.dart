@@ -21,7 +21,7 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
-  bool showPwd = false;
+  bool _showPwd = false;
   String _email = '', _pwd = '';
 
   Future _onProceed() async {
@@ -40,11 +40,12 @@ class _SignInState extends State<SignIn> {
           _pref.then((SharedPreferences pref) {
             pref.setString(Keys.TOKEN, json.token);
             if (json.status == 'success') {
-              ServerHelper.getProfile(context,
-                  route: MaterialPageRoute(
-                      builder: (context) => const Dashboard()));
-              // Navigator.push(context,
-              //     MaterialPageRoute(builder: (context) => const Dashboard()));
+              ServerHelper.getProfile(
+                context,
+                route: MaterialPageRoute(
+                  builder: (context) => const Dashboard(),
+                ),
+              );
             }
           });
         } else {
@@ -100,10 +101,15 @@ class _SignInState extends State<SignIn> {
                 keyboardType: TextInputType.emailAddress,
                 onChanged: (val) => _email = val,
                 decoration: const InputDecoration(
-                    hintText: 'Email',
-                    border: InputBorder.none,
-                    filled: true,
-                    fillColor: Color(0xffFFF6D6)),
+                  hintText: 'Email',
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  filled: true,
+                  fillColor: Color(0xffFFF6D6),
+                ),
                 style: const TextStyle(
                   fontSize: 15,
                   color: Color(0xff000000),
@@ -114,19 +120,30 @@ class _SignInState extends State<SignIn> {
                 padding: const EdgeInsets.only(top: 10, bottom: 20),
                 child: TextField(
                   cursorColor: Colors.black,
-                  obscureText: true,
+                  obscureText: !_showPwd,
                   enableSuggestions: false,
                   autocorrect: false,
                   onChanged: (val) => _pwd = val,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     hintText: 'Password',
-                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    border: const OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
                     filled: true,
-                    fillColor: Color(0xffFFF6D6),
-                    suffixIcon: Icon(
-                      Icons.visibility_off_outlined,
-                      size: 14,
-                      color: Colors.black,
+                    fillColor: const Color(0xffFFF6D6),
+                    suffixIcon: IconButton(
+                      onPressed: () => setState(() {
+                        _showPwd = !_showPwd;
+                      }),
+                      icon: Icon(
+                        _showPwd
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        size: 16,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                   style: const TextStyle(
@@ -147,7 +164,7 @@ class _SignInState extends State<SignIn> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ForgotPassword(),
+                              builder: (context) => const ForgotPassword(),
                             ),
                           ),
                         },
@@ -162,7 +179,9 @@ class _SignInState extends State<SignIn> {
               child: const Text('Proceed',
                   style: TextStyle(color: Color(0xFF000000))),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(
+              height: 30,
+            ),
             Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
               Flexible(
                   flex: 1,

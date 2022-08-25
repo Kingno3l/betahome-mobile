@@ -210,16 +210,19 @@ class _ProfileState extends State<Profile> {
               const SizedBox(
                 height: 30,
               ),
-              TextButton(
-                onPressed: _onSubmit,
-                style: TextButton.styleFrom(
-                  backgroundColor: const Color(0xffFFDA58),
-                  padding: const EdgeInsets.all(15),
-                ),
-                child: const Text(
-                  'Submit',
-                  style: TextStyle(
-                    color: Colors.black,
+              Visibility(
+                visible: _isEdit,
+                child: TextButton(
+                  onPressed: _onSubmit,
+                  style: TextButton.styleFrom(
+                    backgroundColor: const Color(0xffFFDA58),
+                    padding: const EdgeInsets.all(15),
+                  ),
+                  child: const Text(
+                    'Submit',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),

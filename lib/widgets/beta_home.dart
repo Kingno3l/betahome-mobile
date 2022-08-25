@@ -86,7 +86,7 @@ class BetaHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      // padding: const EdgeInsets.symmetric(vertical: 10),
       children: items
           .mapIndexed((index, item) => Padding(
                 padding: const EdgeInsets.only(bottom: 8),

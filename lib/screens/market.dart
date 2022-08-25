@@ -1,6 +1,7 @@
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/http_resp.dart';
+import 'package:beta_home/models/market_item%20category.dart';
 import 'package:beta_home/models/market_item.dart';
 import 'package:beta_home/screens/my_cart.dart';
 import 'package:beta_home/widgets/dot.dart';
@@ -9,8 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:collection/collection.dart';
 
-const productCategories = ['Recommended', 'Chairs', 'Tables', 'Couchs'];
-
 class Market extends StatefulWidget {
   const Market({Key? key}) : super(key: key);
 
@@ -18,18 +17,72 @@ class Market extends StatefulWidget {
   State<StatefulWidget> createState() => _MarketState();
 }
 
-class _MarketState extends State<Market> {
+class _MarketState extends State<Market> with TickerProviderStateMixin {
+  late AnimationController progressCont;
   List _items = [];
-  String _category = "Recommended";
+  List _cats = [];
+  String _category = '';
+  String _query = '';
+  final MarketItemCategory _recommeded = MarketItemCategory('', 'Recommended');
+  bool _isLoading = true;
 
-  Future getItems() async {
+  @override
+  void initState() {
+    progressCont =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1))
+          ..addListener(() {
+            setState(() {});
+          });
+    progressCont.repeat(reverse: true);
+
+    super.initState();
+    getCats();
+    getItems();
+  }
+
+  @override
+  void dispose() {
+    progressCont.dispose();
+    super.dispose();
+  }
+
+  void _onSearch(val) {
+    if (!_isLoading) {
+      setState(() {
+        _query = val;
+        _isLoading = true;
+      });
+    }
+    getItems();
+  }
+
+  Future getCats() async {
     try {
-      final resp = await ServerHelper.get('${UrlHelper.market}/items');
+      final resp = await ServerHelper.get('${UrlHelper.market}/categories');
       if (resp['status'] == 200) {
         final HttpResp json = HttpResp.fromJson(resp['data']);
         if (json.status == 'success') {
           setState(() {
+            _cats = json.data;
+          });
+        }
+      }
+    } catch (e) {}
+  }
+
+  Future getItems() async {
+    try {
+      final url = '${UrlHelper.market}/items?q=$_query&cat=$_category';
+      print(url);
+      final resp = await ServerHelper.get(url);
+      print(resp['status']);
+      if (resp['status'] == 200) {
+        final HttpResp json = HttpResp.fromJson(resp['data']);
+        print(resp['data']);
+        if (json.status == 'success') {
+          setState(() {
             _items = json.data;
+            _isLoading = false;
           });
         } else {
           Fluttertoast.showToast(msg: json.msg, toastLength: Toast.LENGTH_LONG);
@@ -39,20 +92,15 @@ class _MarketState extends State<Market> {
             msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
       }
     } catch (e) {
-      Fluttertoast.showToast(msg: 'Error.', toastLength: Toast.LENGTH_LONG);
+      Fluttertoast.showToast(msg: 'An error occured.', toastLength: Toast.LENGTH_LONG);
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    getItems();
-  }
-
-  void _onCategorySelected(val) {
+  void _onCategorySelected(MarketItemCategory val) {
     setState(() {
-      _category = val;
+      _category = val.id;
     });
+    getItems();
   }
 
   @override
@@ -70,9 +118,10 @@ class _MarketState extends State<Market> {
                   child: TextField(
                 cursorColor: Colors.black,
                 maxLines: 1,
+                onChanged: _onSearch,
                 decoration: InputDecoration(
                     isDense: true,
-                    hintText: 'Search what you need',
+                    hintText: 'Search what you need...',
                     hintStyle: const TextStyle(color: Color(0xffAEAEAE)),
                     // border: InputBorder.none,
                     border: OutlineInputBorder(
@@ -124,7 +173,22 @@ class _MarketState extends State<Market> {
             ],
           ),
           const SizedBox(
-            height: 10,
+            height: 2,
+          ),
+          SizedBox(
+            height: 3,
+            child: _isLoading
+                ? LinearProgressIndicator(
+                    color: const Color(0xffcccccc),
+                    backgroundColor: const Color(0xff999999),
+                    minHeight: 3,
+                    value: progressCont.value,
+                    semanticsLabel: 'Loading...',
+                  )
+                : null,
+          ),
+          const SizedBox(
+            height: 5,
           ),
           InkWell(
             onTap: () => {},
@@ -142,25 +206,15 @@ class _MarketState extends State<Market> {
             height: 32,
             child: ListView(
               scrollDirection: Axis.horizontal,
-              children: productCategories
-                  .mapIndexed((index, item) => Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: OutlinedButton(
-                          onPressed: () => _onCategorySelected(item),
-                          style: OutlinedButton.styleFrom(
-                              primary: const Color(0xff2F2E41),
-                              side: const BorderSide(
-                                  color: Color(0xffD9D9D9), width: 1),
-                              backgroundColor: _category == item
-                                  ? const Color(0xffFFDA58)
-                                  : const Color(0xffFAFAFA)),
-                          child: Text(
-                            item,
-                            style: const TextStyle(fontSize: 13),
-                          ),
-                        ),
-                      ))
-                  .toList(),
+              children: [
+                catItem(_recommeded),
+                ..._cats
+                    .mapIndexed(
+                      (index, item) =>
+                          catItem(MarketItemCategory.fromJson(item)),
+                    )
+                    .toList()
+              ],
             ),
           ),
           const SizedBox(
@@ -179,6 +233,26 @@ class _MarketState extends State<Market> {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  Padding catItem(MarketItemCategory item) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 10),
+      child: OutlinedButton(
+        onPressed: () => _onCategorySelected(item),
+        style: OutlinedButton.styleFrom(
+          primary: const Color(0xff2F2E41),
+          side: const BorderSide(color: Color(0xffD9D9D9), width: 1),
+          backgroundColor: _category == item.id
+              ? const Color(0xffFFDA58)
+              : const Color(0xffFAFAFA),
+        ),
+        child: Text(
+          item.name,
+          style: const TextStyle(fontSize: 13),
+        ),
       ),
     );
   }

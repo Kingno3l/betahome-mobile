@@ -43,7 +43,7 @@ class _ServicesState extends State<Services> {
             msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
       }
     } catch (e) {
-      Fluttertoast.showToast(msg: 'Error.', toastLength: Toast.LENGTH_LONG);
+      Fluttertoast.showToast(msg: 'An error occured.', toastLength: Toast.LENGTH_LONG);
     }
   }
 

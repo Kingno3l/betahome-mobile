@@ -40,7 +40,9 @@ class _OTPState extends State<OTP> {
           if (json.status() == 'success') {
             _pref.then((SharedPreferences pref) {
               pref.setString(Keys.TOKEN, json.token());
-              ServerHelper.getProfile(context, route: MaterialPageRoute(builder: (context) => const Verified()));
+              ServerHelper.getProfile(context,
+                  route: MaterialPageRoute(
+                      builder: (context) => const Verified()));
             });
           }
         } else {
@@ -71,7 +73,8 @@ class _OTPState extends State<OTP> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           direction: Axis.vertical,
           children: [
-            screenHead('OTP', 'Enter the OTP sent to your email address or phone number.'),
+            screenHead('OTP',
+                'Enter the OTP sent to your email address or phone number.'),
             Padding(
               padding: const EdgeInsets.only(top: 30, bottom: 20),
               child: TextField(
@@ -80,7 +83,11 @@ class _OTPState extends State<OTP> {
                 onChanged: (val) => _otp = val,
                 decoration: const InputDecoration(
                     hintText: 'Enter OTP',
-                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
                     filled: true,
                     fillColor: Color(0xffFFF6D6)),
                 style: const TextStyle(

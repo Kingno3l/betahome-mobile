@@ -2,6 +2,7 @@ import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/history_item.dart';
 import 'package:beta_home/models/http_resp.dart';
+import 'package:beta_home/models/order_item.dart';
 import 'package:beta_home/widgets/screen_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,36 +18,6 @@ class OrderHistory extends StatefulWidget {
 }
 
 class _OrderHistoryState extends State<OrderHistory> {
-  final List<HistoryItem> _transactions = [
-    HistoryItem(101, 'Beta Basic', 250, './lib/assets/imgs/remove4.png', 1,
-        '22 May, 2022 4:01pm'),
-    HistoryItem(101, 'Beta Basic', 250, './lib/assets/imgs/remove8.png', -1,
-        '22 May, 2022 4:01pm'),
-    HistoryItem(101, 'Beta Basic', 250, './lib/assets/imgs/remove4.png', 1,
-        '22 May, 2022 4:01pm'),
-    HistoryItem(101, 'Beta Basic', 250, './lib/assets/imgs/remove8.png', -1,
-        '22 May, 2022 4:01pm'),
-    HistoryItem(101, 'Beta Basic', 250, './lib/assets/imgs/remove4.png', 1,
-        '22 May, 2022 4:01pm'),
-    HistoryItem(101, 'Beta Basic', 250, './lib/assets/imgs/remove8.png', -1,
-        '22 May, 2022 4:01pm'),
-    HistoryItem(101, 'Beta Basic', 250, './lib/assets/imgs/remove4.png', 1,
-        '22 May, 2022 4:01pm'),
-    HistoryItem(101, 'Beta Basic', 250, './lib/assets/imgs/remove8.png', -1,
-        '22 May, 2022 4:01pm'),
-    HistoryItem(101, 'Beta Basic', 250, './lib/assets/imgs/remove4.png', 1,
-        '22 May, 2022 4:01pm'),
-    HistoryItem(101, 'Beta Basic', 250, './lib/assets/imgs/remove8.png', -1,
-        '22 May, 2022 4:01pm'),
-    HistoryItem(101, 'Beta Basic', 250, './lib/assets/imgs/remove4.png', 1,
-        '22 May, 2022 4:01pm'),
-    HistoryItem(101, 'Beta Basic', 250, './lib/assets/imgs/remove8.png', -1,
-        '22 May, 2022 4:01pm'),
-    HistoryItem(101, 'Beta Basic', 250, './lib/assets/imgs/remove4.png', 1,
-        '22 May, 2022 4:01pm'),
-    HistoryItem(101, 'Beta Basic', 250, './lib/assets/imgs/remove8.png', -1,
-        '22 May, 2022 4:01pm'),
-  ];
   List _items = [];
 
   @override
@@ -60,11 +31,6 @@ class _OrderHistoryState extends State<OrderHistory> {
       final resp = await ServerHelper.get(UrlHelper.orders);
       if (resp['status'] == 200) {
         final HttpResp json = HttpResp.fromJson(resp['data']);
-        print(resp['data']);
-        var now = DateTime.now();
-        var format = DateFormat().format(now);
-        print(format);
-
         if (json.status == 'success') {
           setState(() {
             _items = json.data;
@@ -144,74 +110,79 @@ class _OrderHistoryState extends State<OrderHistory> {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(10),
-              children: _transactions
+              children: _items
                   .mapIndexed(
-                    (index, item) => Container(
-                      padding: const EdgeInsets.all(10),
-                      margin: const EdgeInsets.only(bottom: 10),
-                      color: const Color(0xffF4F4F4),
-                      child: Row(
-                        children: [
-                          Image(
-                            image: AssetImage(item.picture()),
-                            // alignment: Alignment.center,
-                            height: 70,
-                            width: 70,
-                            fit: BoxFit.cover,
-                          ),
-                          const SizedBox(
-                            width: 16,
-                          ),
-                          Expanded(
-                              child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item.packageName(),
-                                style: const TextStyle(
-                                  fontSize: 17,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                'N${item.price()}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ],
-                          )),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Icon(
-                                item.status() == 1
-                                    ? Icons.check_circle_sharp
-                                    : Icons.cancel,
-                                color: Color(item.status() == 1
-                                    ? 0xff4BD37B
-                                    : 0xffFF0000),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                item.time(),
-                                style: const TextStyle(
-                                  color: Color(0xff696969),
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
+                    (index, item) => listItem(OrderItem.fromJson(item)),
                   )
                   .toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container listItem(OrderItem item) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+      margin: const EdgeInsets.only(bottom: 10),
+      color: const Color(0xffF4F4F4),
+      child: Row(
+        children: [
+          Image(
+            image: AssetImage(item.picture),
+            // alignment: Alignment.center,
+            height: 70,
+            width: 70,
+            fit: BoxFit.cover,
+          ),
+          const SizedBox(
+            width: 12,
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      item.itemName,
+                      style: const TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    Icon(
+                      item.status == 1
+                          ? Icons.check_circle_sharp
+                          : Icons.cancel,
+                      size: 16,
+                      color: Color(item.status == 1 ? 0xff4BD37B : 0xffFF0000),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'N${item.price}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    ),
+                    Text(
+                      item.time,
+                      style: const TextStyle(
+                        color: Color(0xff696969),
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],

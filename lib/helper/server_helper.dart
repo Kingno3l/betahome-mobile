@@ -115,4 +115,14 @@ class ServerHelper {
       Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG);
     }
   }
+
+  static Future logout(context) async {
+    SharedPreferences pref = await _pref;
+    if (await pref.remove(Keys.PROFILE) //&& await pref.remove(Keys.TOKEN)
+        ) {
+      final provider = Provider.of<DataModel>(context, listen: false).profile =
+          pref.getString(Keys.PROFILE);
+      return provider == null;
+    }
+  }
 }

@@ -1,10 +1,10 @@
-import 'package:beta_home/screens/wallet.dart';
-import 'package:beta_home/widgets/DP.dart';
+import 'package:beta_home/helper/server_helper.dart';
+import 'package:beta_home/helper/url_helper.dart';
+import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/widgets/screen_bar.dart';
 import 'package:flutter/material.dart';
-
 import 'package:beta_home/widgets/screen_head.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ResetPassword extends StatefulWidget {
   const ResetPassword({Key? key}) : super(key: key);
@@ -14,6 +14,48 @@ class ResetPassword extends StatefulWidget {
 }
 
 class _ResetPasswordState extends State<ResetPassword> {
+  bool _showOld = false, _showNew = false;
+  String _pwd = '', _newPwd = '', _newPwdAgain = '';
+
+  Future _onProceed() async {
+    if (_pwd == '' || _newPwd == '' || _newPwdAgain == '') {
+      Fluttertoast.showToast(
+          msg: 'All fields are required', toastLength: Toast.LENGTH_LONG);
+    } else if (_newPwd != _newPwdAgain) {
+      Fluttertoast.showToast(
+          msg: 'Password must match', toastLength: Toast.LENGTH_LONG);
+    } else {
+      try {
+        final resp = await ServerHelper.post('${UrlHelper.password}/change', {
+          'password': _pwd,
+          'new_password': _newPwd,
+        });
+        if (resp['status'] == 200) {
+          final HttpResp json = HttpResp.fromJson(resp['data']);
+          if (json.status == 'success') {
+            if (!mounted) return;
+            final isDone = await ServerHelper.logout(context);
+            if (isDone) {
+              Fluttertoast.showToast(
+                  msg: 'Please login', toastLength: Toast.LENGTH_LONG);
+              if (!mounted) return;
+              Navigator.of(context).pop();
+            }
+          } else {
+            Fluttertoast.showToast(
+                msg: json.msg, toastLength: Toast.LENGTH_LONG);
+          }
+        } else {
+          Fluttertoast.showToast(
+              msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
+        }
+      } catch (e) {
+        Fluttertoast.showToast(
+            msg: e.toString(), toastLength: Toast.LENGTH_LONG);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,79 +65,93 @@ class _ResetPasswordState extends State<ResetPassword> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
-              'Create New Password',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            const Text(
-              'Your new password must be different  from the previous password',
-              style: TextStyle(fontSize: 12),
-            ),
+            screenHead('Create New Password',
+                'Your new password must be different from the previous password'),
             const SizedBox(
               height: 30,
             ),
-            const TextField(
+            TextField(
               cursorColor: Colors.black,
-              obscureText: true,
+              obscureText: !_showOld,
+              onChanged: (val) => _pwd = val,
               decoration: InputDecoration(
                 hintText: 'Old Password',
-                border: OutlineInputBorder(
+                hintStyle: const TextStyle(fontSize: 15),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                border: const OutlineInputBorder(
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.all(
                     Radius.circular(8.0),
                   ),
                 ),
                 filled: true,
-                fillColor: Color(0xffFFF6D6),
-                suffixIcon: Icon(
-                  Icons.visibility_off_outlined,
-                  size: 20,
-                  color: Colors.black,
+                fillColor: const Color(0xffFFF6D6),
+                suffixIcon: IconButton(
+                  onPressed: () => setState(() {
+                    _showOld = !_showOld;
+                  }),
+                  icon: Icon(
+                    _showOld
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
+                    size: 16,
+                    color: Colors.black,
+                  ),
                 ),
               ),
-              style: TextStyle(
-                fontSize: 14,
+              style: const TextStyle(
+                fontSize: 18,
                 color: Color(0xff000000),
               ),
             ),
             const SizedBox(
               height: 10,
             ),
-            const TextField(
+            TextField(
               cursorColor: Colors.black,
-              obscureText: true,
+              obscureText: !_showNew,
+              onChanged: (val) => _newPwd = val,
               decoration: InputDecoration(
                 hintText: 'New Password',
-                border: OutlineInputBorder(
+                hintStyle: const TextStyle(fontSize: 15),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                border: const OutlineInputBorder(
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.all(
                     Radius.circular(8.0),
                   ),
                 ),
                 filled: true,
-                fillColor: Color(0xffFFF6D6),
-                suffixIcon: Icon(
-                  Icons.visibility_off_outlined,
-                  size: 20,
-                  color: Colors.black,
+                fillColor: const Color(0xffFFF6D6),
+                suffixIcon: IconButton(
+                  onPressed: () => setState(() {
+                    _showNew = !_showNew;
+                  }),
+                  icon: Icon(
+                    _showNew
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
+                    size: 16,
+                    color: Colors.black,
+                  ),
                 ),
               ),
-              style: TextStyle(
-                fontSize: 14,
+              style: const TextStyle(
+                fontSize: 18,
                 color: Color(0xff000000),
               ),
             ),
             const SizedBox(
               height: 10,
             ),
-            const TextField(
+            TextField(
               cursorColor: Colors.black,
-              obscureText: true,
-              decoration: InputDecoration(
+              obscureText: !_showNew,
+              onChanged: (val) => _newPwdAgain = val,
+              decoration: const InputDecoration(
                 hintText: 'Re-type New Password',
+                hintStyle: TextStyle(fontSize: 15),
+                contentPadding: EdgeInsets.symmetric(horizontal: 12),
                 border: OutlineInputBorder(
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.all(
@@ -104,14 +160,9 @@ class _ResetPasswordState extends State<ResetPassword> {
                 ),
                 filled: true,
                 fillColor: Color(0xffFFF6D6),
-                // suffixIcon: Icon(
-                //   Icons.visibility_off_outlined,
-                //   size: 20,
-                //   color: Colors.black,
-                // ),
               ),
-              style: TextStyle(
-                fontSize: 14,
+              style: const TextStyle(
+                fontSize: 18,
                 color: Color(0xff000000),
               ),
             ),
@@ -119,10 +170,10 @@ class _ResetPasswordState extends State<ResetPassword> {
               height: 30,
             ),
             TextButton(
-              onPressed: null,
+              onPressed: _onProceed,
               style: TextButton.styleFrom(
                 backgroundColor: const Color(0xffFFDA58),
-                padding: const EdgeInsets.all(26),
+                padding: const EdgeInsets.all(15),
               ),
               child: const Text(
                 'Reset Password',

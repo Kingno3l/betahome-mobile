@@ -1,4 +1,6 @@
 import 'package:beta_home/helper/keys.dart';
+import 'package:beta_home/helper/server_helper.dart';
+import 'package:beta_home/helper/utils.dart';
 import 'package:beta_home/models/data.dart';
 import 'package:beta_home/screens/order_history.dart';
 import 'package:beta_home/screens/profile.dart';
@@ -10,7 +12,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -20,18 +21,6 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
-
-  void _onLogout() async {
-    SharedPreferences pref = await _pref;
-    bool isDone = await pref.remove(Keys.PROFILE);
-    if (!mounted) return;
-    if (isDone) {
-      Provider.of<DataModel>(context, listen: false).profile =
-          pref.getString(Keys.PROFILE);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<DataModel>(builder: (contex, data, child) {
@@ -64,17 +53,20 @@ class _SettingsState extends State<Settings> {
                   width: 40,
                 ),
                 Column(
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                       'Last Login:',
                       style: TextStyle(color: Color(0xffAEAEAE)),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 8,
                     ),
                     Text(
-                      '3 weeks ago',
-                      style: TextStyle(color: Color(0xff5C5C5C)),
+                      data.profile != null
+                          ? Utils.timeAgo(
+                              DateTime.parse(data.profile!.last_login))
+                          : '',
+                      style: const TextStyle(color: Color(0xff5C5C5C)),
                     ),
                   ],
                 ),
@@ -254,16 +246,19 @@ class _SettingsState extends State<Settings> {
             const SizedBox(
               height: 30,
             ),
-            TextButton(
-              onPressed: _onLogout,
-              style: TextButton.styleFrom(
-                backgroundColor: const Color(0xffF4F4F4),
-                padding: const EdgeInsets.all(20),
-              ),
-              child: const Text(
-                'Log Out',
-                style: TextStyle(
-                  color: Color(0xffFF0000),
+            Visibility(
+              visible: data.profile != null,
+              child: TextButton(
+                onPressed: () => ServerHelper.logout(context),
+                style: TextButton.styleFrom(
+                  backgroundColor: const Color(0xffF4F4F4),
+                  padding: const EdgeInsets.all(15.0),
+                ),
+                child: const Text(
+                  'Log Out',
+                  style: TextStyle(
+                    color: Color(0xffFF0000),
+                  ),
                 ),
               ),
             ),

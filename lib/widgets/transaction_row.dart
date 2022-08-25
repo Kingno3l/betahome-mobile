@@ -13,7 +13,7 @@ Padding transactionRow(TransactionItem item) {
           padding: const EdgeInsets.all(8),
           margin: const EdgeInsets.only(right: 10),
           decoration: BoxDecoration(
-            color: item.type == 'debit'
+            color: item.type == TransactionItem.TYPE_DEBIT
                 ? const Color.fromARGB(50, 235, 87, 87)
                 : const Color.fromARGB(50, 20, 176, 139),
             borderRadius: const BorderRadius.all(
@@ -24,7 +24,7 @@ Padding transactionRow(TransactionItem item) {
             item.subType == 'wallet'
                 ? './lib/assets/icons/svgs/wallet_top_up.svg'
                 : './lib/assets/icons/svgs/cd.svg',
-            color: item.type == 'debit'
+            color: item.type == TransactionItem.TYPE_DEBIT
                 ? const Color.fromRGBO(235, 87, 87, 1)
                 : const Color.fromRGBO(20, 176, 139, 1),
           ),
@@ -34,7 +34,7 @@ Padding transactionRow(TransactionItem item) {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'N${item.amount}',
+              '${item.type == TransactionItem.TYPE_CREDIT ? '+' : '-'}N${item.amount}',
               style: const TextStyle(fontWeight: FontWeight.w600),
             ),
             const SizedBox(
@@ -49,13 +49,21 @@ Padding transactionRow(TransactionItem item) {
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text('${item.date}'),
+            Text(
+              '${item.date}',
+              style: const TextStyle(
+                fontSize: 12,
+              ),
+            ),
             const SizedBox(
               height: 5,
             ),
             Text(
               '${item.time}',
-              style: const TextStyle(color: Color(0xff696969)),
+              style: const TextStyle(
+                color: Color(0xff696969),
+                fontSize: 12,
+              ),
             ),
           ],
         )

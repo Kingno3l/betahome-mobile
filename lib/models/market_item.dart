@@ -2,7 +2,7 @@ class MarketItem {
   String _id;
   String _name;
   String _desc;
-  String _price;
+  double _price;
   String _picture;
   dynamic _categories;
   final bool _is_rated = false;
@@ -11,8 +11,13 @@ class MarketItem {
       this._categories);
 
   factory MarketItem.fromJson(dynamic json) {
-    return MarketItem(json['_id'], json['name'], json['description'],
-        json['price'], json['picture'], json['category_ids']);
+    return MarketItem(
+        json['_id'],
+        json['name'],
+        json['description'],
+        double.parse(json['price'].toString()),
+        json['picture'],
+        json['category_ids']);
   }
 
   get id => _id;

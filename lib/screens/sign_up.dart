@@ -121,7 +121,11 @@ class _SignUpState extends State<SignUp> {
                   onChanged: (val) => _fName = val,
                   decoration: const InputDecoration(
                     hintText: 'First name',
-                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
                     filled: true,
                     fillColor: Color(0xffFFF6D6),
                     // errorText: _showError ? 'Required' : null,
@@ -142,7 +146,11 @@ class _SignUpState extends State<SignUp> {
                   onChanged: (val) => _lName = val,
                   decoration: const InputDecoration(
                       hintText: 'Last name',
-                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
                       filled: true,
                       fillColor: Color(0xffFFF6D6)),
                   style: const TextStyle(
@@ -159,7 +167,11 @@ class _SignUpState extends State<SignUp> {
                   onChanged: (val) => _email = val,
                   decoration: const InputDecoration(
                     hintText: 'Email',
-                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
                     filled: true,
                     fillColor: Color(0xffFFF6D6),
                   ),
@@ -177,7 +189,11 @@ class _SignUpState extends State<SignUp> {
                     obscureText: true,
                     decoration: const InputDecoration(
                         hintText: 'Password',
-                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
                         filled: true,
                         fillColor: Color(0xffFFF6D6)),
                     style: const TextStyle(
@@ -193,7 +209,11 @@ class _SignUpState extends State<SignUp> {
                     obscureText: true,
                     decoration: const InputDecoration(
                         hintText: 'Confirm password',
-                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
                         filled: true,
                         fillColor: Color(0xffFFF6D6)),
                     style: const TextStyle(

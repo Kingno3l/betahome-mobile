@@ -17,18 +17,50 @@ class Home extends StatefulWidget {
   State<StatefulWidget> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with TickerProviderStateMixin {
+  late AnimationController progressCont;
   int _tabIndex = 0;
   List _items = [];
+  bool _isLoading = true;
 
-  Future getPackages() async {
+  @override
+  void initState() {
+    progressCont =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1))
+          ..addListener(() {
+            setState(() {});
+          });
+    progressCont.repeat(reverse: true);
+
+    super.initState();
+
+    getPackages('');
+  }
+
+  @override
+  void dispose() {
+    progressCont.dispose();
+    super.dispose();
+  }
+
+  void _onSearch(val) {
+    if (!_isLoading) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
+    getPackages(val);
+  }
+
+  Future getPackages(String query) async {
     try {
-      final resp = await ServerHelper.get(UrlHelper.packages);
+      final resp = await ServerHelper.get('${UrlHelper.packages}?q=$query');
       if (resp['status'] == 200) {
         final HttpResp json = HttpResp.fromJson(resp['data']);
         if (json.status == 'success') {
           setState(() {
             _items = json.data;
+            _isLoading = false;
           });
         } else {
           Fluttertoast.showToast(msg: json.msg, toastLength: Toast.LENGTH_LONG);
@@ -41,12 +73,6 @@ class _HomeState extends State<Home> {
       Fluttertoast.showToast(
           msg: 'An error occured.', toastLength: Toast.LENGTH_LONG);
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getPackages();
   }
 
   void _onTabSelected(index) {
@@ -133,6 +159,7 @@ class _HomeState extends State<Home> {
                   TextField(
                     cursorColor: Colors.black,
                     maxLines: 1,
+                    onChanged: _onSearch,
                     decoration: InputDecoration(
                         isDense: true,
                         hintText: 'Search what you need',
@@ -202,10 +229,26 @@ class _HomeState extends State<Home> {
                 ],
               ),
             ),
+            SizedBox(
+              height: 3,
+              child: _isLoading
+                  ? LinearProgressIndicator(
+                      color: const Color(0xffcccccc),
+                      backgroundColor: const Color(0xff999999),
+                      minHeight: 3,
+                      value: progressCont.value,
+                      semanticsLabel: 'Loading...',
+                    )
+                  : null,
+            ),
+            const SizedBox(
+              height: 6,
+            ),
             Expanded(
-                child: _tabIndex == 0
-                    ? BetaHome(items: _items)
-                    : BetaOffice(items: _items))
+              child: _tabIndex == 0
+                  ? BetaHome(items: _items)
+                  : BetaOffice(items: _items),
+            ),
           ],
         ),
       );

@@ -85,7 +85,14 @@ class _MobileState extends State<Mobile> {
                       readOnly: true,
                       decoration: InputDecoration(
                         hintText: _country_code,
-                        border: InputBorder.none,
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 12),
+                        border: const OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(8),
+                              bottomLeft: Radius.circular(8)),
+                        ),
                         filled: true,
                         fillColor: const Color(0xffFFF6D6),
                       ),
@@ -103,7 +110,13 @@ class _MobileState extends State<Mobile> {
                       onChanged: (val) => _phone = val,
                       decoration: const InputDecoration(
                         hintText: 'Phone Number',
-                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(8),
+                              bottomRight: Radius.circular(8)),
+                        ),
                         filled: true,
                         fillColor: Color(0xffFFF6D6),
                       ),
