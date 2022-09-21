@@ -43,7 +43,8 @@ class _ServicesState extends State<Services> {
             msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
       }
     } catch (e) {
-      Fluttertoast.showToast(msg: 'An error occured.', toastLength: Toast.LENGTH_LONG);
+      Fluttertoast.showToast(
+          msg: 'An error occured.', toastLength: Toast.LENGTH_LONG);
     }
   }
 
@@ -124,76 +125,70 @@ class _ServicesState extends State<Services> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: const [
-            Text(
-              'Services',
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-            ),
-            Text(
-              ' (BetaHelp)',
-              style: TextStyle(fontSize: 11),
-            )
-          ],
+    return SafeArea(
+      top: true,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'BetaHelp',
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+          ),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          centerTitle: false,
+          titleTextStyle: const TextStyle(color: Color(0xff000000)),
         ),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        centerTitle: false,
-        titleTextStyle: const TextStyle(color: Color(0xff000000)),
-      ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    cursorColor: Colors.black,
-                    maxLines: 1,
-                    decoration: InputDecoration(
-                        isDense: true,
-                        hintText: 'Search what you need',
-                        hintStyle: const TextStyle(color: Color(0xffAEAEAE)),
-                        // border: InputBorder.none,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.all(1.0),
-                        filled: true,
-                        fillColor: const Color(0xffEDEDED),
-                        prefixIcon: const Icon(
-                          Icons.search,
-                          size: 18,
-                          color: Color(0xffAEAEAE),
-                        )),
-                    style: const TextStyle(
-                      fontSize: 15,
-                      color: Color(0xff000000),
+        body: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      cursorColor: Colors.black,
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                          isDense: true,
+                          hintText: 'Search what you need',
+                          hintStyle: const TextStyle(color: Color(0xffAEAEAE)),
+                          // border: InputBorder.none,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: const EdgeInsets.all(1.0),
+                          filled: true,
+                          fillColor: const Color(0xffEDEDED),
+                          prefixIcon: const Icon(
+                            Icons.search,
+                            size: 18,
+                            color: Color(0xffAEAEAE),
+                          )),
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: Color(0xff000000),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 4,
-            ),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                children: _items
-                    .mapIndexed((index, item) => Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: itemRow(context, index, item),
-                        ))
-                    .toList(),
+                ],
               ),
-            )
-          ],
+              const SizedBox(
+                height: 4,
+              ),
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  children: _items
+                      .mapIndexed((index, item) => Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: itemRow(context, index, item),
+                          ))
+                      .toList(),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
