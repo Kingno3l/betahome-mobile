@@ -1,4 +1,5 @@
-import 'package:beta_home/screens/settings.dart';
+import 'package:beta_home/screens/product.dart';
+import 'package:beta_home/screens/account.dart';
 import 'package:beta_home/screens/market.dart';
 import 'package:beta_home/screens/services.dart';
 import 'package:beta_home/screens/wallet.dart';
@@ -18,10 +19,10 @@ class _DashboardState extends State<Dashboard> {
 
   static final List<Widget> _contentOptions = <Widget>[
     const Home(),
+    const Product(),
     const Market(),
     const Services(),
-    const Wallet(),
-    const Settings()
+    const Account()
   ];
 
   void _onTabSelected(int index) {
@@ -33,24 +34,25 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return
-        SafeArea(
-          top: true,
-          child:
+        // SafeArea(
+        //   top: true,
+        //   child:
         Scaffold(
       body: _contentOptions[_currentTabIndex],
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Home'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.view_list_rounded), label: 'Product'),
           BottomNavigationBarItem(icon: Icon(Icons.sell), label: 'Market'),
           BottomNavigationBarItem(
               icon: Icon(Icons.miscellaneous_services), label: 'Services'),
-          BottomNavigationBarItem(icon: Icon(Icons.wallet), label: 'Wallet'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings_suggest_outlined), label: 'Settings'),
+              icon: Icon(Icons.account_circle_outlined), label: 'Account'),
         ],
         type: BottomNavigationBarType.fixed,
-        currentIndex: _currentTabIndex, 
+        currentIndex: _currentTabIndex,
         selectedItemColor: Colors.black,
         unselectedItemColor: const Color(0xffAEAEAE),
         iconSize: 26,
@@ -59,9 +61,7 @@ class _DashboardState extends State<Dashboard> {
         onTap: _onTabSelected,
         elevation: 0,
       ),
-    )
-          ,
-        )
-        ;
+    );
+    // );
   }
 }

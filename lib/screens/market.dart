@@ -92,7 +92,8 @@ class _MarketState extends State<Market> with TickerProviderStateMixin {
             msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
       }
     } catch (e) {
-      Fluttertoast.showToast(msg: 'An error occured.', toastLength: Toast.LENGTH_LONG);
+      Fluttertoast.showToast(
+          msg: 'An error occured.', toastLength: Toast.LENGTH_LONG);
     }
   }
 
@@ -105,134 +106,137 @@ class _MarketState extends State<Market> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              Expanded(
-                  child: TextField(
-                cursorColor: Colors.black,
-                maxLines: 1,
-                onChanged: _onSearch,
-                decoration: InputDecoration(
-                    isDense: true,
-                    hintText: 'Search what you need...',
-                    hintStyle: const TextStyle(color: Color(0xffAEAEAE)),
-                    // border: InputBorder.none,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide.none),
-                    filled: true,
-                    fillColor: const Color(0xffEDEDED),
-                    prefixIcon: const Icon(
-                      Icons.search,
-                      size: 18,
-                      color: Color(0xffAEAEAE),
-                    )),
-                style: const TextStyle(
-                  fontSize: 15,
-                  color: Color(0xff000000),
-                ),
-              )),
-              const SizedBox(
-                width: 10,
-              ),
-              Stack(
-                children: [
-                  IconButton(
-                      onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MyCart(),
-                            ),
-                          ),
-                      icon: const Icon(
-                        Icons.shopping_cart,
-                        color: Color(0xff000000),
+    return SafeArea(
+      top: true,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                Expanded(
+                    child: TextField(
+                  cursorColor: Colors.black,
+                  maxLines: 1,
+                  onChanged: _onSearch,
+                  decoration: InputDecoration(
+                      isDense: true,
+                      hintText: 'Search what you need...',
+                      hintStyle: const TextStyle(color: Color(0xffAEAEAE)),
+                      // border: InputBorder.none,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide.none),
+                      filled: true,
+                      fillColor: const Color(0xffEDEDED),
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        size: 18,
+                        color: Color(0xffAEAEAE),
                       )),
-                  Dot(),
-                ],
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Stack(
-                children: [
-                  const Icon(
-                    Icons.notifications,
+                  style: const TextStyle(
+                    fontSize: 15,
                     color: Color(0xff000000),
                   ),
-                  Dot(),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 2,
-          ),
-          SizedBox(
-            height: 3,
-            child: _isLoading
-                ? LinearProgressIndicator(
-                    color: const Color(0xffcccccc),
-                    backgroundColor: const Color(0xff999999),
-                    minHeight: 3,
-                    value: progressCont.value,
-                    semanticsLabel: 'Loading...',
-                  )
-                : null,
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          InkWell(
-            onTap: () => {},
-            child: const Image(
-              width: double.infinity,
-              image: AssetImage('./lib/assets/imgs/remove8.png'),
-              alignment: Alignment.center,
-              fit: BoxFit.fill,
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            height: 32,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                catItem(_recommeded),
-                ..._cats
-                    .mapIndexed(
-                      (index, item) =>
-                          catItem(MarketItemCategory.fromJson(item)),
-                    )
-                    .toList()
+                )),
+                const SizedBox(
+                  width: 10,
+                ),
+                Stack(
+                  children: [
+                    IconButton(
+                        onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MyCart(),
+                              ),
+                            ),
+                        icon: const Icon(
+                          Icons.shopping_cart,
+                          color: Color(0xff000000),
+                        )),
+                    Dot(),
+                  ],
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Stack(
+                  children: [
+                    const Icon(
+                      Icons.notifications,
+                      color: Color(0xff000000),
+                    ),
+                    Dot(),
+                  ],
+                ),
               ],
             ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Expanded(
-            child: GridView.builder(
-              itemCount: _items.length,
-              itemBuilder: (context, index) => galleryCard(
-                  context, index, MarketItem.fromJson(_items[index])),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
+            const SizedBox(
+              height: 2,
+            ),
+            SizedBox(
+              height: 3,
+              child: _isLoading
+                  ? LinearProgressIndicator(
+                      color: const Color(0xffcccccc),
+                      backgroundColor: const Color(0xff999999),
+                      minHeight: 3,
+                      value: progressCont.value,
+                      semanticsLabel: 'Loading...',
+                    )
+                  : null,
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            InkWell(
+              onTap: () => {},
+              child: const Image(
+                width: double.infinity,
+                image: AssetImage('./lib/assets/imgs/remove8.png'),
+                alignment: Alignment.center,
+                fit: BoxFit.fill,
               ),
             ),
-          )
-        ],
+            const SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              height: 32,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  catItem(_recommeded),
+                  ..._cats
+                      .mapIndexed(
+                        (index, item) =>
+                            catItem(MarketItemCategory.fromJson(item)),
+                      )
+                      .toList()
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: GridView.builder(
+                itemCount: _items.length,
+                itemBuilder: (context, index) => galleryCard(
+                    context, index, MarketItem.fromJson(_items[index])),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
