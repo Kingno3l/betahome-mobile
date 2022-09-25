@@ -2,15 +2,14 @@ import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/data.dart';
 import 'package:beta_home/models/http_resp.dart';
-import 'package:beta_home/screens/profile.dart';
-import 'package:beta_home/screens/sign_in.dart';
-import 'package:beta_home/widgets/beta_office.dart';
+import 'package:beta_home/screens/explore.dart';
+import 'package:beta_home/screens/workforce.dart';
+import 'package:beta_home/screens/sales.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:beta_home/widgets/beta_home.dart';
 import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:pluto_menu_bar/pluto_menu_bar.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -21,10 +20,9 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   late AnimationController progressCont;
-  int _tabIndex = 0;
+  final int _tabIndex = 0;
   List _items = [];
   bool _isLoading = true;
-
   int _current = 0;
   final CarouselController _controller = CarouselController();
   List<String> images = [
@@ -32,8 +30,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     "https://wallpaperaccess.com/full/2637581.jpg",
     "https://uhdwallpapers.org/uploads/converted/20/01/14/the-mandalorian-5k-1920x1080_477555-mm-90.jpg"
   ];
-
-  String _currentMenu = 'explore';
+  late TabController _tabController;
 
   @override
   void initState() {
@@ -43,7 +40,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             setState(() {});
           });
     progressCont.repeat(reverse: true);
-
+    _tabController = TabController(length: 3, vsync: this);
     super.initState();
 
     getPackages('');
@@ -53,15 +50,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   void dispose() {
     progressCont.dispose();
     super.dispose();
-  }
-
-  void _onSearch(val) {
-    if (!_isLoading) {
-      setState(() {
-        _isLoading = true;
-      });
-    }
-    getPackages(val);
   }
 
   Future getPackages(String query) async {
@@ -87,12 +75,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     }
   }
 
-  void _onTabSelected(index) {
-    setState(() {
-      _tabIndex = index;
-    });
-  }
-
   void message(context, String text) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
@@ -103,97 +85,44 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  List<PlutoMenuItem> getMenus(BuildContext context) {
-    return [
-      PlutoMenuItem(
-        title: 'ABOUT US',
-        onTap: () {
-          setState(() {
-            _currentMenu = 'about';
-          });
-        },
-      ),
-      PlutoMenuItem(
-        title: 'EXPLORE',
-        onTap: () {
-          setState(() {
-            _currentMenu = 'explore';
-          });
-        },
-      ),
-      PlutoMenuItem(
-        title: 'SALES WORKFORCE',
-        onTap: () {
-          setState(() {
-            _currentMenu = 'workforce';
-          });
-        },
-      ),
-      PlutoMenuItem(
-        title: 'BETA HELP',
-        onTap: () {
-          setState(() {
-            _currentMenu = 'betahelp';
-          });
-        },
-      ),
-    ];
-  }
-
   @override
   Widget build(BuildContext context) {
     final List<Widget> imageSliders = images
-        .map((item) => Container(
-              // margin: const EdgeInsets.all(5.0),
-              child: ClipRRect(
-                  // borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-                  child: Stack(
-                children: <Widget>[
-                  Image.network(item, fit: BoxFit.cover, width: 1000.0),
-                  Positioned(
-                    bottom: 0.0,
-                    left: 0.0,
-                    right: 0.0,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Color.fromARGB(100, 0, 0, 0),
-                            Color.fromARGB(0, 0, 0, 0)
-                          ],
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                        ),
+        .map((item) => ClipRRect(
+                // borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+                child: Stack(
+              children: <Widget>[
+                Image.network(item, fit: BoxFit.cover, width: 1000.0),
+                Positioned(
+                  bottom: 0.0,
+                  left: 0.0,
+                  right: 0.0,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Color.fromARGB(100, 0, 0, 0),
+                          Color.fromARGB(0, 0, 0, 0)
+                        ],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
                       ),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 20.0),
-                      child: Text(
-                        'No. ${images.indexOf(item)} image',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 20.0),
+                    child: Text(
+                      'No. ${images.indexOf(item)} image',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                ],
-              )),
-              // ),
-            ))
+                ),
+              ],
+            )))
         .toList();
-
-    Widget content(menu) {
-      if (menu == 'about') {
-        return const Text('About Us');
-      } else if (menu == 'explore') {
-        return const Text('Explore');
-      } else if (menu == 'workforce') {
-        return const Text('Workforce');
-      } else {
-        return const Text('Beta Help');
-      }
-    }
 
     return Consumer<DataModel>(builder: (context, data, child) {
       return SingleChildScrollView(
@@ -204,7 +133,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 CarouselSlider(
                   items: imageSliders,
                   options: CarouselOptions(
-                    height: 300,
+                    height: 200,
                     viewportFraction: 1.0,
                     autoPlay: true,
                     autoPlayCurve: Curves.elasticIn,
@@ -235,8 +164,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                               shape: BoxShape.circle,
                               color: (Theme.of(context).brightness ==
                                           Brightness.dark
-                                      ? Colors.white
-                                      : Colors.black)
+                                      ? Colors.black
+                                      : Colors.white)
                                   .withOpacity(
                                       _current == entry.key ? 0.9 : 0.4)),
                         );
@@ -388,39 +317,61 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             //     ],
             //   ),
             // ),
-            PlutoMenuBar(
-              menus: getMenus(context),
-              textStyle: const TextStyle(fontSize: 12),
-              indicatorColor: const Color(0xffFFDA58),
-            ),
-            SizedBox(
-              height: 3,
-              child: _isLoading
-                  ? LinearProgressIndicator(
-                      color: const Color(0xffcccccc),
-                      backgroundColor: const Color(0xff999999),
-                      minHeight: 3,
-                      value: progressCont.value,
-                      semanticsLabel: 'Loading...',
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 30),
+                    Container(
+                      // height: 50,
+                      width: MediaQuery.of(context).size.height,
+                      decoration: BoxDecoration(
+                          color: Color(0xffFFF6D6),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: TabBar(
+                              unselectedLabelColor: Colors.grey,
+                              labelColor: Colors.black,
+                              indicatorColor: Colors.white,
+                              indicatorWeight: 2,
+                              indicator: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              controller: _tabController,
+                              tabs: const [
+                                Tab(
+                                  text: 'Explore',
+                                ),
+                                Tab(
+                                  text: 'Workforce',
+                                ),
+                                Tab(text: 'Sales Help')
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: TabBarView(controller: _tabController, children: [
+                        explore(),
+                        workforce(),
+                        sales(),
+                      ]),
                     )
-                  : null,
+                  ],
+                ),
+              ),
             ),
-            // const SizedBox(
-            //   height: 6,
-            // ),
-            // Expanded(
-            //   child: BetaHome(items: _items),
-            // ),
-            content(_currentMenu),
           ],
         ),
       );
     });
   }
-}
-
-enum _RadioItems {
-  one,
-  two,
-  three,
 }
