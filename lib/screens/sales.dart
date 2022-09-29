@@ -5,8 +5,20 @@ class sales extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text('Tab 1')),
+    return Scaffold(
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10), color: Colors.green),
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text("15"),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

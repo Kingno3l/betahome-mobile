@@ -328,7 +328,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       // height: 50,
                       width: MediaQuery.of(context).size.height,
                       decoration: BoxDecoration(
-                          color: Color(0xffFFF6D6),
+                          color: const Color(0xffFFF6D6),
                           borderRadius: BorderRadius.circular(5)),
                       child: Column(
                         children: [
@@ -351,7 +351,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 Tab(
                                   text: 'Workforce',
                                 ),
-                                Tab(text: 'Sales Help')
+                                Tab(text: 'Beta Help')
                               ],
                             ),
                           ),
@@ -359,11 +359,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       ),
                     ),
                     Expanded(
-                      child: TabBarView(controller: _tabController, children: [
-                        explore(),
-                        workforce(),
-                        sales(),
-                      ]),
+                      child: TabBarView(
+                          controller: _tabController,
+                          children: const [
+                            explore(),
+                            workforce(),
+                            sales(),
+                          ]),
                     )
                   ],
                 ),
