@@ -1,6 +1,7 @@
 import 'package:beta_home/models/package.dart';
 import 'package:beta_home/models/package_item.dart';
 import 'package:beta_home/widgets/screen_bar.dart';
+import 'package:beta_home/screens/payment.dart';
 import 'package:flutter/material.dart';
 
 class PaymentOption extends StatefulWidget {
@@ -171,7 +172,15 @@ class _PaymentOptionState extends State<PaymentOption> {
                   margin: EdgeInsets.only(
                       top: _paymentPlan == 'Installment' ? 30 : 70, bottom: 30),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Payment(
+                                  amount: 1,
+                                )),
+                      );
+                    },
                     style: TextButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 24),
                         backgroundColor: const Color(0xFFFFDA58)),

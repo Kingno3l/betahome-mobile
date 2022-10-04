@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:beta_home/screens/referral_history.dart';
 
 class Referral extends StatelessWidget {
   const Referral({super.key});
@@ -45,7 +46,7 @@ class Referral extends StatelessWidget {
           children: <Widget>[
             Container(
               decoration: const BoxDecoration(color: Color(0xFFFFFECA)),
-              margin: const EdgeInsets.all(20),
+              margin: const EdgeInsets.all(10),
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: <Widget>[
@@ -92,26 +93,25 @@ class Referral extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  margin: const EdgeInsets.all(15.0),
-                  height: 155,
-                  width: 150,
+                  margin: const EdgeInsets.all(5.0),
+                  height: 145,
+                  width: 144.5,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: const Color(0xFFEBEBEB),
                   ),
                   child: Column(
-                    children: const <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: 5, bottom: 5, left: 5, right: 5),
+                    children: <Widget>[
+                      const Padding(
+                        padding: EdgeInsets.all(4),
                         child: Text(
                           "Completed Betahome",
                           style:
                               TextStyle(color: Color(0xFF575757), fontSize: 14),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(15),
+                      const Padding(
+                        padding: EdgeInsets.all(5),
                         child: Text(
                           "30",
                           style: TextStyle(
@@ -119,35 +119,43 @@ class Referral extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.all(0),
-                        child: Text(
-                          "See all Betahome",
-                          style: TextStyle(color: Colors.green),
+                        padding: const EdgeInsets.all(0),
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Refcomp()),
+                            );
+                          },
+                          child: const Text(
+                            "See all BetaHome",
+                            style: TextStyle(color: Colors.green),
+                          ),
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.all(15.0),
-                  height: 155,
-                  width: 150,
+                  margin: const EdgeInsets.all(5.0),
+                  height: 145,
+                  width: 144.5,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: const Color(0xFFEBEBEB),
                   ),
                   child: Column(
-                    children: const <Widget>[
-                      Padding(
-                          padding: EdgeInsets.only(
-                              top: 5, bottom: 5, left: 5, right: 5),
+                    children: <Widget>[
+                      const Padding(
+                          padding: EdgeInsets.all(5),
                           child: Text(
                             "Registered Betahelp",
                             style: TextStyle(
                                 color: Color(0xFF575757), fontSize: 14),
                           )),
-                      Padding(
-                        padding: EdgeInsets.all(15),
+                      const Padding(
+                        padding: EdgeInsets.all(5),
                         child: Text(
                           "30",
                           style: TextStyle(
@@ -155,10 +163,19 @@ class Referral extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.all(0),
-                        child: Text(
-                          "See all Betahelp",
-                          style: TextStyle(color: Colors.green),
+                        padding: const EdgeInsets.all(0),
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Refcomp()),
+                            );
+                          },
+                          child: const Text(
+                            "See all BetaHelp",
+                            style: TextStyle(color: Colors.green),
+                          ),
                         ),
                       ),
                     ],

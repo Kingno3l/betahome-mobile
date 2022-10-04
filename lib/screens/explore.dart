@@ -1,58 +1,64 @@
+import 'package:beta_home/helper/server_helper.dart';
+import 'package:beta_home/helper/url_helper.dart';
+import 'package:beta_home/models/http_resp.dart';
+import 'package:beta_home/models/market_item.dart';
+import 'package:beta_home/widgets/market_card.dart';
 import 'package:flutter/material.dart';
 
-class explore extends StatelessWidget {
+class explore extends StatefulWidget {
   const explore({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _ExploreState();
+}
+
+class _ExploreState extends State<explore> with TickerProviderStateMixin {
+  List _items = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getItems();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future getItems() async {
+    try {
+      final resp = await ServerHelper.get('${UrlHelper.market}/items');
+      if (resp['status'] == 200) {
+        final HttpResp json = HttpResp.fromJson(resp['data']);
+        if (json.status == 'success') {
+          setState(() {
+            _items = json.data;
+          });
+        }
+      }
+    } catch (e) {}
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ListView(
+        child: Column(
           children: <Widget>[
             Container(
-              margin: const EdgeInsets.symmetric(vertical: 20.0),
-              height: 150.0,
+              height: 200,
+              margin: const EdgeInsets.symmetric(vertical: 10.0),
               padding: const EdgeInsets.symmetric(horizontal: 5.0),
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: <Widget>[
-                  Container(
-                    width: 160.0,
-                    padding: const EdgeInsets.all(10.00),
-                    child: Card(
-                      child: Wrap(
-                        children: <Widget>[
-                          Image.network(
-                            "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/amazon-rivet-furniture-1533048038.jpg",
-                            fit: BoxFit.cover,
-                          ),
-                          const ListTile(
-                            title: Text("Furniture"),
-                            subtitle: Text("data"),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 160.0,
-                    padding: const EdgeInsets.all(10.00),
-                    child: Card(
-                      child: Wrap(
-                        children: <Widget>[
-                          Image.network(
-                            "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/amazon-rivet-furniture-1533048038.jpg",
-                            fit: BoxFit.cover,
-                          ),
-                          const ListTile(
-                            title: Text("Furniture"),
-                            subtitle: Text("data"),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+              child: GridView.builder(
+                itemCount: _items.length,
+                itemBuilder: (context, index) => galleryCard(
+                    context, index, MarketItem.fromJson(_items[index])),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                ),
               ),
             ),
             Padding(
