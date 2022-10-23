@@ -34,6 +34,8 @@ class ProfileModel {
   final String? _address;
   final String? _profile_pic;
   final String? _last_login;
+  final String? _referral_code;
+  final bool? _is_beta_help;
 
   ProfileModel(
     this._first_name,
@@ -44,6 +46,8 @@ class ProfileModel {
     this._address,
     this._profile_pic,
     this._last_login,
+    this._referral_code,
+    this._is_beta_help,
   );
 
   factory ProfileModel.fromJson(dynamic json) {
@@ -56,6 +60,8 @@ class ProfileModel {
       json['address'],
       json['profile_pic'],
       json['last_login'],
+      json['referral_code'],
+      json['is_beta_help'],
     );
   }
 
@@ -67,4 +73,6 @@ class ProfileModel {
   String? get address => _address;
   String? get profile_pic => _profile_pic;
   get last_login => _last_login;
+  get referral_code => _referral_code ?? '';
+  get is_beta_help => _is_beta_help ?? false;
 }

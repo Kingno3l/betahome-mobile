@@ -1,7 +1,6 @@
-import 'package:beta_home/helper/keys.dart';
 import 'package:beta_home/helper/server_helper.dart';
-import 'package:beta_home/helper/utils.dart';
 import 'package:beta_home/models/data.dart';
+import 'package:beta_home/screens/earnings.dart';
 import 'package:beta_home/screens/order_history.dart';
 import 'package:beta_home/screens/profile.dart';
 import 'package:beta_home/screens/reset_password.dart';
@@ -56,14 +55,14 @@ class _AccountState extends State<Account> {
                     width: 40,
                   ),
                   TextButton.icon(
-                    onPressed: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Wallet(),
-                        ),
-                      )
-                    },
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => data.profile == null
+                            ? const SignIn()
+                            : const Wallet(),
+                      ),
+                    ),
                     icon: const Icon(
                       Icons.account_balance_wallet,
                       color: Colors.black,
@@ -148,6 +147,77 @@ class _AccountState extends State<Account> {
                   ],
                 ),
               ),
+              if (data.profile != null &&
+                  data.profile!.referral_code != '') ...[
+                const SizedBox(
+                  height: 16,
+                ),
+                InkWell(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => data.profile == null
+                          ? const SignIn()
+                          : const Earnings(),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 40,
+                        padding: const EdgeInsets.all(10),
+                        margin: const EdgeInsets.only(right: 16),
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(30)),
+                          color: Color(0xffFFDA58),
+                        ),
+                        child: SvgPicture.asset(
+                            './lib/assets/icons/svgs/earnings.svg'),
+                      ),
+                      const Text(
+                        'Earnings',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              if (data.profile != null && data.profile!.is_beta_help) ...[
+                const SizedBox(
+                  height: 16,
+                ),
+                InkWell(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => data.profile == null
+                          ? const SignIn()
+                          : const Profile(),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 40,
+                        padding: const EdgeInsets.all(10),
+                        margin: const EdgeInsets.only(right: 16),
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(30)),
+                          color: Color(0xffFFDA58),
+                        ),
+                        child: SvgPicture.asset(
+                            './lib/assets/icons/svgs/market.svg'),
+                      ),
+                      const Text(
+                        'My Store',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
               const SizedBox(
                 height: 16,
               ),

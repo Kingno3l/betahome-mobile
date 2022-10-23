@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:beta_home/helper/keys.dart';
 import 'package:beta_home/helper/url_helper.dart';
@@ -99,8 +100,10 @@ class ServerHelper {
         final HttpResp json = HttpResp.fromJson(resp['data']);
         if (json.status == 'success') {
           _pref.then((SharedPreferences pref) {
+
             final profile = const JsonEncoder().convert(json.data);
             pref.setString(Keys.PROFILE, profile);
+
             Provider.of<DataModel>(context, listen: false).profile = json.data;
             Navigator.pushAndRemoveUntil(context, route!, ((route) => false));
           });
