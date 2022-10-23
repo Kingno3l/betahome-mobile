@@ -101,12 +101,23 @@ class _ExploreState extends State<Explore> with TickerProviderStateMixin {
 
   Widget itemRow(String key, List items) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(key),
         SizedBox(
+          height: 80,
           child: ListView(
             scrollDirection: Axis.horizontal,
-            children: items.map((e) => Text('data')).toList(),
+            children: items.map((_item) {
+              MarketItem item = MarketItem.fromJson(_item);
+              return Column(
+                children: [
+                  Text(item.name),
+                  Text('N${item.name}'),
+                  Text('N${item.name}'),
+                ],
+              );
+            }).toList(),
           ),
         )
       ],
