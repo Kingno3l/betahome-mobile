@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 Widget galleryCard(context, int index, MarketItem item) => Card(
       clipBehavior: Clip.antiAlias,
+      elevation: 0.4,
       margin: EdgeInsets.zero,
-      elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
