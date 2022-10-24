@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 Widget galleryCard(context, int index, MarketItem item) => Card(
       clipBehavior: Clip.antiAlias,
       margin: EdgeInsets.zero,
+      elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
@@ -16,13 +17,13 @@ Widget galleryCard(context, int index, MarketItem item) => Card(
           ),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          // crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage(item.picture),
+                    image: NetworkImage(item.picture),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -53,7 +54,9 @@ Widget galleryCard(context, int index, MarketItem item) => Card(
               padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
               child: Text(
                 'N${item.price}',
-                style: const TextStyle(color: Color(0xffF55859)),
+                style: const TextStyle(
+                  color: Color(0xffF55859),
+                ),
               ),
             ),
           ],

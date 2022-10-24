@@ -227,7 +227,10 @@ class _MarketState extends State<Market> with TickerProviderStateMixin {
               child: GridView.builder(
                 itemCount: _items.length,
                 itemBuilder: (context, index) => galleryCard(
-                    context, index, MarketItem.fromJson(_items[index])),
+                  context,
+                  index,
+                  MarketItem.fromJson(_items[index]),
+                ),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 8,
