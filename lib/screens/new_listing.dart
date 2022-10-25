@@ -1,6 +1,8 @@
+import 'package:beta_home/elements/bottom_sheet.dart';
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/data.dart';
+import 'package:beta_home/widgets/botom_sheet.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/widgets/DP.dart';
@@ -26,6 +28,8 @@ class _NewListingState extends State<NewListing> {
   final TextEditingController _countryCont = TextEditingController();
   final TextEditingController _phoneCont = TextEditingController();
   final TextEditingController _addrCont = TextEditingController();
+
+  List<DropdownMenuItem<String>> categories = [];
 
   Future _onSubmit() async {
     final name = _nameCont.text.split(' ');
@@ -168,11 +172,30 @@ class _NewListingState extends State<NewListing> {
               const SizedBox(
                 height: 10,
               ),
-              DropdownButtonHideUnderline(
-                child: DropdownButton(
-                    items: [].map(
-                        (String val) => DropdownMenuItem(child: Text('data'))),
-                    onChanged: (String newVal) {}),
+              TextField(
+                readOnly: true,
+                cursorColor: Colors.black45,
+                keyboardType: TextInputType.number,
+                // controller: _nameCont,
+                onTap: () => showModalBottomSheet(
+                  isScrollControlled: true,
+                  shape: BotomSheet.shape(),
+                  context: context,
+                  builder: (context) => BotomShet.productCategories(
+                      [1, 2, 3, 4], (val) => print(val)),
+                ),
+                decoration: InputDecoration(
+                  labelText: 'Category',
+                  hintText: 'Category',
+                  border: InputBorder.none,
+                  filled: true,
+                  suffixIcon: const Icon(Icons.arrow_drop_down),
+                  fillColor: Colors.grey.shade100,
+                ),
+                style: const TextStyle(
+                  fontSize: 15,
+                  color: Color(0xff000000),
+                ),
               ),
               const SizedBox(
                 height: 10,
@@ -196,9 +219,6 @@ class _NewListingState extends State<NewListing> {
                   color: Color(0xff000000),
                 ),
               ),
-              // const SizedBox(
-              //   height: 30,
-              // ),
             ],
           ),
         ),

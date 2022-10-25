@@ -1,8 +1,10 @@
+import 'package:beta_home/elements/bottom_sheet.dart';
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/models/market_item.dart';
 import 'package:beta_home/screens/new_listing.dart';
+import 'package:beta_home/widgets/botom_sheet.dart';
 import 'package:beta_home/widgets/dot.dart';
 import 'package:beta_home/widgets/market_card.dart';
 import 'package:flutter/material.dart';
@@ -51,183 +53,6 @@ class _MyStoreState extends State<MyStore> {
     }
   }
 
-  Widget listingTypes() {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(bottom: 14),
-            child: Text('Choose listing type'),
-          ),
-          Wrap(
-            runSpacing: 8,
-            spacing: 8,
-            children: [
-              SizedBox(
-                width: 160,
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  margin: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const NewListing(
-                            typeId: '63569bbfc3acaa4ec269aaf5',
-                            typeTitle: 'Item for sale'),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              color: const Color(0xffffc9d9),
-                            ),
-                            child: const Icon(Icons.production_quantity_limits),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 3),
-                            child: Text(
-                              'Item for sale',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
-                          ),
-                          Text(
-                            'Create a single listing for one or more items to sell.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black.withOpacity(0.6),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 160,
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  margin: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const NewListing(
-                            typeId: '63569c09c3acaa4ec269aaf6',
-                            typeTitle: 'Vehicle for sale'),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              color: const Color(0xffb5ede5),
-                            ),
-                            child: const Icon(Icons.production_quantity_limits),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 3),
-                            child: Text(
-                              'Vehicle for sale',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
-                          ),
-                          Text(
-                            'Sell a car, van or other type of vehicle.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black.withOpacity(0.6),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 160,
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  margin: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const NewListing(
-                            typeId: '63569c36c3acaa4ec269aaf7',
-                            typeTitle: 'Property for sale or rent'),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              color: const Color(0xfffeebd8),
-                            ),
-                            child: const Icon(Icons.production_quantity_limits),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 3),
-                            child: Text(
-                              'Property for sale or rent',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
-                          ),
-                          Text(
-                            'List a house or flat for sale or rent.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black.withOpacity(0.6),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -252,13 +77,10 @@ class _MyStoreState extends State<MyStore> {
               child: TextButton.icon(
                 onPressed: () => showModalBottomSheet(
                   isScrollControlled: true,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(10.0),
-                    ),
-                  ),
+                  shape: BotomSheet.shape(),
                   context: context,
-                  builder: (context) => listingTypes(),
+                  builder: (context) =>
+                      BotomShet.listingTypes((val) => {print(val)}),
                 ),
                 icon: const Icon(
                   Icons.add,
