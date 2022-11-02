@@ -2,7 +2,7 @@ import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/models/market_item%20category.dart';
-import 'package:beta_home/models/market_item.dart';
+import 'package:beta_home/models/listing_item.dart';
 import 'package:beta_home/screens/my_cart.dart';
 import 'package:beta_home/widgets/dot.dart';
 import 'package:beta_home/widgets/market_card.dart';
@@ -229,7 +229,7 @@ class _MarketState extends State<Market> with TickerProviderStateMixin {
                 itemBuilder: (context, index) => galleryCard(
                   context,
                   index,
-                  MarketItem.fromJson(_items[index]),
+                  ListingItem.fromJson(_items[index]),
                 ),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,

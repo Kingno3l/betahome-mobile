@@ -1,14 +1,13 @@
 import 'package:beta_home/helper/keys.dart';
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
+import 'package:beta_home/helper/utils.dart';
 import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/screens/mobile.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'package:beta_home/widgets/screen_head.dart';
 import 'package:beta_home/screens/sign_in.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUp extends StatefulWidget {
@@ -35,7 +34,7 @@ class _SignUpState extends State<SignUp> {
     }
 
     if (isError) {
-      Fluttertoast.showToast(msg: msg, toastLength: Toast.LENGTH_LONG);
+      Utils.showToast(msg);
       setState(() {
         _showError = isError;
       });
@@ -43,8 +42,7 @@ class _SignUpState extends State<SignUp> {
       if (_isTandC) {
         reg();
       } else {
-        Fluttertoast.showToast(
-            msg: 'Terms & Conditions', toastLength: Toast.LENGTH_LONG);
+        Utils.showToast('Terms & Conditions');
       }
     }
   }
@@ -59,20 +57,19 @@ class _SignUpState extends State<SignUp> {
       });
       if (resp['status'] == 200) {
         final HttpResp json = HttpResp.fromJson(resp['data']);
-        Fluttertoast.showToast(msg: json.msg(), toastLength: Toast.LENGTH_LONG);
-        if (json.status() == 'success') {
+        Utils.showToast(json.msg);
+        if (json.status == 'success') {
           _pref.then((SharedPreferences pref) {
-            pref.setString(Keys.TOKEN, json.token());
+            pref.setString(Keys.TOKEN, json.token);
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const Mobile()));
           });
         }
       } else {
-        Fluttertoast.showToast(
-            msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
+        Utils.showToast('Connection error.');
       }
     } catch (e) {
-      Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG);
+      Utils.showToast('An error occured');
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
+import 'package:beta_home/helper/utils.dart';
 import 'package:beta_home/models/data.dart';
 import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/models/transaction_item.dart';
@@ -7,13 +8,14 @@ import 'package:beta_home/screens/payment.dart';
 import 'package:beta_home/screens/sign_in.dart';
 import 'package:beta_home/screens/transactions.dart';
 import 'package:beta_home/widgets/dot.dart';
-import 'package:beta_home/widgets/screen_bar.dart';
 import 'package:beta_home/widgets/transaction_row.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:intl/intl.dart';
 
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+
+final CURRENCY_FORMAT = NumberFormat("#,##0.00", "en_US");
 
 class Wallet extends StatefulWidget {
   const Wallet({Key? key}) : super(key: key);
@@ -29,7 +31,28 @@ class _WalletState extends State<Wallet> {
   @override
   void initState() {
     super.initState();
+    getBalance();
     getTransactions();
+  }
+
+  Future getBalance() async {
+    try {
+      final resp = await ServerHelper.get('${UrlHelper.my}/wallet/balance');
+      print(':::::::::::::::::getBalance::::::::::::::${resp['status']}');
+      if (resp['status'] == 200) {
+        final HttpResp json = HttpResp.fromJson(resp['data']);
+        if (json.status == 'success') {
+          (() => Provider.of<DataModel>(context, listen: false).balance =
+              json.data)();
+        } else {
+          Utils.showToast(json.msg);
+        }
+      } else {
+        Utils.showToast('Connection error.');
+      }
+    } catch (e) {
+      Utils.showToast('An error occured.');
+    }
   }
 
   Future getTransactions() async {
@@ -42,15 +65,13 @@ class _WalletState extends State<Wallet> {
             _items = json.data;
           });
         } else {
-          Fluttertoast.showToast(msg: json.msg, toastLength: Toast.LENGTH_LONG);
+          Utils.showToast(json.msg);
         }
       } else {
-        Fluttertoast.showToast(
-            msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
+        Utils.showToast('Connection error.');
       }
     } catch (e) {
-      Fluttertoast.showToast(
-          msg: 'An error occured.', toastLength: Toast.LENGTH_LONG);
+      Utils.showToast('An error occured.');
     }
   }
 
@@ -141,9 +162,10 @@ class _WalletState extends State<Wallet> {
                           const Text('Money balance',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 13)),
-                          const Text(
-                            'N 200,000',
-                            style: TextStyle(
+                          Text(
+                            NumberFormat.currency(name: '')
+                                .format(data.balance),
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 22,
                               fontWeight: FontWeight.w600,

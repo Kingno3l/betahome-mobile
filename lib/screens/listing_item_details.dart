@@ -1,24 +1,21 @@
-import 'package:beta_home/models/market_item.dart';
-import 'package:beta_home/models/package.dart';
-import 'package:beta_home/models/package_item.dart';
+import 'package:beta_home/models/listing_item.dart';
 import 'package:beta_home/screens/my_cart.dart';
 import 'package:beta_home/widgets/dot.dart';
-import 'package:beta_home/widgets/screen_bar.dart';
 import 'package:flutter/material.dart';
 
-class MarketItemDetails extends StatefulWidget {
-  final MarketItem item;
+class ListingItemDetails extends StatefulWidget {
+  final ListingItem item;
 
-  const MarketItemDetails({Key? key, required this.item}) : super(key: key);
+  const ListingItemDetails({Key? key, required this.item}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _MarketItemDetails();
+  State<StatefulWidget> createState() => _ListingItemDetailsState();
 }
 
-class _MarketItemDetails extends State<MarketItemDetails> {
+class _ListingItemDetailsState extends State<ListingItemDetails> {
   @override
   Widget build(BuildContext context) {
-    final MarketItem item = widget.item;
+    final ListingItem item = widget.item;
 
     return Scaffold(
       appBar: AppBar(
@@ -61,10 +58,11 @@ class _MarketItemDetails extends State<MarketItemDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
+                width: double.infinity,
                 height: 220,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage(item.picture),
+                    image: NetworkImage(item.picture),
                     fit: BoxFit.cover,
                   ),
                 ),

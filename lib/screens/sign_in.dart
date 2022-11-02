@@ -1,6 +1,7 @@
 import 'package:beta_home/helper/keys.dart';
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
+import 'package:beta_home/helper/utils.dart';
 import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/screens/dashboard.dart';
 import 'package:flutter/gestures.dart';
@@ -9,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:beta_home/widgets/screen_head.dart';
 import 'package:beta_home/screens/sign_up.dart';
 import 'package:beta_home/screens/forgot-password.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignIn extends StatefulWidget {
@@ -26,8 +26,7 @@ class _SignInState extends State<SignIn> {
 
   Future _onProceed() async {
     if (_email == '' || _pwd == '') {
-      Fluttertoast.showToast(
-          msg: 'All fields are required', toastLength: Toast.LENGTH_LONG);
+      Utils.showToast('All fields are required');
     } else {
       try {
         final resp = await ServerHelper.post(UrlHelper.login, {
@@ -36,7 +35,7 @@ class _SignInState extends State<SignIn> {
         });
         if (resp['status'] == 200) {
           final HttpResp json = HttpResp.fromJson(resp['data']);
-          Fluttertoast.showToast(msg: json.msg, toastLength: Toast.LENGTH_LONG);
+          Utils.showToast(json.msg);
           _pref.then((SharedPreferences pref) {
             pref.setString(Keys.TOKEN, json.token);
             if (json.status == 'success') {
@@ -49,12 +48,10 @@ class _SignInState extends State<SignIn> {
             }
           });
         } else {
-          Fluttertoast.showToast(
-              msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
+          Utils.showToast('Connection error.');
         }
       } catch (e) {
-        Fluttertoast.showToast(
-            msg: e.toString(), toastLength: Toast.LENGTH_LONG);
+        Utils.showToast('An error occured');
       }
     }
   }
@@ -75,8 +72,12 @@ class _SignInState extends State<SignIn> {
               padding: const EdgeInsets.only(right: 20),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SignUp()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SignUp(),
+                    ),
+                  );
                 },
                 child: const Text(
                   'Sign Up',

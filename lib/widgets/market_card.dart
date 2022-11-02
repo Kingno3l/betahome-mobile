@@ -1,10 +1,10 @@
-import 'package:beta_home/models/market_item.dart';
-import 'package:beta_home/screens/market_item_details.dart';
+import 'package:beta_home/models/listing_item.dart';
+import 'package:beta_home/screens/listing_item_details.dart';
 import 'package:flutter/material.dart';
 
-Widget galleryCard(context, int index, MarketItem item) => Card(
+Widget galleryCard(context, int index, ListingItem item) => Card(
       clipBehavior: Clip.antiAlias,
-      elevation: 0.4,
+      elevation: 0.3,
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
@@ -13,7 +13,7 @@ Widget galleryCard(context, int index, MarketItem item) => Card(
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MarketItemDetails(item: item),
+            builder: (context) => ListingItemDetails(item: item),
           ),
         ),
         child: Column(
@@ -21,6 +21,8 @@ Widget galleryCard(context, int index, MarketItem item) => Card(
           children: <Widget>[
             Expanded(
               child: Container(
+                width: 120,
+                height: 120,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: NetworkImage(item.picture),
@@ -46,16 +48,29 @@ Widget galleryCard(context, int index, MarketItem item) => Card(
                 ),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(item.name),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  item.name,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 13,
+                  ),
+                ),
+              ),
             ),
-            Container(
-              padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-              child: Text(
-                'N${item.price}',
-                style: const TextStyle(
-                  color: Color(0xffF55859),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
+                child: Text(
+                  'N${item.price}',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: Color(0xffF55859),
+                  ),
                 ),
               ),
             ),

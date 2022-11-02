@@ -1,4 +1,10 @@
+import 'package:fluttertoast/fluttertoast.dart';
+
 class Utils {
+  static void showToast(msg) {
+    Fluttertoast.showToast(msg: msg, toastLength: Toast.LENGTH_LONG);
+  }
+
   static String timeAgo(DateTime d) {
     Duration diff = DateTime.now().difference(d);
     if (diff.inDays > 365) {

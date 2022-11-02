@@ -1,11 +1,11 @@
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
+import 'package:beta_home/helper/utils.dart';
 import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/screens/otp.dart';
 import 'package:flutter/material.dart';
 
 import 'package:beta_home/widgets/screen_head.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class Mobile extends StatefulWidget {
   const Mobile({Key? key}) : super(key: key);
@@ -20,8 +20,7 @@ class _MobileState extends State<Mobile> {
 
   Future _onProceed() async {
     if (_country_code == '' || _phone == '') {
-      Fluttertoast.showToast(
-          msg: 'All fields are required', toastLength: Toast.LENGTH_LONG);
+      Utils.showToast('All fields are required');
     } else {
       try {
         final resp = await ServerHelper.post('${UrlHelper.register}/complete', {
@@ -29,14 +28,11 @@ class _MobileState extends State<Mobile> {
           'phone': _phone,
         });
         if (resp['status'] == 401) {
-          Fluttertoast.showToast(
-              msg: 'Please login or create account',
-              toastLength: Toast.LENGTH_LONG);
+          Utils.showToast('Please login or create account');
         } else if (resp['status'] == 200) {
           final HttpResp json = HttpResp.fromJson(resp['data']);
-          Fluttertoast.showToast(
-              msg: json.msg(), toastLength: Toast.LENGTH_LONG);
-          if (json.status() == 'success') {
+          Utils.showToast(json.msg);
+          if (json.status == 'success') {
             (() {
               Navigator.push(
                 context,
@@ -47,12 +43,10 @@ class _MobileState extends State<Mobile> {
             })();
           }
         } else {
-          Fluttertoast.showToast(
-              msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
+          Utils.showToast('Connection error.');
         }
       } catch (e) {
-        Fluttertoast.showToast(
-            msg: e.toString(), toastLength: Toast.LENGTH_LONG);
+        Utils.showToast('An error occured');
       }
     }
   }

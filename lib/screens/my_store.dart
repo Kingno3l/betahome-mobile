@@ -1,11 +1,11 @@
 import 'package:beta_home/elements/bottom_sheet.dart';
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
+import 'package:beta_home/helper/utils.dart';
 import 'package:beta_home/models/http_resp.dart';
-import 'package:beta_home/models/market_item.dart';
+import 'package:beta_home/models/listing_item.dart';
 import 'package:beta_home/screens/new_listing.dart';
 import 'package:beta_home/widgets/botom_sheet.dart';
-import 'package:beta_home/widgets/dot.dart';
 import 'package:beta_home/widgets/market_card.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -30,26 +30,22 @@ class _MyStoreState extends State<MyStore> {
 
   Future getProducts() async {
     try {
-      final resp = await ServerHelper.get('${UrlHelper.market}/my/products');
-      print(resp['status']);
+      final resp = await ServerHelper.get('${UrlHelper.my}/listings');
       if (resp['status'] == 200) {
         final HttpResp json = HttpResp.fromJson(resp['data']);
-        print(resp['data']);
         if (json.status == 'success') {
           setState(() {
             _items = json.data;
             _isLoading = false;
           });
         } else {
-          Fluttertoast.showToast(msg: json.msg, toastLength: Toast.LENGTH_LONG);
+          Utils.showToast(json.msg);
         }
       } else {
-        Fluttertoast.showToast(
-            msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
+        Utils.showToast('Connection error.');
       }
     } catch (e) {
-      Fluttertoast.showToast(
-          msg: 'An error occured.', toastLength: Toast.LENGTH_LONG);
+      Utils.showToast('An error occured.');
     }
   }
 
@@ -79,8 +75,18 @@ class _MyStoreState extends State<MyStore> {
                   isScrollControlled: true,
                   shape: BotomSheet.shape(),
                   context: context,
-                  builder: (context) =>
-                      BotomShet.listingTypes((val) => {print(val)}),
+                  builder: (context) => BotomShet.listingTypes(
+                    (id, title) {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              NewListing(typeId: id, typeTitle: title),
+                        ),
+                      );
+                    },
+                  ),
                 ),
                 icon: const Icon(
                   Icons.add,
@@ -116,7 +122,7 @@ class _MyStoreState extends State<MyStore> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 16),
                 child: Text(
-                  'My Listings',
+                  'Listings',
                   style: TextStyle(
                     color: Colors.black.withOpacity(0.6),
                   ),
@@ -138,7 +144,7 @@ class _MyStoreState extends State<MyStore> {
                     itemBuilder: (context, index) => galleryCard(
                       context,
                       index,
-                      MarketItem.fromJson(_items[index]),
+                      ListingItem.fromJson(_items[index]),
                     ),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(

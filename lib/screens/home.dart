@@ -2,14 +2,13 @@ import 'dart:convert';
 
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
+import 'package:beta_home/helper/utils.dart';
 import 'package:beta_home/models/data.dart';
 import 'package:beta_home/models/http_resp.dart';
-import 'package:beta_home/models/market_item.dart';
 import 'package:beta_home/screens/explore.dart';
 import 'package:beta_home/screens/beta_help.dart';
 import 'package:beta_home/screens/sales_workforce.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -22,20 +21,15 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   late AnimationController progressCont;
-  final int _tabIndex = 0;
-  List _items = [];
-  bool _isLoading = true;
   int _current = 0;
   final CarouselController _controller = CarouselController();
-  List<String> images = [
-    "https://images.wallpapersden.com/image/download/purple-sunrise-4k-vaporwave_bGplZmiUmZqaraWkpJRmbmdlrWZlbWU.jpg",
-    "https://wallpaperaccess.com/full/2637581.jpg",
-    "https://uhdwallpapers.org/uploads/converted/20/01/14/the-mandalorian-5k-1920x1080_477555-mm-90.jpg"
-  ];
+  List _slides = [];
   late TabController _tabController;
 
   @override
   void initState() {
+    super.initState();
+    getSliders();
     progressCont =
         AnimationController(vsync: this, duration: const Duration(seconds: 1))
           ..addListener(() {
@@ -43,9 +37,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           });
     progressCont.repeat(reverse: true);
     _tabController = TabController(length: 3, vsync: this);
-    super.initState();
-
-    // getPackages('');
   }
 
   @override
@@ -54,29 +45,23 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  Future getPackages(String query) async {
+  Future getSliders() async {
     try {
-      final resp =
-          await ServerHelper.get('${UrlHelper.market}/home/list?q=$query');
+      final resp = await ServerHelper.get(UrlHelper.sliders);
       if (resp['status'] == 200) {
-        // final HttpResp json = HttpResp.fromJson(resp['data']);
-        print('::::::::::::::::::::: ${resp['data']} ::::::::::::::::::');
-        // if (json.status == 'success') {
-        //   setState(() {
-        //     _items = json.data;
-        //     _isLoading = false;
-        //   });
-        // } else {
-        //   Fluttertoast.showToast(msg: json.msg, toastLength: Toast.LENGTH_LONG);
-        // }
+        final HttpResp json = HttpResp.fromJson(resp['data']);
+        if (json.status == 'success') {
+          setState(() {
+            _slides = json.data;
+          });
+        } else {
+          Utils.showToast(json.msg);
+        }
       } else {
-        Fluttertoast.showToast(
-            msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
+        Utils.showToast('Connection error.');
       }
     } catch (e) {
-      print('::::::::::::::::::::: $e ::::::::::::::::::');
-      Fluttertoast.showToast(
-          msg: 'An error occured.', toastLength: Toast.LENGTH_LONG);
+      Utils.showToast('An error occured.');
     }
   }
 
@@ -92,12 +77,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> imageSliders = images
+    final List<Widget> imageSliders = _slides
         .map((item) => ClipRRect(
                 // borderRadius: const BorderRadius.all(Radius.circular(5.0)),
                 child: Stack(
               children: <Widget>[
-                Image.network(item, fit: BoxFit.cover, width: 1000.0),
+                Image.network('${UrlHelper.image}?key=${item['key']}',
+                    fit: BoxFit.cover, width: 1000.0),
                 Positioned(
                   bottom: 0.0,
                   left: 0.0,
@@ -116,7 +102,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     padding: const EdgeInsets.symmetric(
                         vertical: 10.0, horizontal: 20.0),
                     child: Text(
-                      'No. ${images.indexOf(item)} image',
+                      '${item['text']}',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16.0,
@@ -138,10 +124,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 CarouselSlider(
                   items: imageSliders,
                   options: CarouselOptions(
-                    height: 200,
+                    // height: 230,
                     viewportFraction: 1.0,
                     autoPlay: true,
-                    autoPlayCurve: Curves.linearToEaseOut,
+                    autoPlayCurve: Curves.linear,
                     enlargeCenterPage: true,
                     onPageChanged: (index, reason) {
                       setState(() {
@@ -159,7 +145,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     padding: const EdgeInsets.all(10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: images.asMap().entries.map((entry) {
+                      children: _slides.asMap().entries.map((entry) {
                         return Container(
                           width: 4.0,
                           height: 4.0,
@@ -184,26 +170,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               height: MediaQuery.of(context).size.height,
               child: Column(
                 children: [
-                  // Container(
-                  //   // height: 50,
-                  //   width: MediaQuery.of(context).size.height,
-                  //   decoration: BoxDecoration(
-                  //       color: const Color(0xffFFF6D6),
-                  //       borderRadius: BorderRadius.circular(5)),
-                  //   child: Column(
-                  //     children: [
-                  //       Padding(
-                  //         padding: const EdgeInsets.all(0),
-                  //         child:
                   TabBar(
-                    // unselectedLabelColor: Colors.grey,
                     labelColor: Colors.black,
                     indicatorColor: const Color(0xFFFFDA58),
                     indicatorWeight: 1,
-                    // indicator: BoxDecoration(
-                    //   color: Colors.white,
-                    //   borderRadius: BorderRadius.circular(5),
-                    // ),
                     controller: _tabController,
                     tabs: const [
                       Tab(
@@ -215,18 +185,18 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       Tab(text: 'Sales Workforce')
                     ],
                   ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                   Expanded(
-                    child:
-                        TabBarView(controller: _tabController, children: const [
-                      Explore(),
-                      BetaHelp(),
-                      SalesWorkforce(),
-                    ]),
-                  )
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: TabBarView(
+                          controller: _tabController,
+                          children: const [
+                            Explore(),
+                            BetaHelp(),
+                            SalesWorkforce(),
+                          ]),
+                    ),
+                  ),
                 ],
               ),
             ),

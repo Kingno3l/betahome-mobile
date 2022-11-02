@@ -1,9 +1,12 @@
 // ignore_for_file: non_constant_identifier_names
+import 'dart:ffi';
+
 import 'package:flutter/foundation.dart';
 
 class DataModel extends ChangeNotifier {
   final List<int> _cart = [];
   ProfileModel? _profile;
+  double _balance = 0;
 
   List<int> get items => _cart;
 
@@ -12,7 +15,13 @@ class DataModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  set balance(bal) {
+    _balance = bal;
+    notifyListeners();
+  }
+
   ProfileModel? get profile => _profile;
+  double get balance => _balance;
 
   void addToCart(int item) {
     _cart.add(item);

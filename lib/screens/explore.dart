@@ -1,7 +1,7 @@
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/http_resp.dart';
-import 'package:beta_home/models/market_item.dart';
+import 'package:beta_home/models/listing_item.dart';
 import 'package:beta_home/widgets/market_card.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
@@ -21,8 +21,8 @@ class _ExploreState extends State<Explore> with TickerProviderStateMixin {
     'Electronics': [
       {
         "_id": "34567890",
-        "name": "32 Inchs LG TV",
-        "description": "This is a TV set",
+        "title": "32 Inchs LG TV",
+        "desc": "This is a TV set",
         "price": "230000",
         "picture":
             "https://images.wallpapersden.com/image/download/purple-sunrise-4k-vaporwave_bGplZmiUmZqaraWkpJRmbmdlrWZlbWU.jpg",
@@ -30,8 +30,8 @@ class _ExploreState extends State<Explore> with TickerProviderStateMixin {
       },
       {
         "_id": "34567890",
-        "name": "32 Inchs LG TV",
-        "description": "This is a TV set",
+        "title": "32 Inchs LG TV",
+        "desc": "This is a TV set",
         "price": "240000",
         "picture":
             "https://images.wallpapersden.com/image/download/purple-sunrise-4k-vaporwave_bGplZmiUmZqaraWkpJRmbmdlrWZlbWU.jpg",
@@ -39,8 +39,8 @@ class _ExploreState extends State<Explore> with TickerProviderStateMixin {
       },
       {
         "_id": "34567890",
-        "name": "32 Inchs LG TV",
-        "description": "This is a TV set",
+        "title": "32 Inchs LG TV",
+        "desc": "This is a TV set",
         "price": "250000",
         "picture":
             "https://images.wallpapersden.com/image/download/purple-sunrise-4k-vaporwave_bGplZmiUmZqaraWkpJRmbmdlrWZlbWU.jpg",
@@ -50,8 +50,8 @@ class _ExploreState extends State<Explore> with TickerProviderStateMixin {
     'Fashion': [
       {
         "_id": "34567890",
-        "name": "32 Inchs LG TV",
-        "description": "This is a TV set",
+        "title": "32 Inchs LG TV",
+        "desc": "This is a TV set",
         "price": "230000",
         "picture":
             "https://images.wallpapersden.com/image/download/purple-sunrise-4k-vaporwave_bGplZmiUmZqaraWkpJRmbmdlrWZlbWU.jpg",
@@ -59,8 +59,8 @@ class _ExploreState extends State<Explore> with TickerProviderStateMixin {
       },
       {
         "_id": "34567890",
-        "name": "32 Inchs LG TV",
-        "description": "This is a TV set",
+        "title": "32 Inchs LG TV",
+        "desc": "This is a TV set",
         "price": "240000",
         "picture":
             "https://images.wallpapersden.com/image/download/purple-sunrise-4k-vaporwave_bGplZmiUmZqaraWkpJRmbmdlrWZlbWU.jpg",
@@ -68,8 +68,66 @@ class _ExploreState extends State<Explore> with TickerProviderStateMixin {
       },
       {
         "_id": "34567890",
-        "name": "32 Inchs LG TV",
-        "description": "This is a TV set",
+        "title": "32 Inchs LG TV",
+        "desc": "This is a TV set",
+        "price": "250000",
+        "picture":
+            "https://images.wallpapersden.com/image/download/purple-sunrise-4k-vaporwave_bGplZmiUmZqaraWkpJRmbmdlrWZlbWU.jpg",
+        "categories": null
+      },
+    ],
+    'Electronics 2': [
+      {
+        "_id": "34567890",
+        "title": "32 Inchs LG TV",
+        "desc": "This is a TV set",
+        "price": "230000",
+        "picture":
+            "https://images.wallpapersden.com/image/download/purple-sunrise-4k-vaporwave_bGplZmiUmZqaraWkpJRmbmdlrWZlbWU.jpg",
+        "categories": null
+      },
+      {
+        "_id": "34567890",
+        "title": "32 Inchs LG TV",
+        "desc": "This is a TV set",
+        "price": "240000",
+        "picture":
+            "https://images.wallpapersden.com/image/download/purple-sunrise-4k-vaporwave_bGplZmiUmZqaraWkpJRmbmdlrWZlbWU.jpg",
+        "categories": null
+      },
+      {
+        "_id": "34567890",
+        "title": "32 Inchs LG TV",
+        "desc": "This is a TV set",
+        "price": "250000",
+        "picture":
+            "https://images.wallpapersden.com/image/download/purple-sunrise-4k-vaporwave_bGplZmiUmZqaraWkpJRmbmdlrWZlbWU.jpg",
+        "categories": null
+      },
+    ],
+    'Fashion 2': [
+      {
+        "_id": "34567890",
+        "title": "32 Inchs LG TV",
+        "desc": "This is a TV set",
+        "price": "230000",
+        "picture":
+            "https://images.wallpapersden.com/image/download/purple-sunrise-4k-vaporwave_bGplZmiUmZqaraWkpJRmbmdlrWZlbWU.jpg",
+        "categories": null
+      },
+      {
+        "_id": "34567890",
+        "title": "32 Inchs LG TV",
+        "desc": "This is a TV set",
+        "price": "240000",
+        "picture":
+            "https://images.wallpapersden.com/image/download/purple-sunrise-4k-vaporwave_bGplZmiUmZqaraWkpJRmbmdlrWZlbWU.jpg",
+        "categories": null
+      },
+      {
+        "_id": "34567890",
+        "title": "32 Inchs LG TV",
+        "desc": "This is a TV set",
         "price": "250000",
         "picture":
             "https://images.wallpapersden.com/image/download/purple-sunrise-4k-vaporwave_bGplZmiUmZqaraWkpJRmbmdlrWZlbWU.jpg",
@@ -118,7 +176,7 @@ class _ExploreState extends State<Explore> with TickerProviderStateMixin {
                         (index, item) => galleryCard(
                           context,
                           index,
-                          MarketItem.fromJson(item),
+                          ListingItem.fromJson(item),
                         ),
                       )
                       .toList(),
@@ -138,7 +196,7 @@ class _ExploreState extends State<Explore> with TickerProviderStateMixin {
 
   Future getItems() async {
     try {
-      final resp = await ServerHelper.get('${UrlHelper.market}/items');
+      final resp = await ServerHelper.get('${UrlHelper.listings}/explore');
       if (resp['status'] == 200) {
         final HttpResp json = HttpResp.fromJson(resp['data']);
         if (json.status == 'success') {
@@ -152,10 +210,26 @@ class _ExploreState extends State<Explore> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        children: _rows,
-      ),
+    return Column(
+      children: [
+        // ..._rows,
+        Expanded(
+          child: GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: _items.length,
+            itemBuilder: (context, index) => galleryCard(
+              context,
+              index,
+              ListingItem.fromJson(_items[index]),
+            ),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

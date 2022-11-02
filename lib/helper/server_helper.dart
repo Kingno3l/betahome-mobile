@@ -1,15 +1,12 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:beta_home/helper/keys.dart';
 import 'package:beta_home/helper/url_helper.dart';
+import 'package:beta_home/helper/utils.dart';
 import 'package:beta_home/models/data.dart';
 import 'package:beta_home/models/http_resp.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -100,7 +97,6 @@ class ServerHelper {
         final HttpResp json = HttpResp.fromJson(resp['data']);
         if (json.status == 'success') {
           _pref.then((SharedPreferences pref) {
-
             final profile = const JsonEncoder().convert(json.data);
             pref.setString(Keys.PROFILE, profile);
 
@@ -108,14 +104,13 @@ class ServerHelper {
             Navigator.pushAndRemoveUntil(context, route!, ((route) => false));
           });
         } else {
-          Fluttertoast.showToast(msg: json.msg, toastLength: Toast.LENGTH_LONG);
+          Utils.showToast(json.msg);
         }
       } else {
-        Fluttertoast.showToast(
-            msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
+        Utils.showToast('Connection error.');
       }
     } catch (e) {
-      Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG);
+      Utils.showToast('An error occured');
     }
   }
 

@@ -2,28 +2,34 @@ import 'package:flutter/material.dart';
 
 @immutable
 abstract class BotomShet {
-  static Padding productCategories(List items, Function(dynamic) onSelect) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(bottom: 14),
-            child: Text('Select category'),
-          ),
-          ...items.map(
-            (item) => InkWell(
-              onTap: onSelect(item),
-              child: const Text('data'),
+  static Column productCategories(List items, Function(dynamic) onSelect) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(16),
+          child: Text('Select category'),
+        ),
+        Divider(
+          color: Colors.grey.shade300,
+        ),
+        ...items.map(
+          (item) => InkWell(
+            onTap: () => onSelect(item),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+              child: Text(
+                item['name'],
+              ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
-  static Padding listingTypes(Function Function(dynamic) onSelect) {
+  static Padding listingTypes(Function(String, String) onSelect) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -46,15 +52,8 @@ abstract class BotomShet {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: GestureDetector(
-                    onTap: () => onSelect(2),
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const NewListing(
-                    //         typeId: '63569bbfc3acaa4ec269aaf5',
-                    //         typeTitle: 'Item for sale'),
-                    //   ),
-                    // ),
+                    onTap: () =>
+                        onSelect('63569bbfc3acaa4ec269aaf5', 'Item for sale'),
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: Column(
@@ -99,14 +98,8 @@ abstract class BotomShet {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: GestureDetector(
-                    // onTap: () => Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const NewListing(
-                    //         typeId: '63569c09c3acaa4ec269aaf6',
-                    //         typeTitle: 'Vehicle for sale'),
-                    //   ),
-                    // ),
+                    onTap: () => onSelect(
+                        '63569c09c3acaa4ec269aaf6', 'Vehicle for sale'),
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: Column(
@@ -151,14 +144,8 @@ abstract class BotomShet {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: GestureDetector(
-                    // onTap: () => Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const NewListing(
-                    //         typeId: '63569c36c3acaa4ec269aaf7',
-                    //         typeTitle: 'Property for sale or rent'),
-                    //   ),
-                    // ),
+                    onTap: () => onSelect('63569c36c3acaa4ec269aaf7',
+                        'Property for sale or rent'),
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: Column(
