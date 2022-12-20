@@ -1,5 +1,6 @@
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
+import 'package:beta_home/models/data.dart';
 import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/models/market_item%20category.dart';
 import 'package:beta_home/models/listing_item.dart';
@@ -9,6 +10,7 @@ import 'package:beta_home/widgets/market_card.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:collection/collection.dart';
+import 'package:provider/provider.dart';
 
 class Market extends StatefulWidget {
   const Market({Key? key}) : super(key: key);
@@ -73,12 +75,12 @@ class _MarketState extends State<Market> with TickerProviderStateMixin {
   Future getItems() async {
     try {
       final url = '${UrlHelper.market}/items?q=$_query&cat=$_category';
-      print(url);
+      // print(url);
       final resp = await ServerHelper.get(url);
-      print(resp['status']);
+      // print(resp['status']);
       if (resp['status'] == 200) {
         final HttpResp json = HttpResp.fromJson(resp['data']);
-        print(resp['data']);
+        // print(resp['data']);
         if (json.status == 'success') {
           setState(() {
             _items = json.data;
@@ -148,17 +150,25 @@ class _MarketState extends State<Market> with TickerProviderStateMixin {
                 Stack(
                   children: [
                     IconButton(
-                        onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const MyCart(),
-                              ),
-                            ),
-                        icon: const Icon(
-                          Icons.shopping_cart,
-                          color: Color(0xff000000),
-                        )),
-                    Dot(),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MyCart(),
+                        ),
+                      ),
+                      icon: const Icon(
+                        Icons.shopping_cart,
+                        color: Color(0xff000000),
+                      ),
+                    ),
+                    Consumer<DataModel>(
+                      builder: (context, data, child) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 9, top: 9),
+                          child: data.cartItems.isEmpty ? null : Dot(),
+                        );
+                      },
+                    ),
                   ],
                 ),
                 const SizedBox(

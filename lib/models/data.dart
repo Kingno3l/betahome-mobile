@@ -1,14 +1,15 @@
 // ignore_for_file: non_constant_identifier_names
-import 'dart:ffi';
 
+import 'package:beta_home/models/listing_item.dart';
 import 'package:flutter/foundation.dart';
 
 class DataModel extends ChangeNotifier {
-  final List<int> _cart = [];
+  final List<ListingItem> _cart = [];
+  double cartTotal = 0;
   ProfileModel? _profile;
   double _balance = 0;
 
-  List<int> get items => _cart;
+  List<ListingItem> get cartItems => _cart;
 
   set profile(dynamic json) {
     _profile = json != null ? ProfileModel.fromJson(json) : json;
@@ -16,20 +17,28 @@ class DataModel extends ChangeNotifier {
   }
 
   set balance(bal) {
-    _balance = bal;
+    _balance = double.parse(bal.toString());
     notifyListeners();
   }
 
   ProfileModel? get profile => _profile;
   double get balance => _balance;
 
-  void addToCart(int item) {
+  void addToCart(ListingItem item) {
     _cart.add(item);
+    cartTotal = cartTotal + item.price;
     notifyListeners();
   }
 
-  void remove(int item) {
+  void removeFromCart(ListingItem item) {
     _cart.remove(item);
+    cartTotal = cartTotal - item.price;
+    notifyListeners();
+  }
+
+  void clearCart() {
+    _cart.clear();
+    cartTotal = 0;
     notifyListeners();
   }
 }

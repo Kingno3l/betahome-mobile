@@ -47,37 +47,48 @@ class BetaHome extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          packageTitle(package['name'], package['color'], index % 2 == 0,
-              () => onPackageClick(context, package)),
-          ...package['items'].map((item) => Expanded(
-                flex: 1,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: index % 2 == 0 ? 5 : 0,
+          packageTitle(
+            package['name'],
+            package['color'],
+            index % 2 == 0,
+            () => onPackageClick(context, package),
+          ),
+          ...package['items'].map(
+            (item) => Expanded(
+              flex: 1,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: index % 2 == 0 ? 5 : 0,
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () => onPackageClick(context, package),
+                      child: Image(
+                        width: double.infinity,
+                        image: AssetImage(item['picture']),
+                        alignment: Alignment.center,
+                        fit: BoxFit.fill,
+                      ),
                     ),
-                    Flexible(
-                        flex: 1,
-                        child: InkWell(
-                          onTap: () => onPackageClick(context, package),
-                          child: Image(
-                            width: double.infinity,
-                            image: AssetImage(item['picture']),
-                            alignment: Alignment.center,
-                            fit: BoxFit.fill,
-                          ),
-                        )),
-                    SizedBox(
-                      width: index % 2 != 0 ? 5 : 0,
-                    ),
-                    SizedBox(
-                      width: index % 2 != 0 ? 5 : 0,
-                    ),
-                  ],
-                ),
-              )),
-          packageTitle(package['name'], package['color'], index % 2 != 0,
-              () => onPackageClick(context, package))
+                  ),
+                  SizedBox(
+                    width: index % 2 != 0 ? 5 : 0,
+                  ),
+                  SizedBox(
+                    width: index % 2 != 0 ? 5 : 0,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          packageTitle(
+            package['name'],
+            package['color'],
+            index % 2 != 0,
+            () => onPackageClick(context, package),
+          ),
         ],
       ),
     );
@@ -89,7 +100,7 @@ class BetaHome extends StatelessWidget {
       // padding: const EdgeInsets.symmetric(vertical: 10),
       shrinkWrap: true,
       primary: false,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       children: items
           .mapIndexed((index, item) => Padding(
                 padding: const EdgeInsets.only(bottom: 8),

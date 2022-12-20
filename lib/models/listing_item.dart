@@ -6,6 +6,7 @@ class ListingItem {
   String _desc;
   double _price;
   String? _picture;
+  int _cartQty = 1;
   // dynamic _categories;
   final bool _isRated = false;
 
@@ -24,11 +25,27 @@ class ListingItem {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {'id': _id, 'price': _price};
+  }
+
+  set cartQty(val) {
+    _cartQty = val;
+  }
+
   get id => _id;
+
   get name => _title;
+
   get desc => _desc;
+
   get price => _price;
+
   get picture => '${UrlHelper.image}?key=$_picture';
+
+  get cartQty => _cartQty;
+
   // get categories => _categories;
+
   get isRated => _isRated;
 }

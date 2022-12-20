@@ -1,7 +1,9 @@
+import 'package:beta_home/models/data.dart';
 import 'package:beta_home/models/listing_item.dart';
 import 'package:beta_home/screens/my_cart.dart';
 import 'package:beta_home/widgets/dot.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ListingItemDetails extends StatefulWidget {
   final ListingItem item;
@@ -32,17 +34,25 @@ class _ListingItemDetailsState extends State<ListingItemDetails> {
               Stack(
                 children: [
                   IconButton(
-                      onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MyCart(),
-                            ),
-                          ),
-                      icon: const Icon(
-                        Icons.shopping_cart,
-                        color: Color(0xff000000),
-                      )),
-                  Dot(),
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MyCart(),
+                      ),
+                    ),
+                    icon: const Icon(
+                      Icons.shopping_cart,
+                      color: Color(0xff000000),
+                    ),
+                  ),
+                  Consumer<DataModel>(
+                    builder: (context, data, child) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 9, top: 9),
+                        child: data.cartItems.isEmpty ? null : Dot(),
+                      );
+                    },
+                  ),
                 ],
               ),
             ],
@@ -157,16 +167,24 @@ class _ListingItemDetailsState extends State<ListingItemDetails> {
               Container(
                 width: double.infinity,
                 margin: const EdgeInsets.symmetric(vertical: 20),
-                child: TextButton(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 24),
-                      backgroundColor: const Color(0xFFFFDA58)),
-                  child: const Text(
-                    'Add to Cart',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
+                child: Consumer<DataModel>(builder: (context, data, child) {
+                  return TextButton(
+                    onPressed: () => data.cartItems.contains(item)
+                        ? Provider.of<DataModel>(context, listen: false)
+                            .removeFromCart(item)
+                        : Provider.of<DataModel>(context, listen: false)
+                            .addToCart(item),
+                    style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        backgroundColor: const Color(0xFFFFDA58)),
+                    child: Text(
+                      data.cartItems.contains(item)
+                          ? 'Remove from Cart'
+                          : 'Add to Cart',
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                  );
+                }),
               ),
             ],
           )),

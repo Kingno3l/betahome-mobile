@@ -21,7 +21,7 @@ class _PackageItemDetails extends State<PackageItemDetails> {
     final PackageItem item = widget.item;
 
     return Scaffold(
-      appBar: ScreenBar.build(context, package.getName()),
+      appBar: ScreenBar.build(context, package.name),
       body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           padding: const EdgeInsets.only(left: 16, right: 16, bottom: 20),

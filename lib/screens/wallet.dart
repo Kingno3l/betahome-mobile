@@ -1,3 +1,4 @@
+import 'package:beta_home/elements/bottom_sheet.dart';
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/helper/utils.dart';
@@ -7,6 +8,7 @@ import 'package:beta_home/models/transaction_item.dart';
 import 'package:beta_home/screens/payment.dart';
 import 'package:beta_home/screens/sign_in.dart';
 import 'package:beta_home/screens/transactions.dart';
+import 'package:beta_home/widgets/botom_sheet.dart';
 import 'package:beta_home/widgets/dot.dart';
 import 'package:beta_home/widgets/transaction_row.dart';
 import 'package:flutter/material.dart';
@@ -26,11 +28,14 @@ class Wallet extends StatefulWidget {
 
 class _WalletState extends State<Wallet> {
   List _items = [];
-  String _topUpAmount = '';
 
   @override
   void initState() {
     super.initState();
+    task();
+  }
+
+  Future task() async {
     getBalance();
     getTransactions();
   }
@@ -38,7 +43,6 @@ class _WalletState extends State<Wallet> {
   Future getBalance() async {
     try {
       final resp = await ServerHelper.get('${UrlHelper.my}/wallet/balance');
-      print(':::::::::::::::::getBalance::::::::::::::${resp['status']}');
       if (resp['status'] == 200) {
         final HttpResp json = HttpResp.fromJson(resp['data']);
         if (json.status == 'success') {
@@ -75,19 +79,22 @@ class _WalletState extends State<Wallet> {
     }
   }
 
-  void _onNext() async {
-    if (_topUpAmount == '') return;
+  void _onNext(String amount) async {
+    if (amount == '') return;
 
-    final result = await Navigator.push(
+    Navigator.pop(context);
+    String? result = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => Payment(
-          amount: double.parse(_topUpAmount),
+          amount: amount,
         ),
       ),
     );
     if (!mounted) return;
-    print('RESULT:::::::::::::::::::::::::::::::::::$result');
+    if (result == 'success') {
+      getBalance();
+    }
   }
 
   @override
@@ -140,7 +147,7 @@ class _WalletState extends State<Wallet> {
           backgroundColor: Colors.transparent,
         ),
         body: RefreshIndicator(
-          onRefresh: getTransactions,
+          onRefresh: task,
           child: Column(
             children: [
               Expanded(
@@ -188,87 +195,11 @@ class _WalletState extends State<Wallet> {
                                         )
                                       : showModalBottomSheet(
                                           isScrollControlled: true,
-                                          shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.vertical(
-                                              top: Radius.circular(10.0),
-                                            ),
-                                          ),
+                                          shape: BotomSheet.shape(),
                                           context: context,
-                                          builder: (context) {
-                                            return Padding(
-                                              padding: EdgeInsets.only(
-                                                  top: 20,
-                                                  left: 40,
-                                                  right: 40,
-                                                  bottom: MediaQuery.of(context)
-                                                          .viewInsets
-                                                          .bottom +
-                                                      20),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.stretch,
-                                                children: [
-                                                  const Text(
-                                                    'How much do you want to top up?',
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  TextField(
-                                                    cursorColor: Colors.black,
-                                                    keyboardType:
-                                                        const TextInputType
-                                                            .numberWithOptions(),
-                                                    onChanged: (val) =>
-                                                        _topUpAmount = val,
-                                                    decoration:
-                                                        const InputDecoration(
-                                                      hintText: 'Amount',
-                                                      contentPadding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 12),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderSide:
-                                                            BorderSide.none,
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    8)),
-                                                      ),
-                                                      filled: true,
-                                                      fillColor:
-                                                          Color(0xffFFF6D6),
-                                                    ),
-                                                    style: const TextStyle(
-                                                      fontSize: 16,
-                                                      color: Color(0xff000000),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 26,
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: _onNext,
-                                                    style: TextButton.styleFrom(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                vertical: 15.0),
-                                                        backgroundColor:
-                                                            const Color(
-                                                                0xFFFFDA58)),
-                                                    child: const Text('Next',
-                                                        style: TextStyle(
-                                                            color: Color(
-                                                                0xFF000000))),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          },
+                                          builder: (context) =>
+                                              BotomShet.topupAmount(
+                                                  context, _onNext),
                                         ),
                                 },
                                 icon: const Icon(

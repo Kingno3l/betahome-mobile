@@ -1,5 +1,6 @@
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
+import 'package:beta_home/helper/utils.dart';
 import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/widgets/screen_bar.dart';
 import 'package:flutter/material.dart';
@@ -19,11 +20,9 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   Future _onProceed() async {
     if (_pwd == '' || _newPwd == '' || _newPwdAgain == '') {
-      Fluttertoast.showToast(
-          msg: 'All fields are required', toastLength: Toast.LENGTH_LONG);
+      Utils.showToast('All fields are required');
     } else if (_newPwd != _newPwdAgain) {
-      Fluttertoast.showToast(
-          msg: 'Password must match', toastLength: Toast.LENGTH_LONG);
+      Utils.showToast('Password must match');
     } else {
       try {
         final resp = await ServerHelper.post('${UrlHelper.password}/change', {
@@ -36,8 +35,7 @@ class _ResetPasswordState extends State<ResetPassword> {
             if (!mounted) return;
             final isDone = await ServerHelper.logout(context);
             if (isDone) {
-              Fluttertoast.showToast(
-                  msg: 'Please login', toastLength: Toast.LENGTH_LONG);
+              Utils.showToast('Please login');
               if (!mounted) return;
               Navigator.of(context).pop();
             }
@@ -46,12 +44,10 @@ class _ResetPasswordState extends State<ResetPassword> {
                 msg: json.msg, toastLength: Toast.LENGTH_LONG);
           }
         } else {
-          Fluttertoast.showToast(
-              msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
+          Utils.showToast('Connection error.');
         }
       } catch (e) {
-        Fluttertoast.showToast(
-            msg: e.toString(), toastLength: Toast.LENGTH_LONG);
+        Utils.showToast('An error occured.');
       }
     }
   }

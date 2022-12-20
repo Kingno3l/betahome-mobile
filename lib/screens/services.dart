@@ -1,13 +1,10 @@
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
+import 'package:beta_home/helper/utils.dart';
 import 'package:beta_home/models/http_resp.dart';
-import 'package:beta_home/models/package.dart';
-import 'package:beta_home/widgets/dot.dart';
-import 'package:dio/dio.dart';
+import 'package:beta_home/screens/service_details.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
-import 'package:beta_home/widgets/beta_home.dart';
 import 'package:collection/collection.dart';
 
 class Services extends StatefulWidget {
@@ -28,7 +25,7 @@ class _ServicesState extends State<Services> {
 
   Future getServices() async {
     try {
-      final resp = await ServerHelper.get(UrlHelper.services);
+      final resp = await ServerHelper.get('${UrlHelper.services}/provider');
       if (resp['status'] == 200) {
         final HttpResp json = HttpResp.fromJson(resp['data']);
         if (json.status == 'success') {
@@ -36,30 +33,28 @@ class _ServicesState extends State<Services> {
             _items = json.data;
           });
         } else {
-          Fluttertoast.showToast(msg: json.msg, toastLength: Toast.LENGTH_LONG);
+          Utils.showToast(json.msg);
         }
       } else {
-        Fluttertoast.showToast(
-            msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
+        Utils.showToast('Connection error.');
       }
     } catch (e) {
-      Fluttertoast.showToast(
-          msg: 'An error occured.', toastLength: Toast.LENGTH_LONG);
+      Utils.showToast('An error occured.');
     }
   }
 
   void onServiceClick(context, item) {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => PackageDetails(
-    //       package: Package.fromJson(item),
-    //     ),
-    //   ),
-    // );
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ServiceDetails(
+          service: item,
+        ),
+      ),
+    );
   }
 
-  Widget serviceTitle(title, color, isShow, onPress) {
+  Widget serviceTitle(name, color, isShow, onPress) {
     if (!isShow) return const SizedBox(width: 0);
 
     return Flexible(
@@ -70,14 +65,14 @@ class _ServicesState extends State<Services> {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         child: InkWell(
-            onTap: onPress,
-            child: Center(
-              child: Text(
-                title,
-                style:
-                    const TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-              ),
-            )),
+          onTap: onPress,
+          child: Center(
+            child: Text(
+              name,
+              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -87,37 +82,49 @@ class _ServicesState extends State<Services> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          serviceTitle(package['name'], package['color'], index % 2 == 0,
-              () => onServiceClick(context, package)),
-          ...package['items'].map((item) => Expanded(
-                flex: 1,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: index % 2 == 0 ? 5 : 0,
+          serviceTitle(
+            package['name'],
+            package['color'],
+            index % 2 == 0,
+            () => onServiceClick(context, package),
+          ),
+          ...package['users'].map(
+            (item) => Expanded(
+              flex: 1,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: index % 2 == 0 ? 5 : 0,
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () => onServiceClick(context, package),
+                      child: Image(
+                        width: double.infinity,
+                        image: NetworkImage(item['profile_pic'] ??
+                            '${UrlHelper.image}?key=${package['cover_pic']}'),
+                        alignment: Alignment.center,
+                        fit: BoxFit.fill,
+                      ),
                     ),
-                    Flexible(
-                        flex: 1,
-                        child: InkWell(
-                          onTap: () => onServiceClick(context, package),
-                          child: Image(
-                            width: double.infinity,
-                            image: AssetImage(item['picture']),
-                            alignment: Alignment.center,
-                            fit: BoxFit.fill,
-                          ),
-                        )),
-                    SizedBox(
-                      width: index % 2 != 0 ? 5 : 0,
-                    ),
-                    SizedBox(
-                      width: index % 2 != 0 ? 5 : 0,
-                    ),
-                  ],
-                ),
-              )),
-          serviceTitle(package['name'], package['color'], index % 2 != 0,
-              () => onServiceClick(context, package))
+                  ),
+                  SizedBox(
+                    width: index % 2 != 0 ? 5 : 0,
+                  ),
+                  SizedBox(
+                    width: index % 2 != 0 ? 5 : 0,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          serviceTitle(
+            package['name'],
+            package['color'],
+            index % 2 != 0,
+            () => onServiceClick(context, package),
+          ),
         ],
       ),
     );
@@ -149,22 +156,23 @@ class _ServicesState extends State<Services> {
                       cursorColor: Colors.black,
                       maxLines: 1,
                       decoration: InputDecoration(
-                          isDense: true,
-                          hintText: 'Search what you need',
-                          hintStyle: const TextStyle(color: Color(0xffAEAEAE)),
-                          // border: InputBorder.none,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: const EdgeInsets.all(1.0),
-                          filled: true,
-                          fillColor: const Color(0xffEDEDED),
-                          prefixIcon: const Icon(
-                            Icons.search,
-                            size: 18,
-                            color: Color(0xffAEAEAE),
-                          )),
+                        isDense: true,
+                        hintText: 'Search what you need',
+                        hintStyle: const TextStyle(color: Color(0xffAEAEAE)),
+                        // border: InputBorder.none,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding: const EdgeInsets.all(1.0),
+                        filled: true,
+                        fillColor: const Color(0xffEDEDED),
+                        prefixIcon: const Icon(
+                          Icons.search,
+                          size: 18,
+                          color: Color(0xffAEAEAE),
+                        ),
+                      ),
                       style: const TextStyle(
                         fontSize: 15,
                         color: Color(0xff000000),
@@ -180,10 +188,12 @@ class _ServicesState extends State<Services> {
                 child: ListView(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   children: _items
-                      .mapIndexed((index, item) => Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: itemRow(context, index, item),
-                          ))
+                      .mapIndexed(
+                        (index, item) => Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: itemRow(context, index, item),
+                        ),
+                      )
                       .toList(),
                 ),
               )

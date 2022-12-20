@@ -19,7 +19,7 @@ class _PackageDetails extends State<PackageDetails> {
     final Package package = widget.package;
 
     return Scaffold(
-      appBar: ScreenBar.build(context, package.getName()),
+      appBar: ScreenBar.build(context, package.name),
       body: Column(
         children: [
           Padding(
@@ -64,7 +64,7 @@ class _PackageDetails extends State<PackageDetails> {
                       padding: const EdgeInsets.all(8.0),
                       margin: const EdgeInsets.only(top: 8),
                       decoration: BoxDecoration(
-                          color: Color(package.getColor()),
+                          color: Color(package.color),
                           borderRadius:
                               const BorderRadius.all(Radius.circular(6))),
                       child: InkWell(
@@ -164,7 +164,7 @@ class _PackageDetails extends State<PackageDetails> {
                       height: 4,
                     ),
                     Text(
-                      'N${package.getPrice()}',
+                      'N${package.price}',
                       style: const TextStyle(
                           fontWeight: FontWeight.w600, fontSize: 20),
                     ),

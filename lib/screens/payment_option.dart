@@ -1,7 +1,11 @@
+import 'package:beta_home/elements/bottom_sheet.dart';
+import 'package:beta_home/helper/payment_helper.dart';
 import 'package:beta_home/models/package.dart';
-import 'package:beta_home/models/package_item.dart';
+import 'package:beta_home/screens/package_check_out.dart';
+import 'package:beta_home/widgets/botom_sheet.dart';
+import 'package:beta_home/widgets/installment_info.dart';
+import 'package:beta_home/widgets/pay_instal_freq.dart';
 import 'package:beta_home/widgets/screen_bar.dart';
-import 'package:beta_home/screens/payment.dart';
 import 'package:flutter/material.dart';
 
 class PaymentOption extends StatefulWidget {
@@ -33,11 +37,41 @@ Widget RadioButton(
 }
 
 class _PaymentOptionState extends State<PaymentOption> {
-  String _paymentPlan = '';
+  // String _paymentPlan = '';
+  Map<String, dynamic> _selectedPlan = {'tag': ''};
 
   @override
   Widget build(BuildContext context) {
     final Package package = widget.package;
+    PaymentHelper payment = PaymentHelper(package.price);
+    final outright = {
+      'tag': 'Outright',
+      'interval': 0,
+      'for': 'outright',
+      'amount': payment.outright,
+    };
+    final List installments = [
+      {
+        'tag': 'Daily',
+        'interval': 1,
+        'for': 'daily for 90 days',
+        'amount': payment.installment(1),
+      },
+      {
+        'tag': 'Weekly',
+        'interval': 7,
+        'for': 'weekly for 12 weeks',
+        'amount': payment.installment(7),
+      },
+      {
+        'tag': 'Monthly',
+        'interval': 30,
+        'for': 'monthly for 3 months',
+        'amount': payment.installment(30),
+      },
+    ];
+    bool isInstall =
+        _selectedPlan['tag'] != '' && _selectedPlan['tag'] != outright['tag'];
 
     return Scaffold(
       appBar: ScreenBar.build(context, 'Payment option'),
@@ -57,52 +91,36 @@ class _PaymentOptionState extends State<PaymentOption> {
               const SizedBox(
                 height: 20,
               ),
-              _paymentPlan == 'Installment'
-                  ? Container(
-                      width: double.infinity,
-                      margin: const EdgeInsets.only(bottom: 20),
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          color: const Color(0xffF5F2F2),
-                          borderRadius: BorderRadius.circular(6)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            'NOTE',
-                            style: TextStyle(
-                                color: Color(0xffFF0000),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            '80% of the installment payment plan must have been made, on or before 60 days you subscribe to purchase the product, then 20% balance of payment within 30 days of post product delivery date.',
-                            style: TextStyle(fontSize: 12, height: 1.4),
-                          ),
-                        ],
-                      ))
+              _selectedPlan['tag'] != '' &&
+                      _selectedPlan['tag'] != outright['tag']
+                  ? InstallmentInfo()
                   : const SizedBox(
                       height: 0,
                     ),
               Container(
                 padding: const EdgeInsets.only(
-                    left: 12, top: 20, right: 12, bottom: 20),
+                  left: 12,
+                  top: 15,
+                  right: 12,
+                  bottom: 15,
+                ),
                 decoration: BoxDecoration(
                     color: Color(
-                        _paymentPlan == 'Outright' ? 0xff73D282 : 0xffFFF6D6),
+                      _selectedPlan['tag'] == outright['tag']
+                          ? 0xff73D282
+                          : 0xffFFF6D6,
+                    ),
                     borderRadius: BorderRadius.circular(6)),
                 child: InkWell(
                   onTap: () => {
                     setState(() {
-                      _paymentPlan = 'Outright';
+                      _selectedPlan = outright;
                     })
                   },
                   child: Row(
                     children: [
-                      RadioButton(selected: _paymentPlan == 'Outright'),
+                      RadioButton(
+                          selected: _selectedPlan['tag'] == outright['tag']),
                       const SizedBox(
                         width: 12,
                       ),
@@ -110,17 +128,25 @@ class _PaymentOptionState extends State<PaymentOption> {
                           child: Text(
                         'Outright',
                         style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Color(_paymentPlan == 'Outright'
+                          fontWeight: FontWeight.w600,
+                          color: Color(
+                            _selectedPlan['tag'] == outright['tag']
                                 ? 0xffffffff
-                                : 0xff000000)),
+                                : 0xff000000,
+                          ),
+                        ),
                       )),
-                      Text('N150,000.00',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: Color(_paymentPlan == 'Outright'
-                                  ? 0xffffffff
-                                  : 0xff000000))),
+                      Text(
+                        'N${package.price}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: Color(
+                            _selectedPlan['tag'] == outright['tag']
+                                ? 0xffffffff
+                                : 0xff000000,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -130,39 +156,65 @@ class _PaymentOptionState extends State<PaymentOption> {
               ),
               Container(
                 padding: const EdgeInsets.only(
-                    left: 12, top: 20, right: 12, bottom: 20),
+                  left: 12,
+                  top: 15,
+                  right: 12,
+                  bottom: 15,
+                ),
                 decoration: BoxDecoration(
-                    color: Color(_paymentPlan == 'Installment'
+                    color: Color(_selectedPlan['tag'] != '' &&
+                            _selectedPlan['tag'] != outright['tag']
                         ? 0xff73D282
                         : 0xffFFF6D6),
                     borderRadius: BorderRadius.circular(6)),
                 child: InkWell(
-                  onTap: () => {
-                    setState(() {
-                      _paymentPlan = 'Installment';
-                    })
-                  },
+                  onTap: () => showModalBottomSheet(
+                      isScrollControlled: true,
+                      shape: BotomSheet.shape(),
+                      context: context,
+                      builder: (context) => BotomShet.installmentOptions(
+                              installments, _selectedPlan, (plan) {
+                            Navigator.pop(context);
+                            setState(() {
+                              _selectedPlan = plan;
+                            });
+                          })),
                   child: Row(
                     children: [
-                      RadioButton(selected: _paymentPlan == 'Installment'),
+                      RadioButton(
+                          selected: _selectedPlan['tag'] != '' &&
+                              _selectedPlan['tag'] != outright['tag']),
                       const SizedBox(
                         width: 12,
                       ),
                       Expanded(
-                          child: Text(
-                        'Installment',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Color(_paymentPlan == 'Installment'
-                                ? 0xffffffff
-                                : 0xff000000)),
-                      )),
-                      Text('Select your payment plan',
+                        child: Text(
+                          'Installment',
                           style: TextStyle(
-                              fontSize: 11,
-                              color: Color(_paymentPlan == 'Installment'
-                                  ? 0xffffffff
-                                  : 0xff000000))),
+                            fontWeight: FontWeight.w600,
+                            color: Color(_selectedPlan['tag'] != '' &&
+                                    _selectedPlan['tag'] != outright['tag']
+                                ? 0xffffffff
+                                : 0xff000000),
+                          ),
+                        ),
+                      ),
+                      _selectedPlan['tag'] != '' &&
+                              _selectedPlan['tag'] != outright['tag']
+                          ? PayInstalFreq(_selectedPlan, isInstall)
+                          : Text(
+                              'Select your payment plan',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: Color(
+                                  _selectedPlan['tag'] != '' &&
+                                          _selectedPlan['tag'] !=
+                                              outright['tag']
+                                      ? 0xffffffff
+                                      : 0xff000000,
+                                ),
+                              ),
+                            ),
                     ],
                   ),
                 ),
@@ -170,19 +222,28 @@ class _PaymentOptionState extends State<PaymentOption> {
               Container(
                   width: double.infinity,
                   margin: EdgeInsets.only(
-                      top: _paymentPlan == 'Installment' ? 30 : 70, bottom: 30),
+                    top: _selectedPlan['tag'] != '' &&
+                            _selectedPlan['tag'] != outright['tag']
+                        ? 30
+                        : 70,
+                    bottom: 30,
+                  ),
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Payment(
-                                  amount: 1,
-                                )),
-                      );
-                    },
+                    onPressed: _selectedPlan['tag'] == ''
+                        ? null
+                        : () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PackageCheckout(
+                                  package: package,
+                                  paymentPlan: _selectedPlan,
+                                ),
+                              ),
+                            );
+                          },
                     style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 24),
+                        padding: const EdgeInsets.symmetric(vertical: 15),
                         backgroundColor: const Color(0xFFFFDA58)),
                     child: const Text(
                       'Proceed',

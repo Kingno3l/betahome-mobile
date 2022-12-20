@@ -1,10 +1,10 @@
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
+import 'package:beta_home/helper/utils.dart';
 import 'package:beta_home/models/http_resp.dart';
 import 'package:flutter/material.dart';
 
 import 'package:beta_home/widgets/screen_head.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({Key? key}) : super(key: key);
@@ -18,26 +18,22 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   Future _onProceed() async {
     if (_emailCont.text == '') {
-      Fluttertoast.showToast(
-          msg: 'Please enter your account email address',
-          toastLength: Toast.LENGTH_LONG);
+      Utils.showToast('Please enter your account email address');
     } else {
       try {
         final resp = await ServerHelper.post(
             '${UrlHelper.password}/forgot', {'email': _emailCont.text});
         if (resp['status'] == 200) {
           final HttpResp json = HttpResp.fromJson(resp['data']);
-          Fluttertoast.showToast(msg: json.msg, toastLength: Toast.LENGTH_LONG);
+          Utils.showToast(json.msg);
           if (json.status == 'success') {
             _emailCont.text = '';
           }
         } else {
-          Fluttertoast.showToast(
-              msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
+          Utils.showToast('Connection error.');
         }
       } catch (e) {
-        Fluttertoast.showToast(
-            msg: e.toString(), toastLength: Toast.LENGTH_LONG);
+        Utils.showToast('An error occured.');
       }
     }
   }

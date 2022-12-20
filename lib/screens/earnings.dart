@@ -1,14 +1,9 @@
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
-import 'package:beta_home/models/history_item.dart';
 import 'package:beta_home/models/http_resp.dart';
-import 'package:beta_home/models/order_item.dart';
 import 'package:beta_home/widgets/screen_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:collection/collection.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
 
 class Earnings extends StatefulWidget {
   const Earnings({Key? key}) : super(key: key);

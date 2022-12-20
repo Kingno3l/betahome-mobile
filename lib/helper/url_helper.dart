@@ -1,4 +1,4 @@
-// const baseUrl = "http://44.205.154.51:3000"; //live
+// const baseUrl = "http://api.betahome.ng"; //live
 const baseUrl = "http://44.205.154.51:8080"; //test
 
 class UrlHelper {
@@ -12,10 +12,13 @@ class UrlHelper {
   static const listings = "$baseUrl/listings";
   static const my = "$baseUrl/my";
   static const services = "$baseUrl/services";
+  static const service = "$baseUrl/service";
   static const transactions = "$baseUrl/transactions";
   static const orders = "$baseUrl/orders";
+  static const checkoutPay = "$baseUrl/checkout/pay";
   static const setReferralCode = "$baseUrl/user/referral/code";
   static const joinBetaHelp = "$baseUrl/betahelp/join";
+  static const payment = "$baseUrl/payment";
 
   static const image = "$baseUrl/image";
 }

@@ -1,7 +1,64 @@
+import 'package:beta_home/helper/payment_helper.dart';
+import 'package:beta_home/screens/payment_option.dart';
+import 'package:beta_home/widgets/pay_instal_freq.dart';
 import 'package:flutter/material.dart';
 
 @immutable
 abstract class BotomShet {
+  static Padding topupAmount(BuildContext context, Function(String) onNext) {
+    String amount = '';
+    return Padding(
+      padding: EdgeInsets.only(
+          top: 20,
+          left: 40,
+          right: 40,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Text(
+            'How much do you want to top up?',
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          TextField(
+            cursorColor: Colors.black,
+            keyboardType: const TextInputType.numberWithOptions(),
+            onChanged: (val) => amount = val,
+            decoration: const InputDecoration(
+              hintText: 'Amount',
+              contentPadding: EdgeInsets.symmetric(horizontal: 12),
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
+              filled: true,
+              fillColor: Color(0xffFFF6D6),
+            ),
+            style: const TextStyle(
+              fontSize: 16,
+              color: Color(0xff000000),
+            ),
+          ),
+          const SizedBox(
+            height: 26,
+          ),
+          TextButton(
+            onPressed: () => onNext(amount),
+            style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 15.0),
+                backgroundColor: const Color(0xFFFFDA58)),
+            child:
+                const Text('Next', style: TextStyle(color: Color(0xFF000000))),
+          ),
+        ],
+      ),
+    );
+  }
+
   static Column productCategories(List items, Function(dynamic) onSelect) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -185,6 +242,100 @@ abstract class BotomShet {
           )
         ],
       ),
+    );
+  }
+
+  static Padding requestProvider(
+      BuildContext context, dynamic provider, Function(dynamic) onYes) {
+    return Padding(
+      padding: EdgeInsets.only(
+          top: 20,
+          left: 40,
+          right: 40,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'Are you sure you want to request ${provider['first_name']} ${provider['last_name']}?',
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(
+            height: 26,
+          ),
+          TextButton(
+            onPressed: () => onYes(provider),
+            style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 15.0),
+                backgroundColor: const Color(0xFFFFDA58)),
+            child:
+                const Text('Yes', style: TextStyle(color: Color(0xFF000000))),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static Column installmentOptions(List installments, Map selected,
+      Function(Map<String, dynamic>) onSelected) {
+    // int selectedIndex = -1;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(16),
+          child: Text('Select your prefered payment plan'),
+        ),
+        ...installments.asMap().entries.map(
+              (entry) => Container(
+                padding: const EdgeInsets.only(
+                  left: 12,
+                  top: 15,
+                  right: 12,
+                  bottom: 15,
+                ),
+                margin: const EdgeInsets.only(
+                  left: 10,
+                  right: 10,
+                  bottom: 10,
+                ),
+                decoration: BoxDecoration(
+                    color: Color(entry.value['tag'] == selected['tag']
+                        ? 0xff73D282
+                        : 0xffFFF6D6),
+                    borderRadius: BorderRadius.circular(6)),
+                child: InkWell(
+                  onTap: () => onSelected(entry.value),
+                  child: Row(
+                    children: [
+                      RadioButton(
+                          selected: entry.value['tag'] == selected['tag']),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Expanded(
+                        child: Text(
+                          '${entry.value['tag']} payment plan',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Color(
+                              entry.value['tag'] == selected['tag']
+                                  ? 0xffffffff
+                                  : 0xff000000,
+                            ),
+                          ),
+                        ),
+                      ),
+                      PayInstalFreq(
+                          entry.value, entry.value['tag'] == selected['tag']),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+      ],
     );
   }
 }

@@ -187,14 +187,17 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   ),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                      ),
                       child: TabBarView(
-                          controller: _tabController,
-                          children: const [
-                            Explore(),
-                            BetaHelp(),
-                            SalesWorkforce(),
-                          ]),
+                        controller: _tabController,
+                        children: const [
+                          Explore(),
+                          BetaHelp(),
+                          SalesWorkforce(),
+                        ],
+                      ),
                     ),
                   ),
                 ],

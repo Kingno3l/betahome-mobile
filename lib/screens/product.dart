@@ -1,5 +1,6 @@
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
+import 'package:beta_home/helper/utils.dart';
 import 'package:beta_home/models/data.dart';
 import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/screens/profile.dart';
@@ -63,15 +64,13 @@ class _ProductState extends State<Product> with TickerProviderStateMixin {
             _isLoading = false;
           });
         } else {
-          Fluttertoast.showToast(msg: json.msg, toastLength: Toast.LENGTH_LONG);
+          Utils.showToast(json.msg);
         }
       } else {
-        Fluttertoast.showToast(
-            msg: 'Connection error.', toastLength: Toast.LENGTH_LONG);
+        Utils.showToast('Connection error.');
       }
     } catch (e) {
-      Fluttertoast.showToast(
-          msg: 'An error occured.', toastLength: Toast.LENGTH_LONG);
+      Utils.showToast('An error occured.');
     }
   }
 
@@ -99,65 +98,65 @@ class _ProductState extends State<Product> with TickerProviderStateMixin {
                     borderRadius: BorderRadius.all(Radius.circular(8))),
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: Colors.transparent,
-                                backgroundImage: const NetworkImage(
-                                    'https://img.icons8.com/ios-glyphs/60/95A5A6/test-account.png'),
-                                radius: 20,
-                                child: Material(
-                                  shape: const CircleBorder(),
-                                  clipBehavior: Clip.hardEdge,
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap: () => {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              data.profile == null
-                                                  ? const SignIn()
-                                                  : const Profile(),
-                                        ),
-                                      )
-                                    },
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Text(
-                                'Welcome${data.profile != null ? ', ${data.profile?.first_name}' : ''}',
-                                style: const TextStyle(
-                                  color: Color(0xff000000),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Stack(
-                          children: [
-                            const Icon(
-                              Icons.notifications,
-                              color: Color(0xff000000),
-                            ),
-                            Container(
-                              width: 6,
-                              height: 6,
-                              margin: const EdgeInsets.only(left: 15, top: 2),
-                              decoration: const BoxDecoration(
-                                  color: Color(0xffFF0000),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(3))),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 15),
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       child: Row(
+                    //         children: [
+                    //           CircleAvatar(
+                    //             backgroundColor: Colors.transparent,
+                    //             backgroundImage: const NetworkImage(
+                    //                 'https://img.icons8.com/ios-glyphs/60/95A5A6/test-account.png'),
+                    //             radius: 20,
+                    //             child: Material(
+                    //               shape: const CircleBorder(),
+                    //               clipBehavior: Clip.hardEdge,
+                    //               color: Colors.transparent,
+                    //               child: InkWell(
+                    //                 onTap: () => {
+                    //                   Navigator.push(
+                    //                     context,
+                    //                     MaterialPageRoute(
+                    //                       builder: (context) =>
+                    //                           data.profile == null
+                    //                               ? const SignIn()
+                    //                               : const Profile(),
+                    //                     ),
+                    //                   )
+                    //                 },
+                    //               ),
+                    //             ),
+                    //           ),
+                    //           const SizedBox(width: 10),
+                    //           Text(
+                    //             'Welcome${data.profile != null ? ', ${data.profile?.first_name}' : ''}',
+                    //             style: const TextStyle(
+                    //               color: Color(0xff000000),
+                    //             ),
+                    //           )
+                    //         ],
+                    //       ),
+                    //     ),
+                    //     Stack(
+                    //       children: [
+                    //         const Icon(
+                    //           Icons.notifications,
+                    //           color: Color(0xff000000),
+                    //         ),
+                    //         Container(
+                    //           width: 6,
+                    //           height: 6,
+                    //           margin: const EdgeInsets.only(left: 15, top: 2),
+                    //           decoration: const BoxDecoration(
+                    //               color: Color(0xffFF0000),
+                    //               borderRadius:
+                    //                   BorderRadius.all(Radius.circular(3))),
+                    //         )
+                    //       ],
+                    //     )
+                    //   ],
+                    // ),
+                    // const SizedBox(height: 15),
                     TextField(
                       cursorColor: Colors.black,
                       maxLines: 1,
