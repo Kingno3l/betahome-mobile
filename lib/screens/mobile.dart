@@ -17,12 +17,16 @@ class Mobile extends StatefulWidget {
 class _MobileState extends State<Mobile> {
   // final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
   String _country_code = '234', _phone = '';
+  bool _isProgress = false;
 
   Future _onProceed() async {
     if (_country_code == '' || _phone == '') {
       Utils.showToast('All fields are required');
     } else {
       try {
+        setState(() {
+          _isProgress = true;
+        });
         final resp = await ServerHelper.post('${UrlHelper.register}/complete', {
           'country_code': _country_code,
           'phone': _phone,
@@ -48,6 +52,9 @@ class _MobileState extends State<Mobile> {
       } catch (e) {
         Utils.showToast('An error occured');
       }
+      setState(() {
+        _isProgress = false;
+      });
     }
   }
 
@@ -97,7 +104,7 @@ class _MobileState extends State<Mobile> {
                     ),
                   ),
                   Expanded(
-                    flex: 5,
+                    flex: 4,
                     child: TextField(
                       cursorColor: Colors.black,
                       keyboardType: TextInputType.phone,
@@ -124,12 +131,12 @@ class _MobileState extends State<Mobile> {
               ),
             ),
             TextButton(
-              onPressed: _onProceed,
+              onPressed: _isProgress ? null : _onProceed,
               style: TextButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                   backgroundColor: const Color(0xFFFFDA58)),
-              child: const Text('Proceed',
-                  style: TextStyle(color: Color(0xFF000000))),
+              child: Text(_isProgress ? 'Processing...' : 'Proceed',
+                  style: const TextStyle(color: Color(0xFF000000))),
             ),
             const SizedBox(
               height: 20,

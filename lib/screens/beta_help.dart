@@ -1,9 +1,11 @@
+import 'package:beta_home/elements/bottom_sheet.dart';
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/data.dart';
 import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/screens/sign_in.dart';
 import 'package:beta_home/screens/sign_up.dart';
+import 'package:beta_home/widgets/botom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +18,69 @@ class BetaHelp extends StatefulWidget {
 }
 
 class _BetaHelpState extends State<BetaHelp> {
+  List _services = [];
+  late List _banks;
+  Map _params = {
+    'step': 1,
+    'vMethod': 'BVN',
+    'serviceID': '',
+    'bank': null,
+    'account': null,
+    'isVerifying': false,
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    getServices();
+    getBanks();
+  }
+
+  Future getServices() async {
+    try {
+      final resp = await ServerHelper.get(UrlHelper.services);
+      if (resp['status'] == 200) {
+        final HttpResp json = HttpResp.fromJson(resp['data']);
+        if (json.status == 'success') {
+          setState(() {
+            _services = json.data;
+          });
+        }
+      }
+    } catch (e) {}
+  }
+
+  Future getBanks() async {
+    try {
+      final resp = await ServerHelper.get('${UrlHelper.bank}/list');
+      if (resp['status'] == 200) {
+        final HttpResp json = HttpResp.fromJson(resp['data']);
+        if (json.status == 'success') {
+          setState(() {
+            _banks = json.data;
+          });
+        }
+      }
+    } catch (e) {}
+  }
+
+  void _setState(Map state) {
+    Navigator.pop(context);
+    setState(() {
+      _params = {..._params, ...state};
+    });
+    showBottomSheet();
+  }
+
+  void showBottomSheet() {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      shape: BotomSheet.shape(),
+      context: context,
+      builder: (context) => BotomShet.verifyBetaHelp(
+          context, _banks, _services, _params, _setState, () {}),
+    );
+  }
 
   Future _joinNow() async {
     try {
@@ -55,7 +120,7 @@ class _BetaHelpState extends State<BetaHelp> {
                     const SizedBox(
                       width: 250,
                       child: Text(
-                        'Are you an Artisan or a business person? Join our Beta Help and showcase your products and services on our market place.',
+                        'Are you an Artisan or a business person? Join our Beta Help and showcase your products and services in our market place.',
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -67,7 +132,8 @@ class _BetaHelpState extends State<BetaHelp> {
                             .is_beta_help) ... //Logged in but not yet a BetaHelp
                       [
                       TextButton(
-                        onPressed: () => _joinNow(),
+                        onPressed: () => showBottomSheet(),
+                        // () => _joinNow(),
                         style: TextButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
                             vertical: 10.0,

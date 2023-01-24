@@ -19,6 +19,7 @@ class UrlHelper {
   static const setReferralCode = "$baseUrl/user/referral/code";
   static const joinBetaHelp = "$baseUrl/betahelp/join";
   static const payment = "$baseUrl/payment";
+  static const bank = "$baseUrl/bank";
 
   static const image = "$baseUrl/image";
 }

@@ -19,12 +19,16 @@ class OTP extends StatefulWidget {
 class _OTPState extends State<OTP> {
   final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
   String _otp = '';
+  bool _isProgress = false;
 
   Future _onFinish() async {
     if (_otp == '') {
       Utils.showToast('Please enter OTP');
     } else {
       try {
+        setState(() {
+          _isProgress = true;
+        });
         final resp = await ServerHelper.post('${UrlHelper.register}/verify', {
           'verification_code': _otp,
         });
@@ -47,6 +51,9 @@ class _OTPState extends State<OTP> {
       } catch (e) {
         Utils.showToast('An error occured');
       }
+      setState(() {
+        _isProgress = false;
+      });
     }
   }
 
@@ -91,12 +98,12 @@ class _OTPState extends State<OTP> {
               ),
             ),
             TextButton(
-              onPressed: _onFinish,
+              onPressed: _isProgress ? null : _onFinish,
               style: TextButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                   backgroundColor: const Color(0xFFFFDA58)),
-              child: const Text('Proceed',
-                  style: TextStyle(color: Color(0xFF000000))),
+              child: Text(_isProgress ? 'Processing...' : 'Proceed',
+                  style: const TextStyle(color: Color(0xFF000000))),
             ),
           ],
         ),

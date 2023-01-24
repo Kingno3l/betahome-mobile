@@ -33,6 +33,7 @@ class _SignInState extends State<SignIn> {
           'email': _email,
           'password': _pwd,
         });
+        print('STATUS================${resp['status']}');
         if (resp['status'] == 200) {
           final HttpResp json = HttpResp.fromJson(resp['data']);
           Utils.showToast(json.msg);
@@ -51,6 +52,7 @@ class _SignInState extends State<SignIn> {
           Utils.showToast('Connection error.');
         }
       } catch (e) {
+        print('EXCEPTION===========$e');
         Utils.showToast('An error occured');
       }
     }

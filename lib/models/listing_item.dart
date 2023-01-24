@@ -41,7 +41,9 @@ class ListingItem {
 
   get price => _price;
 
-  get picture => '${UrlHelper.image}?key=$_picture';
+  get picture =>
+      _picture != null ? '${UrlHelper.image}?key=${_picture!}' : _picture;
+  // get picture => _picture;
 
   get cartQty => _cartQty;
 

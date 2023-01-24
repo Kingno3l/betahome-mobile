@@ -19,15 +19,21 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
-  String _fName = '', _lName = '', _email = '', _pwd = '', _cPwd = '';
+  String _fName = '',
+      _lName = '',
+      _email = '',
+      _refCode = '',
+      _pwd = '',
+      _cPwd = '';
   bool _isTandC = false, _showError = false;
+  bool _isProgress = false;
 
   void _onProceed() {
     bool isError = false;
     String msg = '';
     if (_fName == '' || _lName == '' || _email == '' || _pwd == '') {
       isError = true;
-      msg = 'All fields are required';
+      msg = 'All * fields are required';
     } else if (_pwd != _cPwd) {
       isError = true;
       msg = 'Password must match';
@@ -49,10 +55,14 @@ class _SignUpState extends State<SignUp> {
 
   Future reg() async {
     try {
+      setState(() {
+        _isProgress = true;
+      });
       final resp = await ServerHelper.post(UrlHelper.register, {
         'first_name': _fName,
         'last_name': _lName,
         'email': _email,
+        'referral_code': _refCode,
         'password': _pwd
       });
       if (resp['status'] == 200) {
@@ -71,6 +81,9 @@ class _SignUpState extends State<SignUp> {
     } catch (e) {
       Utils.showToast('An error occured');
     }
+    setState(() {
+      _isProgress = false;
+    });
   }
 
   @override
@@ -117,7 +130,7 @@ class _SignUpState extends State<SignUp> {
                   cursorColor: Colors.black,
                   onChanged: (val) => _fName = val,
                   decoration: const InputDecoration(
-                    hintText: 'First name',
+                    hintText: 'First name *',
                     contentPadding: EdgeInsets.symmetric(horizontal: 12),
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
@@ -142,7 +155,7 @@ class _SignUpState extends State<SignUp> {
                   cursorColor: Colors.black,
                   onChanged: (val) => _lName = val,
                   decoration: const InputDecoration(
-                      hintText: 'Last name',
+                      hintText: 'Last name *',
                       contentPadding: EdgeInsets.symmetric(horizontal: 12),
                       border: OutlineInputBorder(
                         borderSide: BorderSide.none,
@@ -163,7 +176,29 @@ class _SignUpState extends State<SignUp> {
                   keyboardType: TextInputType.emailAddress,
                   onChanged: (val) => _email = val,
                   decoration: const InputDecoration(
-                    hintText: 'Email',
+                    hintText: 'Email *',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    filled: true,
+                    fillColor: Color(0xffFFF6D6),
+                  ),
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: Color(0xff000000),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: TextField(
+                  cursorColor: Colors.black,
+                  keyboardType: TextInputType.number,
+                  onChanged: (val) => _refCode = val,
+                  decoration: const InputDecoration(
+                    hintText: 'Referral Code (Optional)',
                     contentPadding: EdgeInsets.symmetric(horizontal: 12),
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
@@ -185,7 +220,7 @@ class _SignUpState extends State<SignUp> {
                     onChanged: (val) => _pwd = val,
                     obscureText: true,
                     decoration: const InputDecoration(
-                        hintText: 'Password',
+                        hintText: 'Password *',
                         contentPadding: EdgeInsets.symmetric(horizontal: 12),
                         border: OutlineInputBorder(
                           borderSide: BorderSide.none,
@@ -205,7 +240,7 @@ class _SignUpState extends State<SignUp> {
                     onChanged: (val) => _cPwd = val,
                     obscureText: true,
                     decoration: const InputDecoration(
-                        hintText: 'Confirm password',
+                        hintText: 'Confirm password *',
                         contentPadding: EdgeInsets.symmetric(horizontal: 12),
                         border: OutlineInputBorder(
                           borderSide: BorderSide.none,
@@ -242,11 +277,11 @@ class _SignUpState extends State<SignUp> {
                 height: 15,
               ),
               TextButton(
-                onPressed: _onProceed,
+                onPressed: _isProgress ? null : _onProceed,
                 style: TextButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 15.0),
                     backgroundColor: Color(_isTandC ? 0xFFFFDA58 : 0xffC4C4C4)),
-                child: Text('Proceed',
+                child: Text(_isProgress ? 'Processing...' : 'Proceed',
                     style: TextStyle(
                         color: Color(_isTandC ? 0xFF000000 : 0xffffffff))),
               ),
