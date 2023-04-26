@@ -5,6 +5,7 @@ import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/models/market_item%20category.dart';
 import 'package:beta_home/models/listing_item.dart';
 import 'package:beta_home/screens/my_cart.dart';
+import 'package:beta_home/screens/notifications.dart';
 import 'package:beta_home/widgets/dot.dart';
 import 'package:beta_home/widgets/market_card.dart';
 import 'package:flutter/material.dart';
@@ -174,15 +175,30 @@ class _MarketState extends State<Market> with TickerProviderStateMixin {
                 const SizedBox(
                   width: 10,
                 ),
-                Stack(
-                  children: [
-                    const Icon(
-                      Icons.notifications,
-                      color: Color(0xff000000),
-                    ),
-                    Dot(),
-                  ],
-                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => NotificationsScreen()));
+                  },
+                  child: Stack(
+                    children: [
+                      const Icon(
+                        Icons.notifications,
+                        color: Color(0xff000000),
+                      ),
+                      Container(
+                        width: 6,
+                        height: 6,
+                        margin: const EdgeInsets.only(left: 15, top: 2),
+                        decoration: const BoxDecoration(
+                            color: Color(0xffFF0000),
+                            borderRadius: BorderRadius.all(Radius.circular(3))),
+                      )
+                    ],
+                  ),
+                )
               ],
             ),
             const SizedBox(
@@ -253,6 +269,24 @@ class _MarketState extends State<Market> with TickerProviderStateMixin {
       ),
     );
   }
+
+  // updateCatItem() {
+  //   return Expanded(
+  //     child: GridView.builder(
+  //       itemCount: _items.length,
+  //       itemBuilder: (context, index) => galleryCard(
+  //         context,
+  //         index,
+  //         ListingItem.fromJson(_items[index]),
+  //       ),
+  //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+  //         crossAxisCount: 2,
+  //         mainAxisSpacing: 8,
+  //         crossAxisSpacing: 8,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Padding catItem(MarketItemCategory item) {
     return Padding(

@@ -8,7 +8,7 @@ Column screenHead(title, subTitle) {
         title,
         style: const TextStyle(
             color: Color(0xff000000),
-            fontSize: 18,
+            fontSize: 36,
             fontWeight: FontWeight.w600),
       ),
       const SizedBox(

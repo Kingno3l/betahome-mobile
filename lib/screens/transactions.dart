@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:collection/collection.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class Transactions extends StatefulWidget {
   const Transactions({Key? key}) : super(key: key);
@@ -18,9 +19,15 @@ class Transactions extends StatefulWidget {
 
 class _TransactionsState extends State<Transactions> {
   List _items = [];
+  bool sort_ascending = false;
+  TextEditingController startDateInput = TextEditingController();
+  TextEditingController endDateInput = TextEditingController();
+  bool rotate = false;
 
   @override
   void initState() {
+    startDateInput.text = ""; //set the initial value of text field
+    endDateInput.text = "";
     super.initState();
     getTransactions();
   }
@@ -58,25 +65,63 @@ class _TransactionsState extends State<Transactions> {
             child: Row(
               children: [
                 InkWell(
-                  child: SvgPicture.asset(
-                      './lib/assets/icons/svgs/sort_ascending.svg'),
+                  onTap: () {
+                    setState(() {
+                      sort_ascending = !sort_ascending;
+                      rotate = !rotate;
+                    });
+                  },
+                  child: RotatedBox(
+                    quarterTurns: rotate ? 2 : 0,
+                    child: SvgPicture.asset(
+                        './lib/assets/icons/svgs/sort_ascending.svg'),
+                  ),
                 ),
                 const SizedBox(
                   width: 20,
                 ),
                 Expanded(
-                  child: TextButton.icon(
-                    onPressed: null,
-                    style: TextButton.styleFrom(
-                        padding: const EdgeInsets.all(12),
-                        // shape: RoundedRectangleBorder(borderRadius: ),
-                        alignment: Alignment.centerLeft,
-                        backgroundColor: const Color(0xffF4F4F4)),
-                    icon: const Icon(
-                      Icons.calendar_month_rounded,
-                      size: 18,
+                  child: TextField(
+                    controller: startDateInput,
+                    onTap: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1950),
+                          //DateTime.now() - not to allow to choose before today.
+                          lastDate: DateTime(2100));
+
+                      if (pickedDate != null) {
+                        print(
+                            pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                        String formattedDate =
+                            DateFormat('yyyy-MM-dd').format(pickedDate);
+                        print(
+                            formattedDate); //formatted date output using intl package =>  2021-03-16
+                        setState(() {
+                          startDateInput.text =
+                              formattedDate; //set output date to TextField value.
+                        });
+                      } else {}
+                    },
+                    cursorHeight: 0,
+                    cursorWidth: 0,
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(0),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(40)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(40)),
+                      filled: true,
+                      fillColor: Color(0xffF4F4F4),
+                      hintText: "Start",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      prefixIcon: Icon(Icons.calendar_month_rounded,
+                          size: 18, color: Colors.grey),
                     ),
-                    label: const Text('Start'),
                   ),
                 ),
                 const SizedBox(
@@ -90,18 +135,47 @@ class _TransactionsState extends State<Transactions> {
                   width: 16,
                 ),
                 Expanded(
-                  child: TextButton.icon(
-                    onPressed: null,
-                    style: TextButton.styleFrom(
-                        padding: const EdgeInsets.all(12),
-                        // shape: RoundedRectangleBorder(borderRadius: ),
-                        alignment: Alignment.centerLeft,
-                        backgroundColor: const Color(0xffF4F4F4)),
-                    icon: const Icon(
-                      Icons.calendar_month_rounded,
-                      size: 18,
+                  child: TextField(
+                    controller: endDateInput,
+                    onTap: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1950),
+                          //DateTime.now() - not to allow to choose before today.
+                          lastDate: DateTime(2100));
+
+                      if (pickedDate != null) {
+                        print(
+                            pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                        String formattedDate =
+                            DateFormat('yyyy-MM-dd').format(pickedDate);
+                        print(
+                            formattedDate); //formatted date output using intl package =>  2021-03-16
+                        setState(() {
+                          endDateInput.text =
+                              formattedDate; //set output date to TextField value.
+                        });
+                      } else {}
+                    },
+                    cursorHeight: 0,
+                    cursorWidth: 0,
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(0),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(40)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(40)),
+                      filled: true,
+                      fillColor: Color(0xffF4F4F4),
+                      hintText: "End",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      prefixIcon: Icon(Icons.calendar_month_rounded,
+                          size: 18, color: Colors.grey),
                     ),
-                    label: const Text('End'),
                   ),
                 ),
               ],
@@ -109,6 +183,7 @@ class _TransactionsState extends State<Transactions> {
           ),
           Expanded(
               child: ListView(
+            reverse: sort_ascending,
             padding: const EdgeInsets.all(10),
             children: [
               const Text(

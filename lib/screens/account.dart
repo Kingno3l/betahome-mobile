@@ -47,7 +47,7 @@ class _AccountState extends State<Account> {
                     ),
                     Row(
                       children: [
-                        dp(),
+                        displayPicture(),
                         const SizedBox(
                           width: 40,
                         ),

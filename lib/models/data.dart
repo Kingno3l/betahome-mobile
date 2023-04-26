@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:io';
+
 import 'package:beta_home/models/listing_item.dart';
 import 'package:flutter/foundation.dart';
 
@@ -19,6 +21,27 @@ class DataModel extends ChangeNotifier {
   set balance(bal) {
     _balance = double.parse(bal.toString());
     notifyListeners();
+  }
+
+  String? _profilePicture;
+
+  String? get profilePicture => _profilePicture;
+
+  set profilePicture(String? value) {
+    _profilePicture = value;
+    notifyListeners();
+  }
+
+
+  Future<void> uploadProfilePicture(File file) async {
+    try {
+      // TODO: Implement the code to upload the profile picture to your server
+      final String imageUrl = "";
+      profilePicture = imageUrl;
+    } catch (e) {
+      // Handle any errors that might occur during the upload process.
+      print('Error uploading profile picture: $e');
+    }
   }
 
   ProfileModel? get profile => _profile;

@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/data.dart';
 import 'package:beta_home/models/http_resp.dart';
-import 'package:beta_home/widgets/DP.dart';
+import 'package:beta_home/widgets/dp.dart';
 import 'package:beta_home/widgets/screen_bar.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class Profile extends StatefulWidget {
@@ -18,17 +22,39 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   bool _isEdit = false;
+  XFile? display;
   final TextEditingController _nameCont = TextEditingController();
   final TextEditingController _emailCont = TextEditingController();
   final TextEditingController _countryCont = TextEditingController();
   final TextEditingController _phoneCont = TextEditingController();
   final TextEditingController _addrCont = TextEditingController();
 
+  void _onImageSelected(File file) async {
+    final DataModel dataModel = Provider.of<DataModel>(context, listen: false);
+    await dataModel.uploadProfilePicture(file);
+  }
+
+
+  Future<void> _onPickImage() async {
+    final file = await ImagePicker().pickImage(source: ImageSource.gallery);
+    // if (file != null) {
+    //   final File? imagefile = File(file!.path);
+     _onImageSelected(File(file!.path));
+     setState(() {
+       display = file;
+     });
+    }
+      // if (file == null) return;
+  
+  // setState(() {
+  //  display = File(file.path);
+  // });
+ // }
+
   @override
   void initState() {
     super.initState();
-    ProfileModel? profile =
-        Provider.of<DataModel>(context, listen: false).profile;
+    ProfileModel? profile = Provider.of<DataModel>(context, listen: false).profile;
     _nameCont.text = '${profile?.first_name} ${profile?.last_name}';
     _emailCont.text = '${profile?.email}';
     _phoneCont.text = profile?.phone ?? '';
@@ -39,13 +65,23 @@ class _ProfileState extends State<Profile> {
   Future _onSubmit() async {
     final name = _nameCont.text.split(' ');
     try {
-      final resp = await ServerHelper.put(UrlHelper.profile, {
-        'first_name': name[0],
+//       FormData formData = FormData.from({
+//    "name": "wendux",
+//    "file1": UploadFileInfo(File("./upload.jpg"), "upload1.jpg")
+// });
+var form = FormData.fromMap({
+    'first_name': name[0],
         'last_name': name[1],
         'country_code': _countryCont.text,
         'phone': _phoneCont.text,
         'address': _addrCont.text,
-      });
+    'file': await MultipartFile.fromFile(
+      display!.path,
+      filename: display!.name,
+    ),
+  });
+
+      final resp = await ServerHelper.put(UrlHelper.profile,form);
       if (resp['status'] == 200) {
         final HttpResp json = HttpResp.fromJson(resp['data']);
         Fluttertoast.showToast(msg: json.msg, toastLength: Toast.LENGTH_LONG);
@@ -67,7 +103,9 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    final Function(File) onSelect = Provider.of<DataModel>(context).uploadProfilePicture;
     return Consumer<DataModel>(builder: (context, data, child) {
+      print(data);
       return Scaffold(
         appBar: ScreenBar.build(context, 'Profile'),
         body: SingleChildScrollView(
@@ -75,34 +113,35 @@ class _ProfileState extends State<Profile> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // const SizedBox(
-              //   height: 30,
-              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(
                     width: 30,
                   ),
-                  dp(),
+                  displayPicture(file: display,),
+                  // dp(),
                   const SizedBox(
                     width: 30,
                   ),
-                  Column(
-                    children: [
-                      const Icon(
-                        Icons.edit,
-                        color: Colors.black,
-                      ),
-                      const SizedBox(
-                        height: 6,
-                      ),
-                      Container(
-                        width: 24,
-                        height: 3,
-                        color: Colors.black,
-                      ),
-                    ],
+                  GestureDetector(
+                    onTap: _onPickImage,
+                    child: Column(
+                      children: [
+                        const Icon(
+                          Icons.edit,
+                          color: Colors.black,
+                        ),
+                        const SizedBox(
+                          height: 6,
+                        ),
+                        Container(
+                          width: 24,
+                          height: 3,
+                          color: Colors.black,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

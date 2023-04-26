@@ -3,7 +3,15 @@ import 'package:beta_home/models/package_item.dart';
 import 'package:beta_home/screens/package_item_details.dart';
 import 'package:beta_home/screens/payment_option.dart';
 import 'package:beta_home/widgets/screen_bar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+// import 'package:html/parser.dart' as htmlparser;
+// import 'package:html/dom.dart' as dom;
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+
+
+import '../helper/url_helper.dart';
 
 class PackageDetails extends StatefulWidget {
   final Package package;
@@ -34,24 +42,25 @@ class _PackageDetails extends State<PackageDetails> {
                 const SizedBox(
                   height: 5,
                 ),
-                Text.rich(
-                  TextSpan(
-                    style: const TextStyle(
-                        fontWeight: FontWeight.normal,
-                        fontSize: 12,
-                        height: 1.3),
-                    children: [
-                      TextSpan(
-                        text: package.toString(),
-                        style: const TextStyle(color: Color(0xff333333)),
-                      ),
-                      TextSpan(
-                        text: ': ${package.details()}',
-                        style: const TextStyle(color: Color(0xffB18B04)),
-                      ),
-                    ],
-                  ),
-                )
+                // Text.rich(
+                //   TextSpan(
+                //     style: const TextStyle(
+                //         fontWeight: FontWeight.normal,
+                //         fontSize: 12,
+                //         height: 1.3),
+                //     children: [
+                //       TextSpan(
+                //         text: package.toString(),
+                //         style: const TextStyle(color: Color(0xff333333)),
+                //       ),
+                //       TextSpan(
+                //         text: ': ${package.details()}',
+                //         style: const TextStyle(color: Color(0xffB18B04)),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                HtmlWidget(package.toString()),
               ],
             ),
           ),
@@ -64,7 +73,8 @@ class _PackageDetails extends State<PackageDetails> {
                       padding: const EdgeInsets.all(8.0),
                       margin: const EdgeInsets.only(top: 8),
                       decoration: BoxDecoration(
-                          color: Color(package.color),
+                          color: Color(0xffd3fadb),
+                          // Color(package.color),
                           borderRadius:
                               const BorderRadius.all(Radius.circular(6))),
                       child: InkWell(
@@ -87,7 +97,8 @@ class _PackageDetails extends State<PackageDetails> {
                                 width: 90,
                                 height: 90,
                                 fit: BoxFit.fill,
-                                image: AssetImage(item['picture']),
+                                image: NetworkImage(
+                                    '${UrlHelper.file}/${item['cover_pic']}'),
                               ),
                             ),
                             const SizedBox(
@@ -99,20 +110,29 @@ class _PackageDetails extends State<PackageDetails> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    item['title'],
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w600),
-                                  ),
+                                  // Text(
+                                  //   item['name'],
+                                  //   style: const TextStyle(
+                                  //       fontWeight: FontWeight.w600),
+                                  // ),
+                                  HtmlWidget(item['name']),
                                   const SizedBox(
                                     height: 6,
                                   ),
-                                  Text(
-                                    item['description'],
-                                    maxLines: 4,
-                                    overflow: TextOverflow.fade,
-                                    style: const TextStyle(fontSize: 12),
-                                  )
+                                  // Text(
+                                  //   item['desc'],
+                                  //   maxLines: 4,
+                                  //   overflow: TextOverflow.fade,
+                                  //   style: const TextStyle(fontSize: 12),
+                                  // ),
+                                  HtmlWidget(
+                                    item['desc'],
+                                    // .substring(0, 20),
+                                    textStyle: const TextStyle(
+                                        fontSize: 12,
+                                        overflow: TextOverflow.ellipsis),
+                                  ),
+                                //  MyHtml(item['desc'], maxLines: 2,)
                                 ],
                               ),
                             ),
@@ -182,3 +202,41 @@ class _PackageDetails extends State<PackageDetails> {
     );
   }
 }
+// class MyHtml extends HtmlWidget {
+//   const MyHtml(super.html, {this.maxLines,});
+//   final int? maxLines;
+//   @override
+//    void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+//     super.debugFillProperties(properties);
+//     properties.add(IntProperty('maxLines', maxLines, defaultValue: null));
+//   }
+//   // Widget build(BuildContext context) {
+//   //   return const Placeholder();
+//   // }
+// }
+//  body: new Center(
+//             child: SingleChildScrollView(
+//               child: Html(
+//                 data: """
+//                 <div>Follow<a class='sup'><sup>pl</sup></a> 
+//                   Below hr
+//                     <b>Bold</b>
+//                 <h1>what was sent down to you from your Lord</h1>, 
+//                 and do not follow other guardians apart from Him. Little do 
+//                 <span class='h'>you remind yourselves</span><a class='f'><sup f=2437>1</sup></a></div>
+//                 """,
+//                 padding: EdgeInsets.all(8.0),
+//                 onLinkTap: (url) {
+//                   print("Opening $url...");
+//                 },
+//                 customRender: (node, children) {
+//                   if (node is dom.Element) {
+//                     switch (node.localName) {
+//                       case "custom_tag": // using this, you can handle custom tags in your HTML 
+//                         return Column(children: children);
+//                     }
+//                   }
+//                 },
+//               ),
+//             ),
+//           )

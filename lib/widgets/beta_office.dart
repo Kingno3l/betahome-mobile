@@ -45,7 +45,9 @@ class BetaOffice extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          packageTitle(package.name, package.color, index % 2 == 0,
+          packageTitle(package.name, 
+          Color(0xffd3fadb),
+          index % 2 == 0,
               () => onPackageClick(context, package)),
           ...package.getItems().map((item) => Expanded(
                 flex: 1,
@@ -74,7 +76,10 @@ class BetaOffice extends StatelessWidget {
                   ],
                 ),
               )),
-          packageTitle(package.name, package.color, index % 2 != 0,
+          packageTitle(package.name, 
+          Color(0xffd3fadb),
+          // package.color, 
+          index % 2 != 0,
               () => onPackageClick(context, package))
         ],
       ),

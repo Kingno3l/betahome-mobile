@@ -2,9 +2,11 @@ import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/models/listing_item.dart';
-import 'package:beta_home/widgets/market_card.dart';
+import 'package:beta_home/widgets/explore_card.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:collection/collection.dart';
+
+import '../helper/utils.dart';
 
 class Explore extends StatefulWidget {
   const Explore({Key? key}) : super(key: key);
@@ -15,101 +17,243 @@ class Explore extends StatefulWidget {
 
 class _ExploreState extends State<Explore> with TickerProviderStateMixin {
   List _items = [];
+  List _bestpicked = [];
+  List _latest = [];
+  List _banners = [];
   List<Widget> _rows = [];
+  final List _slides = [];
+  int _current = 0;
+  final bool _isthereData = true; //dummy data just to remove the null in the explore page
 
   @override
   void initState() {
     super.initState();
-    getItems();
-
-    // List<Widget> rows = <Widget>[];
-    // items.forEach((key, value) {
-    //   // print('${key}:${value}');
-    //   // List<dynamic> arr = jsonDecode(value);
-    //   rows.add(itemRow(key, value));
-    //   // for (var i = 0; i < value.length; i++) {
-    //   //   // MarketItem item = MarketItem.fromJson(arr[0]);
-    //   //   MarketItem item = MarketItem.fromJson(value[i]);
-    //   //   print(':::::::::::::::::::::::::::${item.price}');
-    //   // }
-    //   setState(() {
-    //     _rows = rows;
-    //   });
-    // });
+    getHomeItems();
   }
-
-  // Widget itemRow(String key, List items) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(key),
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //         children: [
-  //           Expanded(
-  //             child: SizedBox(
-  //               height: 120,
-  //               child: ListView(
-  //                 // shrinkWrap: true,
-  //                 scrollDirection: Axis.horizontal,
-  //                 children: items
-  //                     .mapIndexed(
-  //                       (index, item) => galleryCard(
-  //                         context,
-  //                         index,
-  //                         ListingItem.fromJson(item),
-  //                       ),
-  //                     )
-  //                     .toList(),
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       )
-  //     ],
-  //   );
-  // }
 
   @override
   void dispose() {
     super.dispose();
   }
 
-  Future getItems() async {
+  Future getHomeItems() async {
     try {
-      final resp = await ServerHelper.get('${UrlHelper.listings}/explore');
+      final resp = await ServerHelper.get(UrlHelper.homeExplore);
       if (resp['status'] == 200) {
-        final HttpResp json = HttpResp.fromJson(resp['data']);
-        if (json.status == 'success') {
+        if (resp['data']['status'] == 'success') {
+          final HttpResp json = HttpResp.fromJson(resp['data']);
+          //   print(json.data['best_picked']);
           setState(() {
-            _items = json.data;
+            _bestpicked = json.data['best_picked'];
+            _latest = json.data['latest'];
+            _banners = json.data['banners'];
           });
+        } else {
+          // Utils.showToast(json_bestPicked.msg);
         }
+      } else {
+        Utils.showToast('Connection error.');
       }
-    } catch (e) {}
+    } catch (e) {
+      Utils.showToast('An error occured.');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    // final List<Widget> imageSliders = _banners
+    //     .map((item) => ClipRRect(
+    //             // borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+    //             child: Stack(
+    //           children: <Widget>[
+    //             Image.network(
+    //               '${UrlHelper.file}/${_banners}',
+    //               fit: BoxFit.cover,
+    //               width: 1000.0,
+    //               height: 500,
+    //             ),
+    //             Positioned(
+    //               bottom: 0.0,
+    //               left: 0.0,
+    //               right: 0.0,
+    //               child: Container(
+    //                 decoration: const BoxDecoration(
+    //                   gradient: LinearGradient(
+    //                     colors: [
+    //                       Color.fromARGB(100, 0, 0, 0),
+    //                       Color.fromARGB(0, 0, 0, 0)
+    //                     ],
+    //                     begin: Alignment.bottomCenter,
+    //                     end: Alignment.topCenter,
+    //                   ),
+    //                 ),
+    //                 padding: const EdgeInsets.symmetric(
+    //                     vertical: 10.0, horizontal: 20.0),
+    //                 child: Text(
+    //                   '${item['text']}',
+    //                   style: const TextStyle(
+    //                     color: Colors.white,
+    //                     fontSize: 16.0,
+    //                     fontWeight: FontWeight.bold,
+    //                   ),
+    //                 ),
+    //               ),
+    //             ),
+    //           ],
+    //         )))
+    //     .toList();
     return Column(
       children: [
         // ..._rows,
-        Expanded(
-          child: GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: _items.length,
-            itemBuilder: (context, index) => galleryCard(
-              context,
-              index,
-              ListingItem.fromJson(_items[index]),
+        Padding(
+          padding:
+              const EdgeInsets.only(left: 8, right: 8, top: 20, bottom: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Best pick for you",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: Text(
+                  "See all >>",
+                  style: TextStyle(
+                      color: Colors.blue.shade900, fontWeight: FontWeight.w400),
+                ),
+              ),
+            ],
+          ), //['data']['best_picked']
+        ),
+        _isthereData
+            ? Container(
+                height: 170,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: _bestpicked.length,
+                  itemBuilder: (context, index) => exploreCard(
+                    context,
+                    index,
+                    ListingItem.fromJson(_bestpicked[index]),
+                  ),
+                  // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  //   crossAxisCount: 2,
+                  //   mainAxisSpacing: 8,
+                  //   crossAxisSpacing: 8,
+                  // ),
+                ),
+              )
+            : Container(
+                height: 170,
+              ),
+        Stack(
+          children: [
+            CarouselSlider(
+              items: _banners.map((image) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                      ),//['picture']
+                      child: Image.network(
+                      '${UrlHelper.file}/${image['picture']}',
+                      fit: BoxFit.cover,
+                    ),
+                    );
+                  },
+                );
+              }).toList(),
+              options: CarouselOptions(
+                // height: 230,
+                viewportFraction: 1.0,
+                height: 130.0,
+                autoPlay: true,
+                autoPlayCurve: Curves.linear,
+                enlargeCenterPage: true,
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    _current = index;
+                  });
+                },
+                scrollDirection: Axis.horizontal,
+              ),
             ),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
+            Positioned(
+              bottom: 0.0,
+              left: 0.0,
+              right: 0.0,
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: _slides.asMap().entries.map((entry) {
+                    return Container(
+                      width: 4.0,
+                      height: 4.0,
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 4.0),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: (Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.black
+                                  : Colors.white)
+                              .withOpacity(_current == entry.key ? 0.9 : 0.4)),
+                    );
+                  }).toList(),
+                ),
+              ),
             ),
+          ],
+        ),
+        Padding(
+          padding:
+              const EdgeInsets.only(left: 8, right: 8, top: 20, bottom: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Latest",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: Text(
+                  "See all >>",
+                  style: TextStyle(
+                      color: Colors.blue.shade900, fontWeight: FontWeight.w400),
+                ),
+              ),
+            ],
           ),
         ),
+        _isthereData
+            ? Container(
+                height: 170,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: _latest.length,
+                  itemBuilder: (context, index) => exploreCard(
+                    context,
+                    index,
+                    ListingItem.fromJson(_latest[index]),
+                  ),
+                  // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  //   crossAxisCount: 2,
+                  //   mainAxisSpacing: 8,
+                  //   crossAxisSpacing: 8,
+                  // ),
+                ),
+              )
+            : Container(
+                height: 170,
+              ),
       ],
     );
   }

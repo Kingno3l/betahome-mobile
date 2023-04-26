@@ -1,5 +1,7 @@
-// const baseUrl = "http://api.betahome.ng"; //live
-const baseUrl = "http://44.205.154.51:8080"; //test
+const baseUrl = 
+// 'https://crolaay-humble-enigma-q7v9grwg474cx649-8080.preview.app.github.dev';
+"https://api.betahome.ng"; //live
+// const baseUrl = "http://44.205.154.51:8080"; //test
 
 class UrlHelper {
   static const sliders = "$baseUrl/sliders";
@@ -20,6 +22,10 @@ class UrlHelper {
   static const joinBetaHelp = "$baseUrl/betahelp/join";
   static const payment = "$baseUrl/payment";
   static const bank = "$baseUrl/bank";
+  
+  //added this endpoint
+  static const bankResolve = "$baseUrl/bank/account/resolve";
+  static const homeExplore = "$baseUrl/home/explore";
 
-  static const image = "$baseUrl/image";
+  static const file = "$baseUrl/file";
 }

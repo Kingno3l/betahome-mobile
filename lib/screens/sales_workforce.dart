@@ -12,6 +12,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'dart:developer';
 
+import '../widgets/join_sales_workforce_bottom_sheet.dart';
+
 class SalesWorkforce extends StatefulWidget {
   const SalesWorkforce({Key? key}) : super(key: key);
 
@@ -145,7 +147,16 @@ class _SalesWorkforceState extends State<SalesWorkforce> {
                     if (data.profile != null &&
                         data.profile!.referral_code == '') ...[
                       TextButton(
-                        onPressed: () => _getCode(),
+                        onPressed: () {
+                          showModalBottomSheet(
+                            isScrollControlled: true,
+                            enableDrag: true,
+                            context: context,
+                            builder: (context) {
+                              return Wrap(
+                                  children: [const JoinSalesWorkforceBottomSheet()]);
+                            });
+                        },//=> _getCode()
                         style: TextButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
                             vertical: 10.0,

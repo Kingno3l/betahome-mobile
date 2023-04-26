@@ -169,7 +169,7 @@ class Slider extends StatelessWidget {
           alignment: Alignment.center,
           height: 300,
           width: double.infinity,
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
         ),
         Container(
           padding: const EdgeInsets.only(top: 12, right: 20, left: 30),
@@ -184,16 +184,16 @@ class Slider extends StatelessWidget {
               //       TextSpan(text: model.getTitle2()),
               //       TextSpan(text: model.getTitle3()),
               //     ])),
-              Text(model.getTitle(), style: const TextStyle(fontSize: 25)),
+              Text(model.getTitle(), style: const TextStyle(fontSize: 25, color: Color(0xFF1B1951))),
               Row(
                 children: [
-                  Text(model.getTitle2(), style: const TextStyle(fontSize: 25)),
+                  Text(model.getTitle2(), style: const TextStyle(fontSize: 25, color: Color(0xFF1B1951) )),
                   Text(' ${model.getTitle3()}',
                       style: const TextStyle(
                           fontSize: 25, color: Color(0xFFFFDA58))),
                 ],
               ),
-              Text(model.getTitle4(), style: const TextStyle(fontSize: 25)),
+              Text(model.getTitle4(), style: const TextStyle(fontSize: 25, color: Color(0xFF1B1951))),
               const SizedBox(height: 12),
               Text(model.getSubTitle(),
                   style: const TextStyle(color: Color(0xff8E8E8E)))

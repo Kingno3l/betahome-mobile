@@ -12,7 +12,7 @@ class ScreenBar {
       ),
       title: Text(
         title,
-        style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+        style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,

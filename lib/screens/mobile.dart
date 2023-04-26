@@ -133,7 +133,7 @@ class _MobileState extends State<Mobile> {
             TextButton(
               onPressed: _isProgress ? null : _onProceed,
               style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  padding: const EdgeInsets.symmetric(vertical: 25.0),
                   backgroundColor: const Color(0xFFFFDA58)),
               child: Text(_isProgress ? 'Processing...' : 'Proceed',
                   style: const TextStyle(color: Color(0xFF000000))),

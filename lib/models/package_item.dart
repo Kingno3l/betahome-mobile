@@ -1,20 +1,20 @@
 class PackageItem {
-  String uid;
+  String _id;
   String title;
   String description;
   int quantity;
   String picture;
 
   PackageItem(
-      this.uid, this.title, this.description, this.quantity, this.picture);
+      this._id, this.title, this.description, this.quantity, this.picture);
 
   factory PackageItem.fromJson(dynamic json) {
-    return PackageItem(json['uid'], json['title'], json['description'],
-        json['quantity'], json['picture']);
+    return PackageItem(json['_id'], json['name'], json['desc'],
+        json['quantity'], json['cover_pic']);
   }
 
   String getUID() {
-    return uid;
+    return _id;
   }
 
   String getTitle() {

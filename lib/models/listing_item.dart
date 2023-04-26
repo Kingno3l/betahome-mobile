@@ -3,7 +3,7 @@ import 'package:beta_home/helper/url_helper.dart';
 class ListingItem {
   String _id;
   String _title;
-  String _desc;
+  String? _desc;
   double _price;
   String? _picture;
   int _cartQty = 1;
@@ -17,10 +17,10 @@ class ListingItem {
   factory ListingItem.fromJson(dynamic json) {
     return ListingItem(
       json['_id'],
-      json['title'],
+      json['name'],
       json['desc'],
       double.parse(json['price'].toString()),
-      json['picture'],
+      json['cover_pic'],
       // json['category_ids']
     );
   }
@@ -42,7 +42,7 @@ class ListingItem {
   get price => _price;
 
   get picture =>
-      _picture != null ? '${UrlHelper.image}?key=${_picture!}' : _picture;
+      _picture != null ? '${UrlHelper.file}/${_picture!}' : _picture;
   // get picture => _picture;
 
   get cartQty => _cartQty;

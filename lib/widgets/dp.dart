@@ -1,9 +1,17 @@
+import 'dart:io';
+
 import 'package:beta_home/models/data.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-Stack dp() {
-  return Stack(
+class displayPicture extends StatelessWidget {
+  XFile? file;
+  displayPicture ({this.file});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
     children: [
       Container(
         decoration: BoxDecoration(
@@ -23,17 +31,25 @@ Stack dp() {
         right: 12,
         bottom: 12,
         child: Consumer<DataModel>(builder: (context, data, child) {
-          return data.profile != null && data.profile!.profile_pic != null
+          return file == null
               ? CircleAvatar(
                   backgroundColor: Colors.transparent,
                   backgroundImage:
                       NetworkImage(data.profile?.profile_pic ?? 'http://'),
                 )
-              : const CircleAvatar(
-                  backgroundImage: AssetImage('./lib/assets/imgs/dp.jpg'),
-                );
+              : ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: Image.file(
+                            File(file!.path),
+                            width: 200.0,
+                            height: 200.0,
+                            fit: BoxFit.fitHeight,
+                          ),
+              );
         }),
       ),
     ],
   );
+  }
 }
+// data.profile != null && data.profile!.profile_pic != null

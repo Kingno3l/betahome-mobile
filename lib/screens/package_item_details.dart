@@ -2,6 +2,9 @@ import 'package:beta_home/models/package.dart';
 import 'package:beta_home/models/package_item.dart';
 import 'package:beta_home/widgets/screen_bar.dart';
 import 'package:flutter/material.dart';
+import '../helper/url_helper.dart';
+// import 'package:html/dom.dart' as dom;
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 
 class PackageItemDetails extends StatefulWidget {
   final Package package;
@@ -29,7 +32,8 @@ class _PackageItemDetails extends State<PackageItemDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image(
-                image: AssetImage(item.getPicture()),
+                image: NetworkImage('${UrlHelper.file}/${item.getPicture()}'),
+                //AssetImage(item.getPicture()),
                 alignment: Alignment.center,
                 height: 220,
                 width: double.infinity,
@@ -77,9 +81,13 @@ class _PackageItemDetails extends State<PackageItemDetails> {
               const SizedBox(
                 height: 10,
               ),
-              Text(
+              // Text(
+              //   item.toString(),
+              //   style: const TextStyle(height: 1.3, fontSize: 12),
+              // ),
+              HtmlWidget(
                 item.toString(),
-                style: const TextStyle(height: 1.3, fontSize: 12),
+                textStyle: const TextStyle(fontSize: 12, height: 1.3, overflow: TextOverflow.ellipsis),
               ),
               Container(
                   width: double.infinity,

@@ -21,6 +21,7 @@ class ServiceDetails extends StatefulWidget {
 class _ServiceDetails extends State<ServiceDetails> {
   List _providers = [];
   String _requestingProviderId = '';
+    var item;
 
   @override
   void initState() {
@@ -115,7 +116,7 @@ class _ServiceDetails extends State<ServiceDetails> {
                                 height: 90,
                                 fit: BoxFit.fill,
                                 image: NetworkImage(item['profile_pic'] ??
-                                    '${UrlHelper.image}?key=${service['cover_pic']}'),
+                                    '${UrlHelper.file}?key=${service['cover_pic']}'),//check later
                               ),
                             ),
                             const SizedBox(
