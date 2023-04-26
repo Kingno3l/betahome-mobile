@@ -157,18 +157,19 @@ class _WalletState extends State<Wallet> {
                     Container(
                       padding: const EdgeInsets.all(16.0),
                       decoration: const BoxDecoration(
+                        color: Color(0xffFFDA58),
                         borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                        image: DecorationImage(
-                          image: AssetImage(
-                              './lib/assets/icons/imgs/wallet_bg.png'),
-                          fit: BoxFit.cover,
-                        ),
+                        // image: DecorationImage(
+                        //   image: AssetImage(
+                        //       './lib/assets/icons/imgs/wallet_bg.png'),
+                        //   fit: BoxFit.cover,
+                        // ),
                       ),
                       child: Column(
                         children: [
-                          const Text('Money balance',
+                          Text('Money balance',
                               style:
-                                  TextStyle(color: Colors.white, fontSize: 13)),
+                                  TextStyle(color: Colors.blue.shade900, fontSize: 13)),
                           Text(
                             NumberFormat.currency(name: '')
                                 .format(data.balance),
@@ -213,7 +214,9 @@ class _WalletState extends State<Wallet> {
                                 ),
                                 style: TextButton.styleFrom(
                                     padding: const EdgeInsets.all(12.0),
-                                    backgroundColor: const Color(0xffFF5F00)),
+                                    backgroundColor: Colors.green
+                                    // const Color(0xffFF5F00)
+                                    ),
                               );
                             },
                           ),
