@@ -9,8 +9,6 @@ import 'package:flutter/material.dart';
 // import 'package:html/parser.dart' as htmlparser;
 // import 'package:html/dom.dart' as dom;
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-
-
 import '../helper/url_helper.dart';
 
 class PackageDetails extends StatefulWidget {

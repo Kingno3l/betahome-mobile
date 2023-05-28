@@ -2,7 +2,6 @@ import 'package:beta_home/widgets/payment_card.dart';
 import 'package:beta_home/widgets/progress_bar.dart';
 import 'package:beta_home/widgets/screen_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class InstallmentalPaymentScreen extends StatefulWidget {
   const InstallmentalPaymentScreen({super.key});

@@ -8,6 +8,7 @@ import 'package:beta_home/screens/my_cart.dart';
 import 'package:beta_home/screens/notifications.dart';
 import 'package:beta_home/widgets/dot.dart';
 import 'package:beta_home/widgets/market_card.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:collection/collection.dart';
@@ -25,6 +26,9 @@ class _MarketState extends State<Market> with TickerProviderStateMixin {
   List _items = [];
   List _cats = [];
   String _category = '';
+  List _banners = [];
+  int _current = 0;
+  final List _slides = [];
   String _query = '';
   final MarketItemCategory _recommeded = MarketItemCategory('', 'Recommended');
   bool _isLoading = true;
@@ -219,15 +223,81 @@ class _MarketState extends State<Market> with TickerProviderStateMixin {
             const SizedBox(
               height: 5,
             ),
-            InkWell(
-              onTap: () => {},
-              child: const Image(
-                width: double.infinity,
-                image: AssetImage('./lib/assets/imgs/remove8.png'),
-                alignment: Alignment.center,
-                fit: BoxFit.fill,
-              ),
+            // InkWell(
+            //   onTap: () => {},
+            //   child: const Image(
+            //     width: double.infinity,
+            //     image: AssetImage('./lib/assets/imgs/remove8.png'),
+            //     alignment: Alignment.center,
+            //     fit: BoxFit.fill,
+            //   ),
+            // ),
+
+            Stack(
+              children: [
+                CarouselSlider(
+                  items: _banners.map((image) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                          ), //['picture']
+                          child: Image.network(
+                            '${UrlHelper.file}/${image['picture']}',
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      },
+                    );
+                  }).toList(),
+                  options: CarouselOptions(
+                    // height: 230,
+                    viewportFraction: 1.0,
+                    height: 130.0,
+                    autoPlay: true,
+                    autoPlayCurve: Curves.linear,
+                    enlargeCenterPage: true,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        _current = index;
+                      });
+                    },
+                    scrollDirection: Axis.horizontal,
+                  ),
+                ),
+                Positioned(
+                  bottom: 0.0,
+                  left: 0.0,
+                  right: 0.0,
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: _slides.asMap().entries.map((entry) {
+                        return Container(
+                          width: 4.0,
+                          height: 4.0,
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 4.0),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: (Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? Colors.black
+                                      : Colors.white)
+                                  .withOpacity(
+                                      _current == entry.key ? 0.9 : 0.4)),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ],
             ),
+
             const SizedBox(
               height: 10,
             ),
@@ -270,24 +340,6 @@ class _MarketState extends State<Market> with TickerProviderStateMixin {
     );
   }
 
-  // updateCatItem() {
-  //   return Expanded(
-  //     child: GridView.builder(
-  //       itemCount: _items.length,
-  //       itemBuilder: (context, index) => galleryCard(
-  //         context,
-  //         index,
-  //         ListingItem.fromJson(_items[index]),
-  //       ),
-  //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-  //         crossAxisCount: 2,
-  //         mainAxisSpacing: 8,
-  //         crossAxisSpacing: 8,
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Padding catItem(MarketItemCategory item) {
     return Padding(
       padding: const EdgeInsets.only(right: 10),
@@ -308,3 +360,67 @@ class _MarketState extends State<Market> with TickerProviderStateMixin {
     );
   }
 }
+
+        // Stack(
+        //   children: [
+        //     CarouselSlider(
+        //       items: _banners.map((image) {
+        //         return Builder(
+        //           builder: (BuildContext context) {
+        //             return Container(
+        //               width: MediaQuery.of(context).size.width,
+        //               margin: const EdgeInsets.symmetric(horizontal: 5.0),
+        //               decoration: const BoxDecoration(
+        //                 color: Colors.white,
+        //               ),//['picture']
+        //               child: Image.network(
+        //               '${UrlHelper.file}/${image['picture']}',
+        //               fit: BoxFit.cover,
+        //             ),
+        //             );
+        //           },
+        //         );
+        //       }).toList(),
+        //       options: CarouselOptions(
+        //         // height: 230,
+        //         viewportFraction: 1.0,
+        //         height: 130.0,
+        //         autoPlay: true,
+        //         autoPlayCurve: Curves.linear,
+        //         enlargeCenterPage: true,
+        //         onPageChanged: (index, reason) {
+        //           setState(() {
+        //             _current = index;
+        //           });
+        //         },
+        //         scrollDirection: Axis.horizontal,
+        //       ),
+        //     ),
+        //     Positioned(
+        //       bottom: 0.0,
+        //       left: 0.0,
+        //       right: 0.0,
+        //       child: Container(
+        //         padding: const EdgeInsets.all(10),
+        //         child: Row(
+        //           mainAxisAlignment: MainAxisAlignment.end,
+        //           children: _slides.asMap().entries.map((entry) {
+        //             return Container(
+        //               width: 4.0,
+        //               height: 4.0,
+        //               margin: const EdgeInsets.symmetric(
+        //                   vertical: 8.0, horizontal: 4.0),
+        //               decoration: BoxDecoration(
+        //                   shape: BoxShape.circle,
+        //                   color: (Theme.of(context).brightness ==
+        //                               Brightness.dark
+        //                           ? Colors.black
+        //                           : Colors.white)
+        //                       .withOpacity(_current == entry.key ? 0.9 : 0.4)),
+        //             );
+        //           }).toList(),
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),

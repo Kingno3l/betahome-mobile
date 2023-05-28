@@ -5,8 +5,6 @@ import 'package:beta_home/widgets/dot.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../helper/url_helper.dart';
-
 class ListingItemDetails extends StatefulWidget {
   final ListingItem item;
 

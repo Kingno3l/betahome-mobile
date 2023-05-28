@@ -1,6 +1,6 @@
 import 'package:beta_home/helper/keys.dart';
 import 'package:flutter/material.dart';
-
+import 'dart:async';
 import 'package:beta_home/screens/dashboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,17 +16,29 @@ class _GetStartedState extends State<GetStarted> {
   List<SliderModel> slides = [];
   int currentIndex = 0;
   PageController? _controller;
+  late Timer _timer;
 
   @override
   void initState() {
     super.initState();
     _controller = PageController(initialPage: 0);
     slides = getSlides();
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      if(currentIndex < 2){
+        currentIndex++;
+        _controller!.animateToPage(currentIndex, duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+      }
+      else {
+        currentIndex = -1;
+         
+      }
+     });
   }
 
   @override
   void dispose() {
     _controller?.dispose();
+    _timer.cancel();
     super.dispose();
   }
 
@@ -34,11 +46,7 @@ class _GetStartedState extends State<GetStarted> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: //CustomScrollView(scrollDirection: Axis.vertical, slivers: [
-          // SliverFillRemaining(
-          //   SingleChildScrollView(
-          // // hasScrollBody: true,
-          // child:
+      body: 
           Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -47,6 +55,7 @@ class _GetStartedState extends State<GetStarted> {
               children: [
                 Expanded(
                     child: PageView.builder(
+                      controller: _controller,
                         scrollDirection: Axis.horizontal,
                         onPageChanged: (value) {
                           setState(() {
@@ -60,7 +69,6 @@ class _GetStartedState extends State<GetStarted> {
                 Container(
                   padding: const EdgeInsets.only(left: 30, top: 12),
                   child: Row(
-                    // mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(
                         slides.length, (index) => buildDot(index, context)),
                   ),
@@ -72,11 +80,8 @@ class _GetStartedState extends State<GetStarted> {
             children: [
               Container(
                 height: 60,
-                // margin: EdgeInsets.all(40),
                 margin: const EdgeInsets.symmetric(vertical: 30),
-                // width: double.infinity,
                 width: 160,
-                // color: const Color(0xFFFFDA58),
                 decoration: const BoxDecoration(
                     color: Color(0xFFFFDA58),
                     borderRadius: BorderRadius.only(
@@ -84,7 +89,6 @@ class _GetStartedState extends State<GetStarted> {
                         bottomRight: Radius.circular(6.0))),
                 child: TextButton(
                     onPressed: () {
-                      // if (currentIndex == slides.length - 1) {
                       _pref.then((SharedPreferences pref) {
                         pref.setBool(Keys.IS_GET_STARTED, true);
                         Navigator.pushReplacement(

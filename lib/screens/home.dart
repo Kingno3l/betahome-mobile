@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
@@ -11,9 +13,14 @@ import 'package:beta_home/screens/notifications.dart';
 import 'package:beta_home/screens/profile.dart';
 import 'package:beta_home/screens/sales_workforce.dart';
 import 'package:beta_home/screens/sign_in.dart';
+import 'package:beta_home/screens/vision.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+
+import 'FAQs.dart';
+import 'aboutUs.dart';
+import 'mission.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -24,12 +31,14 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   late AnimationController progressCont;
-  int _current = 0;
+  int currentIndex = 0;
   final CarouselController _controller = CarouselController();
   List _slides = [];
   late TabController _tabController;
   List _items = [];
   bool _isLoading = true;
+  // bool _paused = false;
+  // late Timer _timer;
 
   @override
   void initState() {
@@ -41,13 +50,25 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             setState(() {});
           });
     progressCont.repeat(reverse: true);
-    _tabController = TabController(length: 3, vsync: this);
+
+    _tabController = TabController(initialIndex: 0, length: 7, vsync: this);
+    _tabController.addListener(() {
+      setState(() {
+        currentIndex = _tabController.index;
+      });
+    });
+    // _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+    //   _tabController.animateTo((_tabController.index + 1 % 7),
+    //       duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+    // });
     getPackages('');
   }
 
   @override
   void dispose() {
     progressCont.dispose();
+    // _timer.cancel();
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -70,7 +91,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       Utils.showToast('An error occured.');
     }
   }
-
 
   void message(context, String text) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -238,33 +258,118 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 height: MediaQuery.of(context).size.height,
                 child: Column(
                   children: [
-                    TabBar(
-                      labelColor: Colors.black,
-                      indicatorColor: const Color(0xFFFFDA58),
-                      indicatorWeight: 1,
-                      controller: _tabController,
-                      tabs: const [
-                        Tab(
-                          text: 'Explore',
+                    Stack(
+                      children: [
+                        // _buildTabArrows(),
+
+                        TabBar(
+                          isScrollable: true,
+                          onTap: (index) {
+                            setState(() {
+                              currentIndex = index;
+                            });
+                          },
+                          physics: NeverScrollableScrollPhysics(),
+                          labelColor: Colors.black,
+                          indicatorColor: const Color(0xFFFFDA58),
+                          indicatorWeight: 1,
+                          controller: _tabController,
+                          tabs: const [
+                            Tab(
+                              text: 'Explore',
+                            ),
+                            Tab(
+                              text: 'About Us',
+                            ),
+                            Tab(text: 'Beta Ambassador'),
+                            Tab(text: 'Beta Help'),
+                            Tab(text: 'Vision'),
+                            Tab(text: 'Mission'),
+                            Tab(text: 'FAQ'),
+                          ],
                         ),
-                        Tab(
-                          text: 'Beta Help',
-                        ),
-                        Tab(text: 'Sales Workforce')
+                        currentIndex > 0
+                            ? Positioned(
+                                top: 5,
+                                left: 2.2,
+                                child: GestureDetector(
+                                  // onTap: () {
+                                  //   _tabController.animateTo(0);
+                                  // },
+                                  child: Container(
+                                    width: 20,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.grey.shade100,
+                                            blurRadius: 4,
+                                            spreadRadius: 2)
+                                      ],
+                                      color: Colors.white,
+                                    ),
+                                    padding: EdgeInsets.symmetric(vertical: 8),
+                                    child: Center(
+                                      child: Icon(
+                                        size: 20,
+                                        Icons.chevron_left,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(),
+                        currentIndex < 6
+                            ? Positioned(
+                                top: 5,
+                                right: 2.2,
+                                child: GestureDetector(
+                                  // onTap: () {
+                                  //   _tabController.animateTo(6);
+                                  // },
+                                  child: Container(
+                                    width: 20,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.grey.shade100,
+                                            blurRadius: 4,
+                                            spreadRadius: 2)
+                                      ],
+                                      color: Colors.white,
+                                    ),
+                                    padding: EdgeInsets.symmetric(vertical: 8),
+                                    child: Center(
+                                      child: Icon(
+                                        size: 20,
+                                        Icons.chevron_right,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(),
                       ],
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
+                        padding: const EdgeInsets.only(
+                          left: 10, right: 10,
                         ),
                         child: TabBarView(
                           controller: _tabController,
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: BouncingScrollPhysics(),
                           children: const [
                             Explore(),
-                            BetaHelp(),
+                            AboutUs(),
                             SalesWorkforce(),
+                            BetaHelp(),
+                            Vision(),
+                            Mission(),
+                            FAQ()
                           ],
                         ),
                       ),
@@ -279,4 +384,3 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     });
   }
 }
-// https://img.icons8.com/ios-glyphs/60/95A5A6/test-account.png
