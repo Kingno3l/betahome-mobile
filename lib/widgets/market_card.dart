@@ -2,8 +2,6 @@ import 'package:beta_home/models/listing_item.dart';
 import 'package:beta_home/screens/listing_item_details.dart';
 import 'package:flutter/material.dart';
 
-import '../helper/url_helper.dart';
-
 Widget galleryCard(context, int index, ListingItem item) => Card(
       clipBehavior: Clip.antiAlias,
       elevation: 0.3,

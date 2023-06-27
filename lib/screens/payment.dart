@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:beta_home/helper/consts.dart';
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/helper/utils.dart';
@@ -9,8 +6,6 @@ import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/widgets/screen_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_credit_card/flutter_credit_card.dart';
-import 'package:flutter_paystack_payment/flutter_paystack_payment.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 

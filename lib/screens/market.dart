@@ -14,6 +14,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:collection/collection.dart';
 import 'package:provider/provider.dart';
 
+import '../helper/utils.dart';
+
 class Market extends StatefulWidget {
   const Market({Key? key}) : super(key: key);
 
@@ -45,6 +47,7 @@ class _MarketState extends State<Market> with TickerProviderStateMixin {
     super.initState();
     getCats();
     getItems();
+    getHomeItems();
   }
 
   @override
@@ -101,6 +104,28 @@ class _MarketState extends State<Market> with TickerProviderStateMixin {
     } catch (e) {
       Fluttertoast.showToast(
           msg: 'An error occured.', toastLength: Toast.LENGTH_LONG);
+    }
+  }
+
+//for the carousel
+  Future getHomeItems() async {
+    try {
+      final resp = await ServerHelper.get(UrlHelper.homeExplore);
+      if (resp['status'] == 200) {
+        if (resp['data']['status'] == 'success') {
+          final HttpResp json = HttpResp.fromJson(resp['data']);
+          //   print(json.data['best_picked']);
+          setState(() {
+            _banners = json.data['banners'];
+          });
+        } else {
+          // Utils.showToast(json_bestPicked.msg);
+        }
+      } else {
+        Utils.showToast('Connection error.');
+      }
+    } catch (e) {
+      Utils.showToast('An error occured.');
     }
   }
 
@@ -223,16 +248,6 @@ class _MarketState extends State<Market> with TickerProviderStateMixin {
             const SizedBox(
               height: 5,
             ),
-            // InkWell(
-            //   onTap: () => {},
-            //   child: const Image(
-            //     width: double.infinity,
-            //     image: AssetImage('./lib/assets/imgs/remove8.png'),
-            //     alignment: Alignment.center,
-            //     fit: BoxFit.fill,
-            //   ),
-            // ),
-
             Stack(
               children: [
                 CarouselSlider(
@@ -297,7 +312,6 @@ class _MarketState extends State<Market> with TickerProviderStateMixin {
                 ),
               ],
             ),
-
             const SizedBox(
               height: 10,
             ),

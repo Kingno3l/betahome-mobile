@@ -32,7 +32,7 @@ class ServerHelper {
       if (e.response != null) {
         return {'status': e.response?.statusCode};
       } else {
-        throw (e.message);
+        rethrow;
       }
     } catch (e) {
       rethrow;
@@ -58,7 +58,7 @@ class ServerHelper {
       if (e.response != null) {
         return {'status': e.response?.statusCode};
       } else {
-        throw (e.message);
+        rethrow;
       }
     } catch (e) {
       rethrow;
@@ -83,7 +83,7 @@ class ServerHelper {
       if (e.response != null) {
         return {'status': e.response?.statusCode};
       } else {
-        throw (e.message);
+        rethrow;
       }
     } catch (e) {
       rethrow;

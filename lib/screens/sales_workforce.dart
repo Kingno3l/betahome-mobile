@@ -10,7 +10,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'dart:developer';
 
 import '../widgets/join_sales_workforce_bottom_sheet.dart';
 
@@ -149,14 +148,15 @@ class _SalesWorkforceState extends State<SalesWorkforce> {
                       TextButton(
                         onPressed: () {
                           showModalBottomSheet(
-                            isScrollControlled: true,
-                            enableDrag: true,
-                            context: context,
-                            builder: (context) {
-                              return Wrap(
-                                  children: [const JoinSalesWorkforceBottomSheet()]);
-                            });
-                        },//=> _getCode()
+                              isScrollControlled: true,
+                              enableDrag: true,
+                              backgroundColor: Colors.transparent,
+                              context: context,
+                              builder: (context) => SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height / 1.55,
+                                  child: JoinSalesWorkforceBottomSheet()));
+                        },
                         style: TextButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
                             vertical: 10.0,

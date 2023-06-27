@@ -26,8 +26,8 @@ Widget exploreCard(context, int index, ListingItem item) => Padding(
             children: <Widget>[
               Expanded(
                 child: Container(
-                  width: 120,
-                  height: 120,
+                  width: 100,
+                  height: 80,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: NetworkImage('${item.picture.toString()}'),//'${UrlHelper.file}/${_items[index]['items'][itemindex]['cover_pic'].toString()}'

@@ -21,10 +21,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Beta Home',
       theme: ThemeData(
-        // primarySwatch: Colors.green,
-        // fontFamily: 'Verdana',
         backgroundColor: Colors.white,
-        // colorSchemeSeed: const Color(0xff6750a4),
         useMaterial3: true,
       ),
       home: const Splash(),

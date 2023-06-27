@@ -19,7 +19,7 @@ class BetaHelp extends StatefulWidget {
 
 class _BetaHelpState extends State<BetaHelp> {
   List _services = [];
-  late List _banks;
+  List? _banks;
   Map _params = {
     'step': 1,
     'vMethod': 'BVN',
@@ -78,7 +78,7 @@ class _BetaHelpState extends State<BetaHelp> {
       shape: BotomSheet.shape(),
       context: context,
       builder: (context) => BotomShet.verifyBetaHelp(
-          context, _banks, _services, _params, _setState, () {}),
+          context, _banks?? [], _services, _params, _setState, () {}),
     );
   }
 

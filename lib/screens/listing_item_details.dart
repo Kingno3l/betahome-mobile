@@ -158,9 +158,10 @@ class _ListingItemDetailsState extends State<ListingItemDetails> {
               const SizedBox(
                 height: 8,
               ),
-              Text(
-                item.desc,
-              ),
+              //getting null
+              // Text(
+              //   item.desc,
+              // ),
               const SizedBox(
                 height: 10,
               ),

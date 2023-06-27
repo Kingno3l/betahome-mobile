@@ -21,7 +21,11 @@ class bank extends StatelessWidget {
         padding: EdgeInsets.all(28),
         decoration: BoxDecoration(
             color: Color(0xffFFF6D6), borderRadius: BorderRadius.circular(10)),
-        child: Text(name),
+        child: Row(
+          children: [
+            Text(name),
+          ],
+        ),
       ),
     );
   }

@@ -14,12 +14,7 @@ class SelectBankBottomSheet extends StatefulWidget {
 class _SelectBankBottomSheetState extends State<SelectBankBottomSheet> {
   List banks = [];
   String _query = '';
-
-  @override
-  void initState() {
-    super.initState();
-    getBanks();
-  }
+  List<dynamic> foundBanks = [];
 
   Future getBanks() async {
     try {
@@ -29,6 +24,7 @@ class _SelectBankBottomSheetState extends State<SelectBankBottomSheet> {
         if (json.status == 'success') {
           setState(() {
             banks = json.data;
+            foundBanks = banks;
           });
         }
       }
@@ -36,11 +32,33 @@ class _SelectBankBottomSheetState extends State<SelectBankBottomSheet> {
   }
 
   @override
+  void initState() {
+    getBanks();
+    super.initState();
+  }
+
+  void updateList(String value) {
+    List<dynamic> results = [];
+    if (value.isEmpty) {
+      results = foundBanks;
+    } else {
+      results = foundBanks
+          .where((element) =>
+              element["name"].toLowerCase().contains(value.toLowerCase()))
+          .toList();
+    }
+    setState(() {
+      foundBanks = results;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      initialChildSize: 0.93,
-      builder: (context, scrollController) => ListView(
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Column(
         children: [
+          //heading
           Container(
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
@@ -71,6 +89,7 @@ class _SelectBankBottomSheetState extends State<SelectBankBottomSheet> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   child: TextField(
+                    onChanged: (value) => updateList(value),
                     cursorColor: Colors.black,
                     maxLines: 1,
                     decoration: InputDecoration(
@@ -97,23 +116,52 @@ class _SelectBankBottomSheetState extends State<SelectBankBottomSheet> {
               ],
             ),
           ),
-          Container(
-            padding: EdgeInsets.all(8),
-            color: Colors.white,
-            height: 555,
-            child: ListView.builder(
-              itemCount: banks.length,
-              physics: BouncingScrollPhysics(),
-              itemBuilder: (BuildContext context, int index) {
-                return bank(
-                  name: banks[index]['name'],
-                  code: banks[index]['code'],
-                );
-              },
-            ),
-          ),
+          //body
+          foundBanks.isNotEmpty
+              ? Expanded(
+                  child: Container(
+                    color: Colors.white,
+                    child: SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
+                      child: Container(
+                          padding: EdgeInsets.all(8),
+                          color: Colors.white,
+                          child: SingleChildScrollView(
+                            physics: BouncingScrollPhysics(),
+                            child: Column(
+                              children: [
+                                for (int i = 0; i < foundBanks.length; i++)
+                                  bank(
+                                    name: foundBanks[i]['name'],
+                                    code: foundBanks[i]['code'],
+                                  ),
+                              ],
+                            ),
+                          )),
+                    ),
+                  ),
+                )
+              : Expanded(
+                child: Container(
+                    padding: EdgeInsets.all(8),
+                    color: Colors.white,
+                    child: Center(child: CircularProgressIndicator())),
+              ),
         ],
       ),
     );
   }
 }
+
+
+
+// ListView.builder(
+//                           itemCount: foundBanks.length,
+//                           physics: BouncingScrollPhysics(),
+//                           itemBuilder: (BuildContext context, int index) {
+//                             return bank(
+//                               name: foundBanks[index]['name'],
+//                               code: foundBanks[index]['code'],
+//                             );
+//                           },
+//                         ),

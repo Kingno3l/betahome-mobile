@@ -4,12 +4,7 @@ import 'package:beta_home/helper/utils.dart';
 import 'package:beta_home/models/data.dart';
 import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/screens/notifications.dart';
-import 'package:beta_home/screens/profile.dart';
-import 'package:beta_home/screens/sign_in.dart';
-import 'package:beta_home/widgets/beta_office.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:beta_home/widgets/beta_home.dart';
 import 'package:provider/provider.dart';
 
 class Services extends StatefulWidget {
@@ -215,15 +210,16 @@ class _ServicesState extends State<Services> with TickerProviderStateMixin {
                         child: Container(
                           height: 45,
                           decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(4),
-                                  bottomRight: Radius.circular(4)),
-                              color: _tabIndex == 1
-                                  ? const Color(0xffFFF6D6)
-                                  : const Color(0xffFAFAFA)),
+                            borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(4),
+                                bottomRight: Radius.circular(4)),
+                            color: _tabIndex == 1
+                                ? const Color(0xffFFF6D6)
+                                : const Color(0xffFAFAFA),
+                          ),
                           child: const Center(
                             child: Text(
-                              'Sales Workforce',
+                              'Beta Ambassador',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Color(0xff2F2E41), fontSize: 12),
@@ -268,15 +264,15 @@ class _ServicesState extends State<Services> with TickerProviderStateMixin {
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: GestureDetector(
                               onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => PackageDetails(
-                          //       package: Package.fromJson(item[index]),
-                          //     ),
-                          //   ),
-                          // );
-                        },
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) => PackageDetails(
+                                //       package: Package.fromJson(item[index]),
+                                //     ),
+                                //   ),
+                                // );
+                              },
                               child: Visibility(
                                 visible: index % 1 == 0,
                                 child: Row(
@@ -304,7 +300,8 @@ class _ServicesState extends State<Services> with TickerProviderStateMixin {
                                     Expanded(
                                       child: SizedBox(
                                         height: 120,
-                                        width: MediaQuery.of(context).size.width,
+                                        width:
+                                            MediaQuery.of(context).size.width,
                                         child: ListView.builder(
                                           reverse: true,
                                           scrollDirection: Axis.horizontal,
@@ -313,17 +310,17 @@ class _ServicesState extends State<Services> with TickerProviderStateMixin {
                                           itemBuilder: (BuildContext context,
                                               int itemindex) {
                                             return Padding(
-                                              padding:
-                                                  const EdgeInsets.only(left: 8),
+                                              padding: const EdgeInsets.only(
+                                                  left: 8),
                                               child: Container(
                                                 height: 120,
                                                 width: 120,
                                                 decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: NetworkImage(
-                                                    '${UrlHelper.file}/${_items[index]['artisans'][itemindex]['dp'].toString()}'),
-                                                fit: BoxFit.cover),
-                                          ),
+                                                  image: DecorationImage(
+                                                      image: NetworkImage(
+                                                          '${UrlHelper.file}/${_items[index]['artisans'][itemindex]['dp'].toString()}'),
+                                                      fit: BoxFit.cover),
+                                                ),
                                               ),
                                             );
                                           },

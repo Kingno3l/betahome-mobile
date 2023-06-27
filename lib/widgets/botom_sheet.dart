@@ -1,4 +1,3 @@
-import 'package:beta_home/helper/payment_helper.dart';
 import 'package:beta_home/models/listing_item.dart';
 import 'package:beta_home/models/order_item.dart';
 import 'package:beta_home/screens/payment_option.dart';
@@ -579,46 +578,46 @@ abstract class BotomShet {
                     onChanged: (val) {
                       setState({'bank': val});
                     },
-                    buttonHeight: 48,
-                    // buttonWidth: 200,
-                    itemHeight: 40,
-                    // dropdownMaxHeight: 200,
-                    // searchController: textEditingController,
-                    // searchInnerWidget: Padding(
-                    //   padding: const EdgeInsets.only(
-                    //     top: 8,
-                    //     bottom: 4,
-                    //     right: 8,
-                    //     left: 8,
-                    //   ),
-                    //   child: TextFormField(
-                    //     // controller: textEditingController,
-                    //     decoration: InputDecoration(
-                    //       isDense: true,
-                    //       contentPadding: const EdgeInsets.symmetric(
-                    //         horizontal: 10,
-                    //         vertical: 8,
-                    //       ),
-                    //       hintText: 'Search for an item...',
-                    //       hintStyle: const TextStyle(fontSize: 12),
-                    //       border: OutlineInputBorder(
-                    //         borderRadius: BorderRadius.circular(8),
-                    //       ),
-                    //     ),
-                    //   ),
+                    // buttonHeight: 48,
+                    // // buttonWidth: 200,
+                    // itemHeight: 40,
+                    // // dropdownMaxHeight: 200,
+                    // // searchController: textEditingController,
+                    // // searchInnerWidget: Padding(
+                    // //   padding: const EdgeInsets.only(
+                    // //     top: 8,
+                    // //     bottom: 4,
+                    // //     right: 8,
+                    // //     left: 8,
+                    // //   ),
+                    // //   child: TextFormField(
+                    // //     // controller: textEditingController,
+                    // //     decoration: InputDecoration(
+                    // //       isDense: true,
+                    // //       contentPadding: const EdgeInsets.symmetric(
+                    // //         horizontal: 10,
+                    // //         vertical: 8,
+                    // //       ),
+                    // //       hintText: 'Search for an item...',
+                    // //       hintStyle: const TextStyle(fontSize: 12),
+                    // //       border: OutlineInputBorder(
+                    // //         borderRadius: BorderRadius.circular(8),
+                    // //       ),
+                    // //     ),
+                    // //   ),
+                    // // ),
+                    // // searchMatchFn: (item, searchValue) {
+                    // //   return (item.value.toString().contains(searchValue));
+                    // // },
+                    // //This to clear the search value when you close the menu
+                    // // onMenuStateChange: (isOpen) {
+                    // //   if (!isOpen) {
+                    // //     textEditingController.clear();
+                    // //   }
+                    // // },
+                    // buttonDecoration: const BoxDecoration(
+                    //   color: Color(0xffFFF6D6),
                     // ),
-                    // searchMatchFn: (item, searchValue) {
-                    //   return (item.value.toString().contains(searchValue));
-                    // },
-                    //This to clear the search value when you close the menu
-                    // onMenuStateChange: (isOpen) {
-                    //   if (!isOpen) {
-                    //     textEditingController.clear();
-                    //   }
-                    // },
-                    buttonDecoration: const BoxDecoration(
-                      color: Color(0xffFFF6D6),
-                    ),
                   ),
                 ),
                 const SizedBox(

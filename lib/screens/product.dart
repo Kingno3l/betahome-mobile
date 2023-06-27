@@ -6,13 +6,8 @@ import 'package:beta_home/models/http_resp.dart';
 import 'package:beta_home/models/package.dart';
 import 'package:beta_home/screens/notifications.dart';
 import 'package:beta_home/screens/package_details.dart';
-import 'package:beta_home/screens/profile.dart';
-import 'package:beta_home/screens/sign_in.dart';
-import 'package:beta_home/widgets/beta_office.dart';
 import 'package:beta_home/widgets/productCategory.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:beta_home/widgets/beta_home.dart';
 import 'package:provider/provider.dart';
 
 class Product extends StatefulWidget {

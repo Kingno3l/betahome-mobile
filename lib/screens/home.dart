@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:ui';
-
 import 'package:beta_home/helper/server_helper.dart';
 import 'package:beta_home/helper/url_helper.dart';
 import 'package:beta_home/helper/utils.dart';
@@ -136,249 +133,244 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Consumer<DataModel>(builder: (context, data, child) {
       return SafeArea(
-        top: true,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.only(
-                    left: 20, right: 20, bottom: 20, top: 20),
-                margin: const EdgeInsets.only(
-                    top: 10, bottom: 10, left: 10, right: 10),
-                decoration: const BoxDecoration(
-                    color: Color(0xffFFF6D6),
-                    borderRadius: BorderRadius.all(Radius.circular(8))),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: Colors.transparent,
-                                backgroundImage: const NetworkImage(''),
-                                radius: 20,
-                                child: Material(
-                                  shape: const CircleBorder(),
-                                  clipBehavior: Clip.hardEdge,
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap: () => {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              data.profile == null
-                                                  ? const SignIn()
-                                                  : const Profile(),
-                                        ),
-                                      )
-                                    },
-                                  ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(
+                  left: 20, right: 20, bottom: 20, top: 20),
+              margin: const EdgeInsets.only(
+                  top: 10, bottom: 10, left: 10, right: 10),
+              decoration: const BoxDecoration(
+                  color: Color(0xffFFF6D6),
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              backgroundImage: const NetworkImage(''),
+                              radius: 20,
+                              child: Material(
+                                shape: const CircleBorder(),
+                                clipBehavior: Clip.hardEdge,
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () => {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            data.profile == null
+                                                ? const SignIn()
+                                                : const Profile(),
+                                      ),
+                                    )
+                                  },
                                 ),
                               ),
-                              const SizedBox(width: 10),
-                              Text(
-                                'Welcome${data.profile != null ? ', ${data.profile?.first_name}' : ''}',
-                                style: const TextStyle(
-                                  color: Color(0xff000000),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        NotificationsScreen()));
-                          },
-                          child: Stack(
-                            children: [
-                              const Icon(
-                                Icons.notifications,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              'Welcome${data.profile != null ? ', ${data.profile?.first_name}' : ''}',
+                              style: const TextStyle(
                                 color: Color(0xff000000),
                               ),
-                              Container(
-                                width: 6,
-                                height: 6,
-                                margin: const EdgeInsets.only(left: 15, top: 2),
-                                decoration: const BoxDecoration(
-                                    color: Color(0xffFF0000),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(3))),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Column(
-                      children: [
-                        TextField(
-                          cursorColor: Colors.black,
-                          maxLines: 1,
-                          onChanged: _onSearch,
-                          decoration: InputDecoration(
-                              isDense: true,
-                              hintText: 'Search what you need',
-                              hintStyle:
-                                  const TextStyle(color: Color(0xffAEAEAE)),
-                              // border: InputBorder.none,
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  borderSide: BorderSide.none),
-                              filled: true,
-                              fillColor: const Color(0xffffffff),
-                              prefixIcon: const Icon(
-                                Icons.search,
-                                size: 18,
-                                color: Color(0xffAEAEAE),
-                              )),
-                          style: const TextStyle(
-                            fontSize: 15,
-                            color: Color(0xff000000),
-                          ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: Column(
-                  children: [
-                    Stack(
-                      children: [
-                        // _buildTabArrows(),
-
-                        TabBar(
-                          isScrollable: true,
-                          onTap: (index) {
-                            setState(() {
-                              currentIndex = index;
-                            });
-                          },
-                          physics: NeverScrollableScrollPhysics(),
-                          labelColor: Colors.black,
-                          indicatorColor: const Color(0xFFFFDA58),
-                          indicatorWeight: 1,
-                          controller: _tabController,
-                          tabs: const [
-                            Tab(
-                              text: 'Explore',
-                            ),
-                            Tab(
-                              text: 'About Us',
-                            ),
-                            Tab(text: 'Beta Ambassador'),
-                            Tab(text: 'Beta Help'),
-                            Tab(text: 'Vision'),
-                            Tab(text: 'Mission'),
-                            Tab(text: 'FAQ'),
-                          ],
-                        ),
-                        currentIndex > 0
-                            ? Positioned(
-                                top: 5,
-                                left: 2.2,
-                                child: GestureDetector(
-                                  // onTap: () {
-                                  //   _tabController.animateTo(0);
-                                  // },
-                                  child: Container(
-                                    width: 20,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Colors.grey.shade100,
-                                            blurRadius: 4,
-                                            spreadRadius: 2)
-                                      ],
-                                      color: Colors.white,
-                                    ),
-                                    padding: EdgeInsets.symmetric(vertical: 8),
-                                    child: Center(
-                                      child: Icon(
-                                        size: 20,
-                                        Icons.chevron_left,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : Container(),
-                        currentIndex < 6
-                            ? Positioned(
-                                top: 5,
-                                right: 2.2,
-                                child: GestureDetector(
-                                  // onTap: () {
-                                  //   _tabController.animateTo(6);
-                                  // },
-                                  child: Container(
-                                    width: 20,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Colors.grey.shade100,
-                                            blurRadius: 4,
-                                            spreadRadius: 2)
-                                      ],
-                                      color: Colors.white,
-                                    ),
-                                    padding: EdgeInsets.symmetric(vertical: 8),
-                                    child: Center(
-                                      child: Icon(
-                                        size: 20,
-                                        Icons.chevron_right,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : Container(),
-                      ],
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 10, right: 10,
-                        ),
-                        child: TabBarView(
-                          controller: _tabController,
-                          physics: BouncingScrollPhysics(),
-                          children: const [
-                            Explore(),
-                            AboutUs(),
-                            SalesWorkforce(),
-                            BetaHelp(),
-                            Vision(),
-                            Mission(),
-                            FAQ()
+                            )
                           ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      NotificationsScreen()));
+                        },
+                        child: Stack(
+                          children: [
+                            const Icon(
+                              Icons.notifications,
+                              color: Color(0xff000000),
+                            ),
+                            Container(
+                              width: 6,
+                              height: 6,
+                              margin: const EdgeInsets.only(left: 15, top: 2),
+                              decoration: const BoxDecoration(
+                                  color: Color(0xffFF0000),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(3))),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Column(
+                    children: [
+                      TextField(
+                        cursorColor: Colors.black,
+                        maxLines: 1,
+                        onChanged: _onSearch,
+                        decoration: InputDecoration(
+                            isDense: true,
+                            hintText: 'Search what you need',
+                            hintStyle:
+                                const TextStyle(color: Color(0xffAEAEAE)),
+                            // border: InputBorder.none,
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                borderSide: BorderSide.none),
+                            filled: true,
+                            fillColor: const Color(0xffffffff),
+                            prefixIcon: const Icon(
+                              Icons.search,
+                              size: 18,
+                              color: Color(0xffAEAEAE),
+                            )),
+                        style: const TextStyle(
+                          fontSize: 15,
+                          color: Color(0xff000000),
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      TabBar(
+                        isScrollable: true,
+                        onTap: (index) {
+                          setState(() {
+                            currentIndex = index;
+                          });
+                        },
+                        physics: NeverScrollableScrollPhysics(),
+                        labelColor: Colors.black,
+                        indicatorColor: const Color(0xFFFFDA58),
+                        indicatorWeight: 1,
+                        controller: _tabController,
+                        tabs: const [
+                          Tab(
+                            text: 'Explore',
+                          ),
+                          Tab(
+                            text: 'About Us',
+                          ),
+                          Tab(text: 'Beta Ambassador'),
+                          Tab(text: 'Beta Help'),
+                          Tab(text: 'Vision'),
+                          Tab(text: 'Mission'),
+                          Tab(text: 'FAQ'),
+                        ],
+                      ),
+                      
+                      currentIndex > 0
+                          ? Positioned(
+                              top: 5,
+                              left: 2.2,
+                              child: GestureDetector(
+                                // onTap: () {
+                                //   _tabController.animateTo(0);
+                                // },
+                                child: Container(
+                                  width: 20,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey.shade100,
+                                          blurRadius: 4,
+                                          spreadRadius: 2)
+                                    ],
+                                    color: Colors.white,
+                                  ),
+                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                  child: Center(
+                                    child: Icon(
+                                      size: 20,
+                                      Icons.chevron_left,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      currentIndex < 6
+                          ? Positioned(
+                              top: 5,
+                              right: 2.2,
+                              child: GestureDetector(
+                                // onTap: () {
+                                //   _tabController.animateTo(6);
+                                // },
+                                child: Container(
+                                  width: 20,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey.shade100,
+                                          blurRadius: 4,
+                                          spreadRadius: 2)
+                                    ],
+                                    color: Colors.white,
+                                  ),
+                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                  child: Center(
+                                    child: Icon(
+                                      size: 20,
+                                      Icons.chevron_right,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Container(),
+                    ],
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 10, right: 10,
+                      ),
+                      child: TabBarView(
+                        controller: _tabController,
+                        physics:BouncingScrollPhysics(),
+                        children: const [
+                          Explore(),
+                          AboutUs(),
+                          SalesWorkforce(),
+                          BetaHelp(),
+                          Vision(),
+                          Mission(),
+                          FAQ()
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       );
     });

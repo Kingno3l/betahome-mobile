@@ -1,10 +1,8 @@
 import 'package:beta_home/models/data.dart';
-import 'package:beta_home/widgets/join_sales_workforce_bottom_sheet.dart';
 import 'package:beta_home/screens/registered_beta_help.dart';
 import 'package:beta_home/widgets/dot.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class SalesWorkForceScreen extends StatefulWidget {
   const SalesWorkForceScreen({super.key});

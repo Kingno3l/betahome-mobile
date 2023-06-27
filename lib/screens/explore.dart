@@ -23,7 +23,8 @@ class _ExploreState extends State<Explore> with TickerProviderStateMixin {
   List<Widget> _rows = [];
   final List _slides = [];
   int _current = 0;
-  final bool _isthereData = true; //dummy data just to remove the null in the explore page
+  final bool _isthereData =
+      true; //dummy data just to remove the null in the explore page
 
   @override
   void initState() {
@@ -61,51 +62,10 @@ class _ExploreState extends State<Explore> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    // final List<Widget> imageSliders = _banners
-    //     .map((item) => ClipRRect(
-    //             // borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-    //             child: Stack(
-    //           children: <Widget>[
-    //             Image.network(
-    //               '${UrlHelper.file}/${_banners}',
-    //               fit: BoxFit.cover,
-    //               width: 1000.0,
-    //               height: 500,
-    //             ),
-    //             Positioned(
-    //               bottom: 0.0,
-    //               left: 0.0,
-    //               right: 0.0,
-    //               child: Container(
-    //                 decoration: const BoxDecoration(
-    //                   gradient: LinearGradient(
-    //                     colors: [
-    //                       Color.fromARGB(100, 0, 0, 0),
-    //                       Color.fromARGB(0, 0, 0, 0)
-    //                     ],
-    //                     begin: Alignment.bottomCenter,
-    //                     end: Alignment.topCenter,
-    //                   ),
-    //                 ),
-    //                 padding: const EdgeInsets.symmetric(
-    //                     vertical: 10.0, horizontal: 20.0),
-    //                 child: Text(
-    //                   '${item['text']}',
-    //                   style: const TextStyle(
-    //                     color: Colors.white,
-    //                     fontSize: 16.0,
-    //                     fontWeight: FontWeight.bold,
-    //                   ),
-    //                 ),
-    //               ),
-    //             ),
-    //           ],
-    //         )))
-    //     .toList();
     return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
       child: Column(
         children: [
-          // ..._rows,
           Padding(
             padding:
                 const EdgeInsets.only(left: 8, right: 8, top: 20, bottom: 12),
@@ -121,7 +81,8 @@ class _ExploreState extends State<Explore> with TickerProviderStateMixin {
                   child: Text(
                     "See all >>",
                     style: TextStyle(
-                        color: Colors.blue.shade900, fontWeight: FontWeight.w400),
+                        color: Colors.blue.shade900,
+                        fontWeight: FontWeight.w400),
                   ),
                 ),
               ],
@@ -139,16 +100,13 @@ class _ExploreState extends State<Explore> with TickerProviderStateMixin {
                       index,
                       ListingItem.fromJson(_bestpicked[index]),
                     ),
-                    // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    //   crossAxisCount: 2,
-                    //   mainAxisSpacing: 8,
-                    //   crossAxisSpacing: 8,
-                    // ),
                   ),
                 )
               : Container(
-                  height: 170,
-                ),
+                height: 170,
+              ),
+
+          //carousel
           Stack(
             children: [
               CarouselSlider(
@@ -160,11 +118,11 @@ class _ExploreState extends State<Explore> with TickerProviderStateMixin {
                         margin: const EdgeInsets.symmetric(horizontal: 5.0),
                         decoration: const BoxDecoration(
                           color: Colors.white,
-                        ),//['picture']
+                        ), //['picture']
                         child: Image.network(
-                        '${UrlHelper.file}/${image['picture']}',
-                        fit: BoxFit.cover,
-                      ),
+                          '${UrlHelper.file}/${image['picture']}',
+                          fit: BoxFit.cover,
+                        ),
                       );
                     },
                   );
@@ -172,7 +130,7 @@ class _ExploreState extends State<Explore> with TickerProviderStateMixin {
                 options: CarouselOptions(
                   // height: 230,
                   viewportFraction: 1.0,
-                  height: 130.0,
+                  height: 100.0,
                   autoPlay: true,
                   autoPlayCurve: Curves.linear,
                   enlargeCenterPage: true,
@@ -200,11 +158,12 @@ class _ExploreState extends State<Explore> with TickerProviderStateMixin {
                             vertical: 8.0, horizontal: 4.0),
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: (Theme.of(context).brightness ==
-                                        Brightness.dark
-                                    ? Colors.black
-                                    : Colors.white)
-                                .withOpacity(_current == entry.key ? 0.9 : 0.4)),
+                            color:
+                                (Theme.of(context).brightness == Brightness.dark
+                                        ? Colors.black
+                                        : Colors.white)
+                                    .withOpacity(
+                                        _current == entry.key ? 0.9 : 0.4)),
                       );
                     }).toList(),
                   ),
@@ -227,7 +186,8 @@ class _ExploreState extends State<Explore> with TickerProviderStateMixin {
                   child: Text(
                     "See all >>",
                     style: TextStyle(
-                        color: Colors.blue.shade900, fontWeight: FontWeight.w400),
+                        color: Colors.blue.shade900,
+                        fontWeight: FontWeight.w400),
                   ),
                 ),
               ],
@@ -245,16 +205,11 @@ class _ExploreState extends State<Explore> with TickerProviderStateMixin {
                       index,
                       ListingItem.fromJson(_latest[index]),
                     ),
-                    // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    //   crossAxisCount: 2,
-                    //   mainAxisSpacing: 8,
-                    //   crossAxisSpacing: 8,
-                    // ),
                   ),
                 )
               : Container(
-                  height: 170,
-                ),
+                height: 170,
+              ),
         ],
       ),
     );
